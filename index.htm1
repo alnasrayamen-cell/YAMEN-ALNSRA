@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>متجري الإلكتروني</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- ================= HEADER ================= -->
+
+    <header class="topbar">
+
+        <div class="brand">
+            متجري
+        </div>
+
+        <nav>
+
+            <a href="#home">
+                الرئيسية
+            </a>
+
+            <a href="#products">
+                المنتجات
+            </a>
+
+            <a href="#categories">
+                التصنيفات
+            </a>
+
+            <a href="#cart">
+                السلة 🛒
+                <span id="cartCount">0</span>
+            </a>
+
+            <a href="admin.html">
+                لوحة الأدمن 🔐
+            </a>
+
+        </nav>
+
+    </header>
+
+
+    <!-- ================= MAIN ================= -->
+
+    <main>
+
+
+        <!-- ================= HERO ================= -->
+
+        <section id="home" class="hero">
+
+            <div class="hero-content">
+
+                <span class="badge">
+                    🛍️ متجر إلكتروني
+                </span>
+
+                <h1 id="heroTitle">
+                    اكتشف منتجاتنا
+                </h1>
+
+                <p id="heroText">
+                    أهلاً وسهلاً بك في متجرنا الإلكتروني.
+                    اكتشف أفضل المنتجات والعروض.
+                </p>
+
+                <a href="#products" class="btn">
+                    تسوق الآن
+                </a>
+
+            </div>
+
+
+            <div class="hero-image">
+
+                <img
+                    id="heroImage"
+                    src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=1200&q=80"
+                    alt="متجر إلكتروني"
+                >
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ================= CATEGORIES ================= -->
+
+        <section id="categories" class="section">
+
+            <div class="section-head">
+
+                <h2>
+                    التصنيفات
+                </h2>
+
+            </div>
+
+            <div
+                id="categoryGrid"
+                class="grid categories"
+            >
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ================= PRODUCTS ================= -->
+
+        <section id="products" class="section">
+
+            <div class="section-head">
+
+                <h2>
+                    المنتجات
+                </h2>
+
+                <input
+                    id="search"
+                    class="search"
+                    type="text"
+                    placeholder="🔎 ابحث عن منتج..."
+                >
+
+            </div>
+
+
+            <div
+                id="productGrid"
+                class="grid products"
+            >
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ================= CART ================= -->
+
+        <section id="cart" class="section cart-section">
+
+            <div class="section-head">
+
+                <h2>
+                    🛒 سلة المشتريات
+                </h2>
+
+            </div>
+
+
+            <div id="cartItems">
+
+            </div>
+
+
+            <div class="cart-total">
+
+                الإجمالي:
+
+                <strong id="cartTotal">
+                    0 ₪
+                </strong>
+
+            </div>
+
+
+            <button
+                class="btn"
+                onclick="checkout()"
+            >
+                إتمام الطلب
+            </button>
+
+        </section>
+
+    </main>
+
+
+
+    <!-- ================= FOOTER ================= -->
+
+    <footer>
+
+        <p>
+            ©️ 2026 متجري الإلكتروني
+        </p>
+
+        <p>
+            جميع الحقوق محفوظة
+        </p>
+
+    </footer>
+
+
+
+    <!-- ================= JAVASCRIPT ================= -->
+
+    <script src="app.js"></script>
+
+</body>
+
+</html>
