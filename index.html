@@ -2,13 +2,17 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover"
+  >
 
   <title>KOSHI.WEAR</title>
 
   <meta
     name="description"
-    content="KOSHI.WEAR — أزياء أطفال مختارة بعناية."
+    content="KOSHI.WEAR — أزياء أطفال."
   >
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -27,25 +31,21 @@
 
 <body>
 
-  <!-- ================= HEADER ================= -->
+  <!-- ==================================================
+       TOP HEADER
+       ================================================== -->
 
   <header class="site-header">
 
-    <div class="top-strip">
-      <div class="container">
-        شحن لجميع مناطق فلسطين 🇵🇸
-      </div>
-    </div>
-
     <div class="header-main container">
 
-      <!-- Mobile Menu -->
+      <!-- Menu -->
 
       <button
-        class="icon-btn mobile-menu-btn"
         id="mobileMenuBtn"
+        class="icon-btn"
         type="button"
-        aria-label="فتح القائمة"
+        aria-label="القائمة"
       >
         ☰
       </button>
@@ -62,64 +62,41 @@
       </a>
 
 
-      <!-- Desktop Navigation -->
-
-      <nav class="main-nav">
-
-        <a href="#home">
-          الرئيسية
-        </a>
-
-        <a href="#products">
-          المنتجات
-        </a>
-
-        <a href="#new">
-          وصل حديثًا
-        </a>
-
-      </nav>
-
-
-      <!-- Header Actions -->
+      <!-- Header actions -->
 
       <div class="header-actions">
 
-        <!-- Search -->
-
         <button
-          class="icon-btn"
           id="searchBtn"
+          class="icon-btn"
           type="button"
-          aria-label="بحث"
+          aria-label="البحث"
         >
           🔍
         </button>
 
 
-        <!-- Favorites -->
-
         <button
-          class="icon-btn favorite-header-btn"
           id="favoritesButton"
+          class="icon-btn"
           type="button"
           aria-label="المفضلة"
         >
           ♡
+
           <span
             id="favoritesCount"
             class="favorites-count"
           >
             0
           </span>
+
         </button>
 
 
-        <!-- Cart -->
-
         <button
-          class="icon-btn cart-btn"
           id="cartButton"
+          class="icon-btn cart-btn"
           type="button"
           aria-label="السلة"
         >
@@ -136,11 +113,46 @@
     </div>
 
 
-    <!-- Mobile Navigation -->
+    <!-- ==================================================
+         SEARCH
+         ================================================== -->
+
+    <div class="header-search container">
+
+      <div class="search-box">
+
+        <span class="search-icon">
+          🔍
+        </span>
+
+        <input
+          type="search"
+          id="searchInput"
+          placeholder="ابحث عن منتج..."
+          autocomplete="off"
+        >
+
+        <button
+          id="closeSearch"
+          class="search-clear"
+          type="button"
+          aria-label="مسح البحث"
+        >
+          ×
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <!-- ==================================================
+         MOBILE NAV
+         ================================================== -->
 
     <nav
-      class="mobile-nav"
       id="mobileNav"
+      class="mobile-nav"
     >
 
       <a href="#home">
@@ -152,7 +164,7 @@
       </a>
 
       <a href="#new">
-        وصل حديثًا
+        الجديد
       </a>
 
       <a href="#favorites">
@@ -164,143 +176,133 @@
   </header>
 
 
-  <!-- ================= SEARCH ================= -->
-
-  <div
-    class="search-panel"
-    id="searchPanel"
-  >
-
-    <div class="container search-inner">
-
-      <input
-        type="search"
-        id="searchInput"
-        placeholder="ابحث عن منتج..."
-        autocomplete="off"
-      >
-
-      <button
-        type="button"
-        id="closeSearch"
-        class="close-btn"
-        aria-label="إغلاق البحث"
-      >
-        ×
-      </button>
-
-    </div>
-
-  </div>
-
-
-  <!-- ================= MAIN ================= -->
+  <!-- ==================================================
+       MAIN
+       ================================================== -->
 
   <main id="home">
 
 
-    <!-- ================= HERO ================= -->
+    <!-- ==================================================
+         HERO IMAGE ONLY
+         ================================================== -->
 
     <section
-      class="hero"
       id="heroSection"
+      class="hero"
     >
 
-      <!--
-        لاحقًا app.js سيضع صورة الـHero
-        التي تختارها من لوحة الإدارة.
-      -->
-
       <div
-        class="hero-image"
         id="heroImage"
+        class="hero-image"
       ></div>
-
-
-      <div class="hero-content container">
-
-        <div class="hero-text">
-
-          <span
-            class="hero-label"
-            id="heroStoreName"
-          >
-            KOSHI.WEAR
-          </span>
-
-
-          <h1 id="heroTitle">
-            أسلوبك يبدأ<br>
-            من هنا.
-          </h1>
-
-
-          <p id="heroDescription">
-            اكتشف أحدث القطع المختارة بعناية
-            وصمّم إطلالتك بطريقتك.
-          </p>
-
-
-          <a
-            href="#products"
-            class="primary-btn"
-          >
-            تسوّق الآن
-          </a>
-
-        </div>
-
-      </div>
 
     </section>
 
 
-    <!-- ================= NEW PRODUCTS ================= -->
+    <!-- ==================================================
+         QUICK CATEGORIES
+         ================================================== -->
 
-    <section
-      class="new-products-section"
-      id="new"
-    >
+    <section class="quick-categories">
 
       <div class="container">
 
-        <div class="section-heading">
+        <div class="quick-categories-scroll">
 
-          <div>
+          <button
+            type="button"
+            class="quick-category active"
+            data-category="all"
+          >
+            <span class="category-icon">
+              ✦
+            </span>
 
-            <span class="eyebrow">
+            <span>
+              الكل
+            </span>
+          </button>
+
+
+          <button
+            type="button"
+            class="quick-category"
+            data-category="new"
+          >
+            <span class="category-icon">
               NEW
             </span>
 
-            <h2>
-              وصل حديثًا
-            </h2>
+            <span>
+              جديد
+            </span>
+          </button>
 
-          </div>
+
+          <button
+            type="button"
+            class="quick-category"
+            data-category="boys"
+          >
+            <span class="category-icon">
+              👕
+            </span>
+
+            <span>
+              أولاد
+            </span>
+          </button>
+
+
+          <button
+            type="button"
+            class="quick-category"
+            data-category="girls"
+          >
+            <span class="category-icon">
+              👗
+            </span>
+
+            <span>
+              بنات
+            </span>
+          </button>
+
+
+          <button
+            type="button"
+            class="quick-category"
+            data-category="sets"
+          >
+            <span class="category-icon">
+              ◈
+            </span>
+
+            <span>
+              أطقم
+            </span>
+          </button>
 
         </div>
-
-
-        <div
-          id="newProductsGrid"
-          class="products-grid new-products-grid"
-        ></div>
 
       </div>
 
     </section>
 
 
-    <!-- ================= PRODUCTS ================= -->
+    <!-- ==================================================
+         NEW PRODUCTS
+         ================================================== -->
 
     <section
-      class="products-section"
-      id="products"
+      id="new"
+      class="products-section new-products-section"
     >
 
       <div class="container">
 
-        <div class="section-heading products-heading">
+        <div class="products-title-row">
 
           <div>
 
@@ -309,7 +311,53 @@
             </span>
 
             <h2>
-              منتجاتنا
+              وصل حديثًا
+            </h2>
+
+          </div>
+
+
+          <a
+            href="#products"
+            class="view-all-link"
+          >
+            عرض الكل
+          </a>
+
+        </div>
+
+
+        <div
+          id="newProductsGrid"
+          class="products-grid"
+        ></div>
+
+      </div>
+
+    </section>
+
+
+    <!-- ==================================================
+         ALL PRODUCTS
+         ================================================== -->
+
+    <section
+      id="products"
+      class="products-section"
+    >
+
+      <div class="container">
+
+        <div class="products-title-row">
+
+          <div>
+
+            <span class="eyebrow">
+              SHOP
+            </span>
+
+            <h2>
+              كل المنتجات
             </h2>
 
           </div>
@@ -317,18 +365,21 @@
 
           <div class="products-tools">
 
-            <select id="sortProducts">
+            <select
+              id="sortProducts"
+              aria-label="ترتيب المنتجات"
+            >
 
               <option value="newest">
                 الأحدث
               </option>
 
               <option value="price-low">
-                السعر: من الأقل للأعلى
+                الأقل سعرًا
               </option>
 
               <option value="price-high">
-                السعر: من الأعلى للأقل
+                الأعلى سعرًا
               </option>
 
               <option value="name">
@@ -375,16 +426,18 @@
     </section>
 
 
-    <!-- ================= FAVORITES ================= -->
+    <!-- ==================================================
+         FAVORITES
+         ================================================== -->
 
     <section
-      class="favorites-section"
       id="favorites"
+      class="products-section favorites-section"
     >
 
       <div class="container">
 
-        <div class="section-heading">
+        <div class="products-title-row">
 
           <div>
 
@@ -393,7 +446,7 @@
             </span>
 
             <h2>
-              المفضلة ❤️
+              المفضلة
             </h2>
 
           </div>
@@ -405,7 +458,7 @@
           id="favoritesEmpty"
           class="products-empty"
         >
-          لم تضف أي منتجات إلى المفضلة بعد.
+          لم تضف أي منتج للمفضلة بعد.
         </div>
 
 
@@ -419,7 +472,9 @@
     </section>
 
 
-    <!-- ================= CUSTOMER SERVICE ================= -->
+    <!-- ==================================================
+         CUSTOMER SERVICE
+         ================================================== -->
 
     <section class="customer-service-section">
 
@@ -428,7 +483,7 @@
         <div class="customer-service-box">
 
           <span class="eyebrow">
-            CUSTOMER SERVICE
+            KOSHI.WEAR
           </span>
 
           <h2>
@@ -441,7 +496,7 @@
 
           <a
             href="tel:0593805242"
-            class="primary-btn"
+            class="customer-phone"
           >
             0593805242
           </a>
@@ -455,7 +510,9 @@
   </main>
 
 
-  <!-- ================= OVERLAY ================= -->
+  <!-- ==================================================
+       OVERLAY
+       ================================================== -->
 
   <div
     id="overlay"
@@ -463,7 +520,9 @@
   ></div>
 
 
-  <!-- ================= CART DRAWER ================= -->
+  <!-- ==================================================
+       CART
+       ================================================== -->
 
   <aside
     id="cartDrawer"
@@ -476,11 +535,11 @@
       <div>
 
         <span class="eyebrow">
-          YOUR CART
+          KOSHI.WEAR
         </span>
 
         <h2>
-          سلة التسوق
+          السلة
         </h2>
 
       </div>
@@ -490,7 +549,6 @@
         id="closeCart"
         class="close-btn"
         type="button"
-        aria-label="إغلاق السلة"
       >
         ×
       </button>
@@ -538,7 +596,9 @@
   </aside>
 
 
-  <!-- ================= PRODUCT MODAL ================= -->
+  <!-- ==================================================
+       PRODUCT DETAILS
+       ================================================== -->
 
   <div
     id="productModal"
@@ -573,7 +633,9 @@
   </div>
 
 
-  <!-- ================= FOOTER ================= -->
+  <!-- ==================================================
+       FOOTER
+       ================================================== -->
 
   <footer class="site-footer">
 
@@ -581,8 +643,6 @@
 
       <div class="footer-grid">
 
-
-        <!-- Store -->
 
         <div>
 
@@ -600,12 +660,10 @@
         </div>
 
 
-        <!-- Links -->
-
         <div>
 
           <h3>
-            روابط
+            KOSHI.WEAR
           </h3>
 
           <a href="#home">
@@ -626,8 +684,6 @@
 
         </div>
 
-
-        <!-- Customer Service -->
 
         <div>
 
@@ -665,7 +721,9 @@
   </footer>
 
 
-  <!-- Supabase + Store App -->
+  <!-- ==================================================
+       APP
+       ================================================== -->
 
   <script src="app.js"></script>
 
