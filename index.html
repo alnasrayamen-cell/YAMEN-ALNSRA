@@ -1,214 +1,275 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>متجري الإلكتروني</title>
-
+    <title>YAMEN ALNSRA | المتجر</title>
     <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
-
-    <!-- ================= HEADER ================= -->
-
-    <header class="topbar">
-
-        <div class="brand">
-            متجري
-        </div>
-
-        <nav>
-
-            <a href="#home">
-                الرئيسية
-            </a>
-
-            <a href="#products">
-                المنتجات
-            </a>
-
-            <a href="#categories">
-                التصنيفات
-            </a>
-
-            <a href="#cart">
-                السلة 🛒
+<header class="main-header">
+    <div class="container header-content">
+        <a href="index.html" class="logo">
+            YAMEN ALNSRA
+        </a>
+        <nav class="main-nav">
+            <a href="#products">المنتجات</a>
+            <a href="#about">عن المتجر</a>
+            <button class="cart-button" onclick="openCart()">
+                🛒 السلة
                 <span id="cartCount">0</span>
-            </a>
-
-            <a href="admin.html">
-                لوحة الأدمن 🔐
-            </a>
-
-        </nav>
-
-    </header>
-
-
-    <!-- ================= MAIN ================= -->
-
-    <main>
-
-
-        <!-- ================= HERO ================= -->
-
-        <section id="home" class="hero">
-
-            <div class="hero-content">
-
-                <span class="badge">
-                    🛍️ متجر إلكتروني
-                </span>
-
-                <h1 id="heroTitle">
-                    اكتشف منتجاتنا
-                </h1>
-
-                <p id="heroText">
-                    أهلاً وسهلاً بك في متجرنا الإلكتروني.
-                    اكتشف أفضل المنتجات والعروض.
-                </p>
-
-                <a href="#products" class="btn">
-                    تسوق الآن
-                </a>
-
-            </div>
-
-
-            <div class="hero-image">
-
-                <img
-                    id="heroImage"
-                    src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=1200&q=80"
-                    alt="متجر إلكتروني"
-                >
-
-            </div>
-
-        </section>
-
-
-
-        <!-- ================= CATEGORIES ================= -->
-
-        <section id="categories" class="section">
-
-            <div class="section-head">
-
-                <h2>
-                    التصنيفات
-                </h2>
-
-            </div>
-
-            <div
-                id="categoryGrid"
-                class="grid categories"
-            >
-
-            </div>
-
-        </section>
-
-
-
-        <!-- ================= PRODUCTS ================= -->
-
-        <section id="products" class="section">
-
-            <div class="section-head">
-
-                <h2>
-                    المنتجات
-                </h2>
-
-                <input
-                    id="search"
-                    class="search"
-                    type="text"
-                    placeholder="🔎 ابحث عن منتج..."
-                >
-
-            </div>
-
-
-            <div
-                id="productGrid"
-                class="grid products"
-            >
-
-            </div>
-
-        </section>
-
-
-
-        <!-- ================= CART ================= -->
-
-        <section id="cart" class="section cart-section">
-
-            <div class="section-head">
-
-                <h2>
-                    🛒 سلة المشتريات
-                </h2>
-
-            </div>
-
-
-            <div id="cartItems">
-
-            </div>
-
-
-            <div class="cart-total">
-
-                الإجمالي:
-
-                <strong id="cartTotal">
-                    0 ₪
-                </strong>
-
-            </div>
-
-
-            <button
-                class="btn"
-                onclick="checkout()"
-            >
-                إتمام الطلب
             </button>
-
-        </section>
-
-    </main>
-
-
-
-    <!-- ================= FOOTER ================= -->
-
-    <footer>
-
+        </nav>
+    </div>
+</header>
+<main>
+    <!-- HERO -->
+    <section class="hero">
+        <div class="container">
+            <h1>مرحبًا بك في YAMEN ALNSRA</h1>
+            <p>
+                اكتشف منتجاتنا واختر ما يناسبك بسهولة.
+            </p>
+            <a href="#products" class="hero-button">
+                تسوق الآن
+            </a>
+        </div>
+    </section>
+    <!-- PRODUCTS -->
+    <section id="products" class="products-section">
+        <div class="container">
+            <div class="section-title">
+                <h2>منتجاتنا</h2>
+                <p>اختر المنتج وأضفه إلى السلة</p>
+            </div>
+            <div id="productGrid" class="product-grid">
+                <!-- المنتجات يتم تحميلها من app.js -->
+            </div>
+        </div>
+    </section>
+    <!-- ABOUT -->
+    <section id="about" class="about-section">
+        <div class="container">
+            <h2>عن المتجر</h2>
+            <p>
+                YAMEN ALNSRA متجر إلكتروني لعرض المنتجات والطلبات
+                بطريقة سهلة وسريعة.
+            </p>
+        </div>
+    </section>
+</main>
+<!-- CART -->
+<div id="cartOverlay" class="overlay" onclick="closeCart(event)">
+    <div class="cart-panel" onclick="event.stopPropagation()">
+        <div class="cart-header">
+            <h2>🛒 سلة المشتريات</h2>
+            <button onclick="closeCart()">
+                ✕
+            </button>
+        </div>
+        <div id="cartItems">
+            <!-- محتويات السلة -->
+        </div>
+        <div class="cart-summary">
+            <div class="summary-row">
+                <span>عدد المنتجات</span>
+                <strong id="cartTotalItems">0</strong>
+            </div>
+            <div class="summary-row total">
+                <span>المجموع</span>
+                <strong id="cartTotal">0</strong>
+            </div>
+        </div>
+        <button class="checkout-button" onclick="openCheckout()">
+            إتمام الطلب
+        </button>
+    </div>
+</div>
+<!-- CHECKOUT -->
+<div id="checkoutOverlay" class="overlay">
+    <div class="checkout-panel">
+        <div class="checkout-header">
+            <div>
+                <h2>إتمام الطلب</h2>
+                <p>أدخل معلومات التوصيل الخاصة بك</p>
+            </div>
+            <button onclick="closeCheckout()">
+                ✕
+            </button>
+        </div>
+        <form id="checkoutForm" onsubmit="submitOrder(event)">
+            <!-- NAME -->
+            <div class="form-group">
+                <label for="customerName">
+                    الاسم الكامل
+                </label>
+                <input
+                    type="text"
+                    id="customerName"
+                    name="customerName"
+                    placeholder="اكتب اسمك الكامل"
+                    required
+                    minlength="3"
+                >
+            </div>
+            <!-- PHONE -->
+            <div class="form-group">
+                <label for="customerPhone">
+                    رقم الهاتف
+                </label>
+                <input
+                    type="tel"
+                    id="customerPhone"
+                    name="customerPhone"
+                    placeholder="مثال: 059XXXXXXX"
+                    required
+                >
+                <small>
+                    سيتم استخدام الرقم للتواصل معك بخصوص الطلب.
+                </small>
+            </div>
+            <!-- AREA -->
+            <div class="form-group">
+                <label for="customerArea">
+                    المنطقة
+                </label>
+                <select
+                    id="customerArea"
+                    name="customerArea"
+                    required
+                    onchange="updateCities()"
+                >
+                    <option value="">
+                        اختر المنطقة
+                    </option>
+                    <option value="west-bank">
+                        الضفة الغربية
+                    </option>
+                    <option value="gaza">
+                        قطاع غزة
+                    </option>
+                    <option value="inside-israel">
+                        المدن والبلدات داخل إسرائيل
+                    </option>
+                </select>
+            </div>
+            <!-- CITY -->
+            <div class="form-group">
+                <label for="customerCity">
+                    المدينة / البلدة
+                </label>
+                <select
+                    id="customerCity"
+                    name="customerCity"
+                    required
+                    disabled
+                >
+                    <option value="">
+                        اختر المنطقة أولًا
+                    </option>
+                </select>
+            </div>
+            <!-- ADDRESS -->
+            <div class="form-group">
+                <label for="customerAddress">
+                    العنوان بالتفصيل
+                </label>
+                <textarea
+                    id="customerAddress"
+                    name="customerAddress"
+                    rows="3"
+                    placeholder="اسم الشارع، رقم البناية، الطابق، الشقة..."
+                    required
+                ></textarea>
+            </div>
+            <!-- LANDMARK -->
+            <div class="form-group">
+                <label for="customerLandmark">
+                    أقرب معلم
+                    <span>(اختياري)</span>
+                </label>
+                <input
+                    type="text"
+                    id="customerLandmark"
+                    name="customerLandmark"
+                    placeholder="مثال: بجانب..."
+                >
+            </div>
+            <!-- NOTES -->
+            <div class="form-group">
+                <label for="customerNotes">
+                    ملاحظات الطلب
+                    <span>(اختياري)</span>
+                </label>
+                <textarea
+                    id="customerNotes"
+                    name="customerNotes"
+                    rows="3"
+                    placeholder="أي ملاحظة تريد إضافتها للطلب..."
+                ></textarea>
+            </div>
+            <!-- ORDER SUMMARY -->
+            <div class="checkout-summary">
+                <h3>ملخص الطلب</h3>
+                <div id="checkoutItems">
+                    <!-- المنتجات -->
+                </div>
+                <div class="checkout-total">
+                    <span>
+                        الإجمالي
+                    </span>
+                    <strong id="checkoutTotal">
+                        0
+                    </strong>
+                </div>
+            </div>
+            <!-- PRIVACY -->
+            <div class="privacy-note">
+                🔒 معلوماتك تستخدم فقط لمعالجة طلبك والتواصل معك
+                بخصوص التوصيل.
+            </div>
+            <button
+                type="submit"
+                class="confirm-order-button"
+            >
+                تأكيد الطلب
+            </button>
+        </form>
+    </div>
+</div>
+<!-- ORDER SUCCESS -->
+<div id="successOverlay" class="overlay">
+    <div class="success-panel">
+        <div class="success-icon">
+            ✓
+        </div>
+        <h2>
+            تم استلام طلبك بنجاح 🎉
+        </h2>
         <p>
-            ©️ 2026 متجري الإلكتروني
+            شكرًا لطلبك من YAMEN ALNSRA.
         </p>
-
         <p>
-            جميع الحقوق محفوظة
+            سيتم التواصل معك لتأكيد الطلب.
         </p>
-
-    </footer>
-
-
-
-    <!-- ================= JAVASCRIPT ================= -->
-
-    <script src="app.js"></script>
-
+        <div class="order-number">
+            رقم الطلب:
+            <strong id="orderNumber">
+                -
+            </strong>
+        </div>
+        <button onclick="closeSuccess()">
+            متابعة التسوق
+        </button>
+    </div>
+</div>
+<footer>
+    <div class="container">
+        <p>
+            ©️ 2026 YAMEN ALNSRA — جميع الحقوق محفوظة
+        </p>
+    </div>
+</footer>
+<script src="app.js"></script>
 </body>
-
 </html>
