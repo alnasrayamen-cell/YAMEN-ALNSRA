@@ -1,1 +1,4193 @@
+/* =========================================================
+KOSHI.WEAR
+DARK LUXURY CHILDREN FASHION STORE
+========================================================= */
 
+/* =========================================================
+
+1. ROOT
+    ========================================================= */
+
+:root {
+
+–black: #050505;
+–black-2: #0a0a0a;
+–black-3: #101010;
+–black-4: #151515;
+
+–card: #111111;
+–card-hover: #171717;
+
+–white: #ffffff;
+–white-soft: #f5f5f5;
+
+–text: #eeeeee;
+–text-soft: #aaaaaa;
+–text-muted: #777777;
+
+–border: rgba(255,255,255,0.09);
+–border-light: rgba(255,255,255,0.15);
+
+–gold: #d7b56d;
+–gold-light: #f0d79d;
+
+–sale: #ff4d5a;
+–success: #58d68d;
+
+–radius-sm: 8px;
+–radius-md: 14px;
+–radius-lg: 20px;
+–radius-xl: 28px;
+
+–container: 1440px;
+
+–shadow:
+0 15px 50px rgba(0,0,0,0.35);
+
+–transition:
+0.25s ease;
+
+}
+
+/* =========================================================
+2. RESET
+========================================================= */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    }
+
+html {
+scroll-behavior: smooth;
+}
+
+body {
+
+min-height: 100vh;
+
+background:
+radial-gradient(
+circle at 50% -20%,
+rgba(255,255,255,0.035),
+transparent 35%
+),
+var(–black);
+
+color: var(–text);
+
+font-family:
+“Cairo”,
+system-ui,
+-apple-system,
+BlinkMacSystemFont,
+sans-serif;
+
+line-height: 1.6;
+
+overflow-x: hidden;
+
+}
+
+body,
+button,
+input,
+textarea,
+select {
+font-family:
+“Cairo”,
+system-ui,
+sans-serif;
+}
+
+button,
+input,
+textarea,
+select {
+font-size: inherit;
+}
+
+button {
+border: 0;
+cursor: pointer;
+}
+
+a {
+color: inherit;
+text-decoration: none;
+}
+
+img {
+display: block;
+max-width: 100%;
+}
+
+ul,
+ol {
+list-style: none;
+}
+
+::selection {
+background: var(–white);
+color: var(–black);
+}
+
+/* =========================================================
+3. SCROLLBAR
+========================================================= */
+
+::-webkit-scrollbar {
+width: 8px;
+}
+
+::-webkit-scrollbar-track {
+background: var(–black);
+}
+
+::-webkit-scrollbar-thumb {
+background: #292929;
+border-radius: 20px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+background: #444;
+}
+
+/* =========================================================
+4. TOP BAR
+========================================================= */
+
+.top-bar {
+
+background: #000;
+
+border-bottom:
+1px solid var(–border);
+
+color: var(–text-soft);
+
+font-size: 12px;
+
+}
+
+.top-bar-inner {
+
+max-width: var(–container);
+
+margin: auto;
+
+min-height: 34px;
+
+padding:
+0 24px;
+
+display: flex;
+
+align-items: center;
+
+justify-content: space-between;
+
+gap: 20px;
+
+}
+
+.top-message {
+letter-spacing: 0.2px;
+}
+
+.top-links {
+
+display: flex;
+
+align-items: center;
+
+gap: 12px;
+
+}
+
+.top-links button,
+.top-links a {
+
+background: transparent;
+
+color: var(–text-soft);
+
+font-size: 12px;
+
+transition:
+color var(–transition);
+
+}
+
+.top-links button:hover,
+.top-links a:hover {
+color: var(–white);
+}
+
+/* =========================================================
+5. HEADER
+========================================================= */
+
+.site-header {
+
+position: sticky;
+
+top: 0;
+
+z-index: 1000;
+
+background:
+rgba(5,5,5,0.94);
+
+backdrop-filter:
+blur(18px);
+
+-webkit-backdrop-filter:
+blur(18px);
+
+border-bottom:
+1px solid var(–border);
+
+}
+
+.header-inner {
+
+max-width: var(–container);
+
+min-height: 82px;
+
+margin: auto;
+
+padding:
+0 24px;
+
+display: grid;
+
+grid-template-columns:
+auto minmax(180px, 1fr) minmax(320px, 1.6fr) auto;
+
+align-items: center;
+
+gap: 32px;
+
+}
+
+/* =========================================================
+6. LOGO
+========================================================= */
+
+.logo {
+
+display: flex;
+
+flex-direction: column;
+
+align-items: flex-start;
+
+line-height: 1;
+
+user-select: none;
+
+}
+
+.logo-main {
+
+font-family:
+“Montserrat”,
+sans-serif;
+
+font-size: 28px;
+
+font-weight: 800;
+
+letter-spacing: 4px;
+
+color: var(–white);
+
+}
+
+.logo-sub {
+
+margin-top: 5px;
+
+font-family:
+“Montserrat”,
+sans-serif;
+
+font-size: 9px;
+
+font-weight: 600;
+
+letter-spacing: 6px;
+
+color: var(–gold);
+
+}
+
+/* =========================================================
+7. SEARCH
+========================================================= */
+
+.header-search {
+
+position: relative;
+
+height: 44px;
+
+display: flex;
+
+align-items: center;
+
+background: #101010;
+
+border:
+1px solid var(–border);
+
+border-radius: 5px;
+
+overflow: hidden;
+
+transition:
+border-color var(–transition),
+box-shadow var(–transition);
+
+}
+
+.header-search:focus-within {
+
+border-color:
+rgba(255,255,255,0.25);
+
+box-shadow:
+0 0 0 3px rgba(255,255,255,0.035);
+
+}
+
+.search-icon {
+
+padding-left: 14px;
+
+font-size: 15px;
+
+opacity: 0.65;
+
+}
+
+.header-search input {
+
+flex: 1;
+
+height: 100%;
+
+min-width: 0;
+
+border: 0;
+
+outline: 0;
+
+background: transparent;
+
+color: var(–white);
+
+padding:
+0 12px;
+
+}
+
+.header-search input::placeholder {
+color: #666;
+}
+
+.header-search button {
+
+height: 100%;
+
+padding:
+0 18px;
+
+background: var(–white);
+
+color: #000;
+
+font-weight: 700;
+
+font-size: 12px;
+
+transition:
+background var(–transition),
+color var(–transition);
+
+}
+
+.header-search button:hover {
+
+background: var(–gold-light);
+
+}
+
+/* =========================================================
+8. HEADER ACTIONS
+========================================================= */
+
+.header-actions {
+
+display: flex;
+
+align-items: center;
+
+gap: 8px;
+
+}
+
+.header-action {
+
+position: relative;
+
+min-width: 54px;
+
+min-height: 54px;
+
+display: flex;
+
+flex-direction: column;
+
+justify-content: center;
+
+align-items: center;
+
+gap: 2px;
+
+background: transparent;
+
+color: var(–text-soft);
+
+transition:
+color var(–transition);
+
+}
+
+.header-action:hover {
+color: var(–white);
+}
+
+.header-action span {
+font-size: 20px;
+}
+
+.header-action small {
+
+font-size: 9px;
+
+color: inherit;
+
+}
+
+.action-count {
+
+position: absolute;
+
+top: 4px;
+
+right: 6px;
+
+min-width: 17px;
+
+height: 17px;
+
+padding: 0 4px;
+
+border-radius: 20px;
+
+background: var(–white);
+
+color: #000;
+
+font-size: 9px;
+
+display: flex;
+
+align-items: center;
+
+justify-content: center;
+
+}
+
+/* =========================================================
+9. MOBILE MENU BUTTON
+========================================================= */
+
+.mobile-menu-button {
+display: none;
+}
+
+/* =========================================================
+10. NAVIGATION
+========================================================= */
+
+.main-navigation {
+
+max-width: var(–container);
+
+margin: auto;
+
+min-height: 48px;
+
+padding:
+0 24px;
+
+display: flex;
+
+align-items: center;
+
+justify-content: center;
+
+gap: 42px;
+
+}
+
+.main-navigation a {
+
+position: relative;
+
+height: 48px;
+
+display: flex;
+
+align-items: center;
+
+color: #bdbdbd;
+
+font-size: 13px;
+
+font-weight: 600;
+
+letter-spacing: 0.3px;
+
+transition:
+color var(–transition);
+
+}
+
+.main-navigation a::after {
+
+content: “”;
+
+position: absolute;
+
+right: 0;
+
+bottom: 0;
+
+width: 0;
+
+height: 2px;
+
+background: var(–white);
+
+transition:
+width var(–transition);
+
+}
+
+.main-navigation a:hover {
+
+color: var(–white);
+
+}
+
+.main-navigation a:hover::after {
+
+width: 100%;
+
+}
+
+.main-navigation .sale-link {
+
+color: var(–sale);
+
+}
+
+.main-navigation .sale-link::after {
+
+background: var(–sale);
+
+}
+
+/* =========================================================
+11. MOBILE MENU
+========================================================= */
+
+.mobile-menu {
+
+position: fixed;
+
+top: 0;
+
+right: -100%;
+
+width: min(330px, 88vw);
+
+height: 100vh;
+
+z-index: 3000;
+
+background: #0b0b0b;
+
+border-left:
+1px solid var(–border);
+
+box-shadow:
+-20px 0 70px rgba(0,0,0,0.5);
+
+transition:
+right 0.35s ease;
+
+}
+
+.mobile-menu.active {
+right: 0;
+}
+
+.mobile-menu-header {
+
+min-height: 80px;
+
+padding:
+0 22px;
+
+border-bottom:
+1px solid var(–border);
+
+display: flex;
+
+align-items: center;
+
+justify-content: space-between;
+
+}
+
+.mobile-menu-header strong {
+
+font-family:
+“Montserrat”,
+sans-serif;
+
+letter-spacing: 3px;
+
+}
+
+.mobile-menu-header button {
+
+width: 40px;
+
+height: 40px;
+
+border-radius: 50%;
+
+background: #191919;
+
+color: var(–white);
+
+font-size: 26px;
+
+}
+
+.mobile-menu-links {
+
+padding: 20px;
+
+display: flex;
+
+flex-direction: column;
+
+}
+
+.mobile-menu-links a {
+
+padding:
+17px 5px;
+
+border-bottom:
+1px solid var(–border);
+
+color: #ccc;
+
+font-size: 15px;
+
+transition:
+color var(–transition),
+padding var(–transition);
+
+}
+
+.mobile-menu-links a:hover {
+
+color: var(–white);
+
+padding-right: 12px;
+
+}
+
+/* =========================================================
+12. HERO
+========================================================= */
+
+.hero-section {
+
+position: relative;
+
+min-height: 590px;
+
+display: flex;
+
+align-items: center;
+
+overflow: hidden;
+
+background:
+
+linear-gradient(
+  90deg,
+  rgba(0,0,0,0.92) 0%,
+  rgba(0,0,0,0.70) 38%,
+  rgba(0,0,0,0.25) 72%,
+  rgba(0,0,0,0.55) 100%
+),
+url("https://www.carrefour.es/crs/cdn-static/promo-content/Carrefour/contenidos/moda/2018/sept/bebe/bebe-2-res.jpg")
+center / cover no-repeat;
+
+}
+
+.hero-section::before {
+
+content: “”;
+
+position: absolute;
+
+inset: 0;
+
+background:
+linear-gradient(
+180deg,
+rgba(0,0,0,0.15),
+transparent 40%,
+rgba(0,0,0,0.7)
+);
+
+pointer-events: none;
+
+}
+
+.hero-content {
+
+position: relative;
+
+z-index: 1;
+
+width: min(620px, 90%);
+
+margin-right: max(
+7vw,
+calc((100vw - var(–container)) / 2)
+);
+
+padding:
+70px 0;
+
+}
+
+.hero-label {
+
+display: inline-flex;
+
+align-items: center;
+
+gap: 10px;
+
+margin-bottom: 18px;
+
+color: var(–gold-light);
+
+font-family:
+“Montserrat”,
+sans-serif;
+
+font-size: 12px;
+
+font-weight: 700;
+
+letter-spacing: 3px;
+
+}
+
+.hero-label::before {
+
+content: “”;
+
+width: 28px;
+
+height: 1px;
+
+background: var(–gold);
+
+}
+
+.hero-content h1 {
+
+margin-bottom: 20px;
+
+color: var(–white);
+
+font-size:
+clamp(38px, 5vw, 72px);
+
+font-weight: 800;
+
+line-height: 1.12;
+
+letter-spacing: -1px;
+
+}
+
+.hero-content p {
+
+max-width: 520px;
+
+margin-bottom: 30px;
+
+color: #d0d0d0;
+
+font-size: 15px;
+
+line-height: 2;
+
+}
+
+/* =========================================================
+13. PRIMARY BUTTON
+========================================================= */
+
+.primary-button {
+
+min-height: 50px;
+
+padding:
+0 28px;
+
+display: inline-flex;
+
+align-items: center;
+
+justify-content: center;
+
+gap: 18px;
+
+background: var(–white);
+
+color: #000;
+
+font-family:
+“Montserrat”,
+“Cairo”,
+sans-serif;
+
+font-size: 12px;
+
+font-weight: 800;
+
+letter-spacing: 1px;
+
+transition:
+transform var(–transition),
+background var(–transition),
+color var(–transition);
+
+}
+
+.primary-button:hover {
+
+background: var(–gold-light);
+
+transform:
+translateY(-2px);
+
+}
+
+.primary-button span {
+font-size: 18px;
+}
+
+/* =========================================================
+14. PROMO STRIP
+========================================================= */
+
+.promo-strip {
+
+min-height: 54px;
+
+padding:
+0 24px;
+
+display: grid;
+
+grid-template-columns:
+repeat(4, 1fr);
+
+align-items: center;
+
+border-top:
+1px solid var(–border);
+
+border-bottom:
+1px solid var(–border);
+
+background: #0b0b0b;
+
+}
+
+.promo-strip > div {
+
+min-height: 30px;
+
+display: flex;
+
+align-items: center;
+
+justify-content: center;
+
+color: #bdbdbd;
+
+font-size: 11px;
+
+border-left:
+1px solid var(–border);
+
+}
+
+.promo-strip > div:first-child {
+border-left: 0;
+}
+
+/* =========================================================
+15. SECTIONS
+========================================================= */
+
+.section {
+
+width: min(
+var(–container),
+calc(100% - 48px)
+);
+
+margin:
+0 auto;
+
+padding:
+90px 0;
+
+}
+
+.section-heading {
+
+margin-bottom: 34px;
+
+display: flex;
+
+align-items: flex-end;
+
+justify-content: space-between;
+
+gap: 25px;
+
+}
+
+.section-kicker {
+
+display: block;
+
+margin-bottom: 8px;
+
+color: var(–gold);
+
+font-family:
+“Montserrat”,
+sans-serif;
+
+font-size: 10px;
+
+font-weight: 700;
+
+letter-spacing: 3px;
+
+}
+
+.section-heading h2 {
+
+color: var(–white);
+
+font-size:
+clamp(25px, 3vw, 38px);
+
+font-weight: 800;
+
+line-height: 1.2;
+
+}
+
+.text-button {
+
+background: transparent;
+
+color: #bdbdbd;
+
+font-size: 12px;
+
+transition:
+color var(–transition);
+
+}
+
+.text-button:hover {
+color: var(–white);
+}
+
+/* =========================================================
+16. CATEGORY GRID
+========================================================= */
+
+.category-grid {
+
+display: grid;
+
+grid-template-columns:
+repeat(4, 1fr);
+
+gap: 14px;
+
+}
+
+.category-card {
+
+position: relative;
+
+min-height: 310px;
+
+overflow: hidden;
+
+background: #111;
+
+border-radius: var(–radius-md);
+
+border:
+1px solid var(–border);
+
+}
+
+.category-image {
+
+position: absolute;
+
+inset: 0;
+
+background-position: center;
+
+background-size: cover;
+
+transition:
+transform 0.6s ease;
+
+}
+
+.category-card:hover
+.category-image {
+
+transform:
+scale(1.07);
+
+}
+
+.category-girls {
+
+background-image:
+linear-gradient(
+180deg,
+transparent 20%,
+rgba(0,0,0,0.85)
+),
+url(“https://cdn.shopify.com/s/files/1/0646/0211/2255/files/new_07_10_2024_aadaeed9-0a39-477f-965f-510af8a966ab084A4693.jpg?v=1739253145”);
+
+}
+
+.category-boys {
+
+background-image:
+linear-gradient(
+180deg,
+transparent 20%,
+rgba(0,0,0,0.85)
+),
+url(“https://www.panachekids.co.uk/images/thumbs/0074627_mitch-son-boys-easy-onoff-jump-large-m-trainer-white.jpeg”);
+
+}
+
+.category-baby {
+
+background-image:
+linear-gradient(
+180deg,
+transparent 20%,
+rgba(0,0,0,0.85)
+),
+url(“https://cotandcandybaby.com/cdn/shop/files/Z1233826.jpg?v=1752494283&width=1946”);
+
+}
+
+.category-jackets {
+
+background-image:
+linear-gradient(
+180deg,
+transparent 20%,
+rgba(0,0,0,0.85)
+),
+url(“https://down-br.img.susercontent.com/file/cn-11134208-7ras8-m7aaomai6vqm9b”);
+
+}
+
+.category-sets {
+
+background-image:
+linear-gradient(
+180deg,
+transparent 20%,
+rgba(0,0,0,0.85)
+),
+url(“https://funly.co.in/cdn/shop/files/MDC01.jpg?v=1772998790”);
+
+}
+
+.category-shoes {
+
+background-image:
+linear-gradient(
+180deg,
+transparent 20%,
+rgba(0,0,0,0.85)
+),
+url(“https://www.panachekids.co.uk/images/thumbs/0074627_mitch-son-boys-easy-onoff-jump-large-m-trainer-white.jpeg”);
+
+}
+
+.category-accessories {
+
+background-image:
+linear-gradient(
+180deg,
+transparent 20%,
+rgba(0,0,0,0.85)
+),
+url(“https://s.alicdn.com/@sc04/kf/H8c94e16a353e43e69c6ad58854362a1c6/Korean-Style-Summer-Dress-for-Newborn-Baby-Girls-Stylish-Dress-Clothes-for-Babies.jpg”);
+
+}
+
+.category-sale {
+
+background-image:
+linear-gradient(
+180deg,
+rgba(110,0,0,0.15),
+rgba(0,0,0,0.88)
+),
+url(“https://www.wilsonandfrenchy.com.au/cdn/shop/files/AW25_WEB_StyledFlatlay_16_023.jpg?v=1743050483&width=2000”);
+
+}
+
+.category-overlay {
+
+position: absolute;
+
+right: 22px;
+
+bottom: 20px;
+
+left: 22px;
+
+display: flex;
+
+flex-direction: column;
+
+align-items: flex-start;
+
+text-align: right;
+
+}
+
+.category-overlay span {
+
+color: #c5c5c5;
+
+font-family:
+“Montserrat”,
+sans-serif;
+
+font-size: 9px;
+
+letter-spacing: 2px;
+
+}
+
+.category-overlay strong {
+
+margin-top: 2px;
+
+color: var(–white);
+
+font-size: 21px;
+
+font-weight: 800;
+
+}
+
+/* =========================================================
+17. FLASH SALE
+========================================================= */
+
+.flash-sale-section {
+
+width: 100%;
+
+max-width: none;
+
+padding-right:
+max(
+24px,
+calc((100vw - var(–container)) / 2)
+);
+
+padding-left:
+max(
+24px,
+calc((100vw - var(–container)) / 2)
+);
+
+background:
+linear-gradient(
+180deg,
+#090909,
+#050505
+);
+
+}
+
+.countdown {
+
+display: flex;
+
+align-items: center;
+
+gap: 7px;
+
+}
+
+.countdown > div {
+
+min-width: 58px;
+
+padding:
+7px 8px;
+
+border:
+1px solid var(–border);
+
+background: #101010;
+
+border-radius: 5px;
+
+text-align: center;
+
+}
+
+.countdown strong {
+
+display: block;
+
+color: var(–white);
+
+font-family:
+“Montserrat”,
+sans-serif;
+
+font-size: 18px;
+
+}
+
+.countdown small {
+
+display: block;
+
+color: #666;
+
+font-size: 8px;
+
+}
+
+.countdown > span {
+
+color: var(–gold);
+
+font-weight: 700;
+
+}
+
+/* =========================================================
+18. PRODUCT GRID
+========================================================= */
+
+.product-grid {
+
+display: grid;
+
+grid-template-columns:
+repeat(4, minmax(0, 1fr));
+
+gap: 20px;
+
+}
+
+.product-card {
+
+position: relative;
+
+min-width: 0;
+
+overflow: hidden;
+
+background: var(–card);
+
+border:
+1px solid var(–border);
+
+border-radius:
+var(–radius-md);
+
+transition:
+transform 0.3s ease,
+border-color 0.3s ease,
+background 0.3s ease;
+
+}
+
+.product-card:hover {
+
+transform:
+translateY(-5px);
+
+background:
+var(–card-hover);
+
+border-color:
+rgba(255,255,255,0.17);
+
+}
+
+/* =========================================================
+19. PRODUCT IMAGE
+========================================================= */
+
+.product-image-wrap {
+
+position: relative;
+
+aspect-ratio: 0.82;
+
+overflow: hidden;
+
+background: #181818;
+
+}
+
+.product-image-wrap img {
+
+width: 100%;
+
+height: 100%;
+
+object-fit: cover;
+
+transition:
+transform 0.5s ease;
+
+}
+
+.product-card:hover
+.product-image-wrap img {
+
+transform:
+scale(1.04);
+
+}
+
+/* =========================================================
+20. PRODUCT BADGES
+========================================================= */
+
+.product-badge {
+
+position: absolute;
+
+top: 12px;
+
+right: 12px;
+
+z-index: 2;
+
+padding:
+5px 9px;
+
+border-radius: 3px;
+
+background: var(–white);
+
+color: #000;
+
+font-size: 9px;
+
+font-weight: 800;
+
+}
+
+.product-badge.sale {
+
+background: var(–sale);
+
+color: white;
+
+}
+
+.product-badge.new {
+
+background: var(–gold);
+
+color: #000;
+
+}
+
+/* =========================================================
+21. PRODUCT FAVORITE
+========================================================= */
+
+.product-favorite {
+
+position: absolute;
+
+top: 11px;
+
+left: 11px;
+
+z-index: 3;
+
+width: 37px;
+
+height: 37px;
+
+border-radius: 50%;
+
+background:
+rgba(0,0,0,0.62);
+
+border:
+1px solid rgba(255,255,255,0.12);
+
+color: white;
+
+display: flex;
+
+align-items: center;
+
+justify-content: center;
+
+font-size: 19px;
+
+transition:
+background var(–transition),
+transform var(–transition);
+
+}
+
+.product-favorite:hover {
+
+background:
+rgba(255,255,255,0.15);
+
+transform:
+scale(1.08);
+
+}
+
+.product-favorite.active {
+
+color: #ff5363;
+
+}
+
+/* =========================================================
+22. PRODUCT INFO
+========================================================= */
+
+.product-info {
+
+padding:
+16px;
+
+}
+
+.product-name {
+
+min-height: 44px;
+
+color: var(–white);
+
+font-size: 13px;
+
+font-weight: 700;
+
+line-height: 1.7;
+
+}
+
+.product-rating {
+
+display: flex;
+
+align-items: center;
+
+gap: 5px;
+
+margin-top: 5px;
+
+color: var(–gold);
+
+font-size: 10px;
+
+}
+
+.product-rating span {
+
+color: #777;
+
+font-size: 10px;
+
+}
+
+.product-price-row {
+
+margin-top: 9px;
+
+display: flex;
+
+align-items: center;
+
+flex-wrap: wrap;
+
+gap: 8px;
+
+}
+
+.product-price {
+
+color: var(–white);
+
+font-family:
+“Montserrat”,
+“Cairo”,
+sans-serif;
+
+font-size: 16px;
+
+font-weight: 800;
+
+}
+
+.product-old-price {
+
+color: #666;
+
+text-decoration:
+line-through;
+
+font-size: 11px;
+
+}
+
+.product-discount {
+
+color: var(–sale);
+
+font-size: 10px;
+
+font-weight: 800;
+
+}
+
+/* =========================================================
+23. PRODUCT OPTIONS
+========================================================= */
+
+.product-options {
+
+margin-top: 12px;
+
+display: flex;
+
+align-items: center;
+
+gap: 6px;
+
+flex-wrap: wrap;
+
+}
+
+.product-color {
+
+width: 18px;
+
+height: 18px;
+
+border-radius: 50%;
+
+border:
+2px solid #111;
+
+box-shadow:
+0 0 0 1px #555;
+
+}
+
+.product-size {
+
+min-width: 29px;
+
+height: 24px;
+
+padding:
+0 7px;
+
+display: inline-flex;
+
+align-items: center;
+
+justify-content: center;
+
+border:
+1px solid #292929;
+
+border-radius: 3px;
+
+color: #aaa;
+
+font-size: 9px;
+
+}
+
+/* =========================================================
+24. ADD TO CART
+========================================================= */
+
+.product-add {
+
+width: 100%;
+
+height: 42px;
+
+margin-top: 14px;
+
+background:
+#1d1d1d;
+
+color: var(–white);
+
+border:
+1px solid var(–border-light);
+
+border-radius: 4px;
+
+font-size: 11px;
+
+font-weight: 700;
+
+transition:
+background var(–transition),
+color var(–transition);
+
+}
+
+.product-add:hover {
+
+background:
+var(–white);
+
+color:
+#000;
+
+}
+
+/* =========================================================
+25. LOADING / EMPTY
+========================================================= */
+
+.products-loading {
+
+grid-column:
+1 / -1;
+
+min-height: 180px;
+
+display: flex;
+
+align-items: center;
+
+justify-content: center;
+
+color: #777;
+
+font-size: 13px;
+
+}
+
+.products-empty {
+
+width: 100%;
+
+padding:
+70px 20px;
+
+text-align: center;
+
+color: #888;
+
+}
+
+.products-empty > div {
+
+margin-bottom: 10px;
+
+font-size: 40px;
+
+}
+
+.products-empty h3 {
+
+margin-bottom: 7px;
+
+color: var(–white);
+
+}
+
+/* =========================================================
+26. SECTION TABS
+========================================================= */
+
+.section-tabs {
+
+display: flex;
+
+align-items: center;
+
+gap: 8px;
+
+overflow-x: auto;
+
+}
+
+.section-tabs button {
+
+padding:
+7px 13px;
+
+background: transparent;
+
+color: #777;
+
+border-bottom:
+1px solid transparent;
+
+white-space: nowrap;
+
+font-size: 11px;
+
+}
+
+.section-tabs button:hover,
+.section-tabs button.active {
+
+color: var(–white);
+
+border-bottom-color:
+var(–white);
+
+}
+
+/* =========================================================
+27. SALE BANNER
+========================================================= */
+
+.sale-banner {
+
+position: relative;
+
+min-height: 330px;
+
+margin:
+20px 0 0;
+
+display: flex;
+
+align-items: center;
+
+overflow: hidden;
+
+background:
+
+linear-gradient(
+  90deg,
+  rgba(0,0,0,0.93),
+  rgba(0,0,0,0.65),
+  rgba(0,0,0,0.2)
+),
+url("https://www.wilsonandfrenchy.com.au/cdn/shop/files/AW25_WEB_StyledFlatlay_16_023.jpg?v=1743050483&width=2000")
+center / cover no-repeat;
+
+}
+
+.sale-banner-content {
+
+width: min(
+var(–container),
+calc(100% - 48px)
+);
+
+margin: auto;
+
+}
+
+.sale-banner-content > span {
+
+color: var(–gold);
+
+font-family:
+“Montserrat”,
+sans-serif;
+
+font-size: 11px;
+
+font-weight: 700;
+
+letter-spacing: 3px;
+
+}
+
+.sale-banner h2 {
+
+margin:
+10px 0;
+
+color: var(–white);
+
+font-size:
+clamp(30px, 4vw, 50px);
+
+font-weight: 800;
+
+}
+
+.sale-banner h2 strong {
+
+color: var(–sale);
+
+}
+
+.sale-banner p {
+
+margin-bottom: 20px;
+
+color: #bbb;
+
+}
+
+/* =========================================================
+28. SORT / FILTER
+========================================================= */
+
+.sort-wrapper {
+
+display: flex;
+
+align-items: center;
+
+gap: 8px;
+
+}
+
+.sort-wrapper label {
+
+color: #777;
+
+font-size: 11px;
+
+}
+
+.sort-wrapper select {
+
+min-width: 125px;
+
+padding:
+9px 12px;
+
+border:
+1px solid var(–border);
+
+border-radius: 4px;
+
+background: #111;
+
+color: var(–white);
+
+outline: none;
+
+}
+
+.filters-bar {
+
+margin-bottom: 15px;
+
+padding:
+12px 14px;
+
+display: flex;
+
+align-items: center;
+
+justify-content: space-between;
+
+background: #0d0d0d;
+
+border:
+1px solid var(–border);
+
+border-radius: 6px;
+
+}
+
+.filters-bar button {
+
+background: transparent;
+
+color: #bbb;
+
+font-size: 11px;
+
+}
+
+.filters-bar button:hover {
+
+color: white;
+
+}
+
+#resultsCount {
+
+color: #666;
+
+font-size: 11px;
+
+}
+
+.advanced-filters {
+
+display: none;
+
+margin-bottom: 22px;
+
+padding: 20px;
+
+grid-template-columns:
+repeat(4, 1fr);
+
+gap: 16px;
+
+background: #0e0e0e;
+
+border:
+1px solid var(–border);
+
+border-radius: 8px;
+
+}
+
+.advanced-filters.active {
+
+display: grid;
+
+}
+
+.filter-group {
+
+display: flex;
+
+flex-direction: column;
+
+gap: 7px;
+
+}
+
+.filter-group label {
+
+color: #888;
+
+font-size: 10px;
+
+}
+
+.filter-group select,
+.filter-group input {
+
+width: 100%;
+
+height: 40px;
+
+padding:
+0 10px;
+
+border:
+1px solid var(–border);
+
+border-radius: 4px;
+
+outline: none;
+
+background: #151515;
+
+color: var(–white);
+
+}
+
+.price-range {
+
+display: grid;
+
+grid-template-columns:
+1fr 1fr;
+
+gap: 7px;
+
+}
+
+.clear-filters {
+
+align-self: end;
+
+height: 40px;
+
+background: #202020;
+
+color: #bbb;
+
+border-radius: 4px;
+
+font-size: 10px;
+
+}
+
+.clear-filters:hover {
+
+background: var(–white);
+
+color: #000;
+
+}
+
+/* =========================================================
+29. REVIEWS
+========================================================= */
+
+.reviews-section {
+
+border-top:
+1px solid var(–border);
+
+}
+
+.reviews-grid {
+
+display: grid;
+
+grid-template-columns:
+repeat(3, 1fr);
+
+gap: 18px;
+
+}
+
+.review-card {
+
+padding:
+28px;
+
+background:
+#0d0d0d;
+
+border:
+1px solid var(–border);
+
+border-radius:
+var(–radius-md);
+
+}
+
+.review-stars {
+
+margin-bottom: 15px;
+
+color: var(–gold);
+
+letter-spacing: 3px;
+
+font-size: 12px;
+
+}
+
+.review-card p {
+
+min-height: 60px;
+
+margin-bottom: 20px;
+
+color: #aaa;
+
+font-size: 13px;
+
+line-height: 2;
+
+}
+
+.review-card strong {
+
+color: var(–white);
+
+font-size: 12px;
+
+}
+
+/* =========================================================
+30. DELIVERY
+========================================================= */
+
+.delivery-section {
+
+max-width: var(–container);
+
+margin:
+0 auto;
+
+padding:
+35px 24px;
+
+display: grid;
+
+grid-template-columns:
+repeat(4, 1fr);
+
+border-top:
+1px solid var(–border);
+
+border-bottom:
+1px solid var(–border);
+
+}
+
+.delivery-item {
+
+display: flex;
+
+align-items: center;
+
+justify-content: center;
+
+gap: 13px;
+
+padding:
+8px 15px;
+
+border-left:
+1px solid var(–border);
+
+}
+
+.delivery-item:first-child {
+border-left: 0;
+}
+
+.delivery-item > span {
+
+font-size: 23px;
+
+}
+
+.delivery-item strong {
+
+display: block;
+
+color: var(–white);
+
+font-size: 11px;
+
+}
+
+.delivery-item small {
+
+display: block;
+
+margin-top: 2px;
+
+color: #666;
+
+font-size: 9px;
+
+}
+
+/* =========================================================
+31. NEWSLETTER
+========================================================= */
+
+.newsletter-section {
+
+max-width: var(–container);
+
+margin:
+0 auto;
+
+padding:
+80px 24px;
+
+display: flex;
+
+align-items: center;
+
+justify-content: space-between;
+
+gap: 40px;
+
+}
+
+.newsletter-section > div {
+
+flex: 1;
+
+}
+
+.newsletter-section span {
+
+color: var(–gold);
+
+font-family:
+“Montserrat”,
+sans-serif;
+
+font-size: 10px;
+
+letter-spacing: 3px;
+
+}
+
+.newsletter-section h2 {
+
+margin:
+7px 0;
+
+color: var(–white);
+
+font-size: 26px;
+
+}
+
+.newsletter-section p {
+
+color: #777;
+
+font-size: 12px;
+
+}
+
+.newsletter-form {
+
+display: flex;
+
+width: min(450px, 100%);
+
+height: 48px;
+
+}
+
+.newsletter-form input {
+
+flex: 1;
+
+min-width: 0;
+
+padding:
+0 14px;
+
+border:
+1px solid var(–border);
+
+outline: none;
+
+background: #111;
+
+color: white;
+
+}
+
+.newsletter-form button {
+
+padding:
+0 22px;
+
+background: var(–white);
+
+color: #000;
+
+font-weight: 800;
+
+font-size: 10px;
+
+}
+
+/* =========================================================
+32. CART DRAWER
+========================================================= */
+
+.cart-drawer {
+
+position: fixed;
+
+top: 0;
+
+right: -520px;
+
+z-index: 4000;
+
+width: min(500px, 100vw);
+
+height: 100vh;
+
+display: flex;
+
+flex-direction: column;
+
+background: #0a0a0a;
+
+border-left:
+1px solid var(–border);
+
+box-shadow:
+-20px 0 80px rgba(0,0,0,0.6);
+
+transition:
+right 0.35s ease;
+
+}
+
+.cart-drawer.active {
+right: 0;
+}
+
+.cart-header {
+
+min-height: 88px;
+
+padding:
+18px 22px;
+
+display: flex;
+
+align-items: center;
+
+justify-content: space-between;
+
+border-bottom:
+1px solid var(–border);
+
+}
+
+.cart-header span {
+
+color: var(–gold);
+
+font-family:
+“Montserrat”,
+sans-serif;
+
+font-size: 9px;
+
+letter-spacing: 3px;
+
+}
+
+.cart-header h2 {
+
+margin-top: 2px;
+
+color: var(–white);
+
+font-size: 20px;
+
+}
+
+.cart-header button {
+
+width: 40px;
+
+height: 40px;
+
+border-radius: 50%;
+
+background: #181818;
+
+color: white;
+
+font-size: 25px;
+
+}
+
+.cart-items {
+
+flex: 1;
+
+overflow-y: auto;
+
+padding: 18px;
+
+}
+
+.cart-item {
+
+display: grid;
+
+grid-template-columns:
+80px 1fr auto;
+
+gap: 12px;
+
+padding:
+13px 0;
+
+border-bottom:
+1px solid var(–border);
+
+}
+
+.cart-item-image {
+
+width: 80px;
+
+height: 100px;
+
+overflow: hidden;
+
+background: #181818;
+
+}
+
+.cart-item-image img {
+
+width: 100%;
+
+height: 100%;
+
+object-fit: cover;
+
+}
+
+.cart-item-info h4 {
+
+color: var(–white);
+
+font-size: 12px;
+
+}
+
+.cart-item-info p {
+
+margin-top: 4px;
+
+color: #777;
+
+font-size: 9px;
+
+}
+
+.cart-item-price {
+
+margin-top: 8px;
+
+color: var(–white);
+
+font-size: 12px;
+
+font-weight: 700;
+
+}
+
+.cart-quantity {
+
+margin-top: 10px;
+
+display: flex;
+
+align-items: center;
+
+gap: 7px;
+
+}
+
+.cart-quantity button {
+
+width: 24px;
+
+height: 24px;
+
+background: #1b1b1b;
+
+color: white;
+
+border-radius: 3px;
+
+}
+
+.cart-quantity span {
+
+min-width: 20px;
+
+text-align: center;
+
+font-size: 11px;
+
+}
+
+.cart-item-delete {
+
+color: #777;
+
+background: transparent;
+
+font-size: 16px;
+
+}
+
+.cart-item-delete:hover {
+color: var(–sale);
+}
+
+.cart-empty {
+
+flex: 1;
+
+display: flex;
+
+flex-direction: column;
+
+align-items: center;
+
+justify-content: center;
+
+text-align: center;
+
+color: #666;
+
+}
+
+.cart-empty > div {
+
+margin-bottom: 10px;
+
+font-size: 45px;
+
+}
+
+.cart-empty h3 {
+
+color: var(–white);
+
+font-size: 16px;
+
+}
+
+.cart-empty p {
+
+margin-top: 5px;
+
+font-size: 11px;
+
+}
+
+.cart-footer {
+
+padding:
+20px;
+
+border-top:
+1px solid var(–border);
+
+background: #080808;
+
+}
+
+.cart-total-row {
+
+display: flex;
+
+align-items: center;
+
+justify-content: space-between;
+
+margin-bottom: 8px;
+
+color: #888;
+
+font-size: 11px;
+
+}
+
+.cart-total-row strong {
+
+color: #ddd;
+
+}
+
+.discount-row strong {
+
+color: var(–sale);
+
+}
+
+.cart-grand-total {
+
+margin-top: 13px;
+
+padding-top: 13px;
+
+border-top:
+1px solid var(–border);
+
+color: var(–white);
+
+font-size: 14px;
+
+}
+
+.cart-grand-total strong {
+
+color: var(–white);
+
+font-size: 17px;
+
+}
+
+.checkout-button {
+
+width: 100%;
+
+height: 50px;
+
+margin-top: 15px;
+
+background: var(–white);
+
+color: #000;
+
+font-weight: 800;
+
+font-size: 11px;
+
+letter-spacing: 1px;
+
+}
+
+.checkout-button:hover {
+
+background: var(–gold-light);
+
+}
+
+/* =========================================================
+33. DRAWER OVERLAY
+========================================================= */
+
+.drawer-overlay {
+
+position: fixed;
+
+inset: 0;
+
+z-index: 3500;
+
+background:
+rgba(0,0,0,0.7);
+
+opacity: 0;
+
+visibility: hidden;
+
+transition:
+opacity var(–transition),
+visibility var(–transition);
+
+}
+
+.drawer-overlay.active {
+
+opacity: 1;
+
+visibility: visible;
+
+}
+
+/* =========================================================
+34. MODALS
+========================================================= */
+
+.modal {
+
+position: fixed;
+
+inset: 0;
+
+z-index: 5000;
+
+display: flex;
+
+align-items: center;
+
+justify-content: center;
+
+padding: 20px;
+
+}
+
+.modal[hidden] {
+display: none;
+}
+
+.modal-backdrop {
+
+position: absolute;
+
+inset: 0;
+
+background:
+rgba(0,0,0,0.82);
+
+backdrop-filter:
+blur(7px);
+
+}
+
+.modal-content {
+
+position: relative;
+
+z-index: 1;
+
+width: min(
+100%,
+1000px
+);
+
+max-height: 90vh;
+
+overflow-y: auto;
+
+background:
+#0d0d0d;
+
+border:
+1px solid var(–border-light);
+
+border-radius:
+var(–radius-lg);
+
+box-shadow:
+0 30px 100px rgba(0,0,0,0.7);
+
+}
+
+.modal-close {
+
+position: absolute;
+
+top: 15px;
+
+left: 15px;
+
+z-index: 10;
+
+width: 38px;
+
+height: 38px;
+
+border-radius: 50%;
+
+background: rgba(0,0,0,0.7);
+
+color: white;
+
+border:
+1px solid var(–border);
+
+font-size: 22px;
+
+}
+
+.modal-close:hover {
+
+background: white;
+
+color: black;
+
+}
+
+/* =========================================================
+35. PRODUCT MODAL
+========================================================= */
+
+.product-modal {
+
+min-height: 500px;
+
+display: grid;
+
+grid-template-columns:
+1fr 1fr;
+
+}
+
+.product-modal-gallery {
+
+min-height: 500px;
+
+background: #161616;
+
+}
+
+.product-modal-gallery img {
+
+width: 100%;
+
+height: 100%;
+
+min-height: 500px;
+
+object-fit: cover;
+
+}
+
+.product-modal-details {
+
+padding:
+50px 38px;
+
+}
+
+.product-modal-details .product-name {
+
+min-height: auto;
+
+margin-bottom: 10px;
+
+font-size: 26px;
+
+}
+
+.product-modal-price {
+
+margin:
+18px 0;
+
+display: flex;
+
+align-items: center;
+
+gap: 12px;
+
+}
+
+.product-modal-price strong {
+
+color: white;
+
+font-family:
+“Montserrat”,
+sans-serif;
+
+font-size: 25px;
+
+}
+
+.product-modal-price del {
+
+color: #666;
+
+font-size: 13px;
+
+}
+
+.product-detail-label {
+
+display: block;
+
+margin:
+22px 0 9px;
+
+color: #aaa;
+
+font-size: 11px;
+
+}
+
+.product-color-list,
+.product-size-list {
+
+display: flex;
+
+flex-wrap: wrap;
+
+gap: 8px;
+
+}
+
+.color-option {
+
+width: 30px;
+
+height: 30px;
+
+border-radius: 50%;
+
+border:
+2px solid transparent;
+
+box-shadow:
+0 0 0 1px #444;
+
+}
+
+.color-option.active {
+
+box-shadow:
+0 0 0 2px white;
+
+}
+
+.size-option {
+
+min-width: 45px;
+
+height: 38px;
+
+padding:
+0 12px;
+
+background: #151515;
+
+color: #aaa;
+
+border:
+1px solid #2a2a2a;
+
+}
+
+.size-option:hover,
+.size-option.active {
+
+background: white;
+
+color: black;
+
+border-color: white;
+
+}
+
+.quantity-selector {
+
+margin-top: 22px;
+
+display: inline-flex;
+
+align-items: center;
+
+border:
+1px solid #292929;
+
+}
+
+.quantity-selector button {
+
+width: 40px;
+
+height: 40px;
+
+background: #161616;
+
+color: white;
+
+}
+
+.quantity-selector span {
+
+width: 45px;
+
+text-align: center;
+
+font-size: 12px;
+
+}
+
+.product-modal-add {
+
+width: 100%;
+
+height: 52px;
+
+margin-top: 22px;
+
+background: white;
+
+color: black;
+
+font-weight: 800;
+
+}
+
+.product-modal-add:hover {
+
+background: var(–gold-light);
+
+}
+
+/* =========================================================
+36. CHECKOUT
+========================================================= */
+
+.checkout-content {
+
+width: min(
+700px,
+100%
+);
+
+padding:
+38px;
+
+}
+
+.checkout-header {
+
+margin-bottom: 25px;
+
+}
+
+.checkout-header span {
+
+color: var(–gold);
+
+font-family:
+“Montserrat”,
+sans-serif;
+
+font-size: 9px;
+
+letter-spacing: 3px;
+
+}
+
+.checkout-header h2 {
+
+margin-top: 5px;
+
+color: white;
+
+font-size: 25px;
+
+}
+
+.form-grid {
+
+display: grid;
+
+grid-template-columns:
+1fr 1fr;
+
+gap: 15px;
+
+}
+
+.form-field {
+
+display: flex;
+
+flex-direction: column;
+
+gap: 7px;
+
+}
+
+.form-field-full {
+
+grid-column:
+1 / -1;
+
+}
+
+.form-field label {
+
+color: #999;
+
+font-size: 10px;
+
+}
+
+.form-field input,
+.form-field textarea {
+
+width: 100%;
+
+padding:
+11px 12px;
+
+outline: none;
+
+border:
+1px solid var(–border);
+
+border-radius: 4px;
+
+background: #151515;
+
+color: white;
+
+resize: vertical;
+
+}
+
+.form-field input:focus,
+.form-field textarea:focus {
+
+border-color:
+rgba(255,255,255,0.3);
+
+}
+
+.checkout-summary {
+
+margin-top: 25px;
+
+padding:
+18px;
+
+background: #151515;
+
+border:
+1px solid var(–border);
+
+}
+
+.checkout-summary > div {
+
+display: flex;
+
+justify-content: space-between;
+
+align-items: center;
+
+}
+
+.checkout-summary span {
+
+color: #777;
+
+font-size: 11px;
+
+}
+
+.checkout-summary strong {
+
+color: white;
+
+font-family:
+“Montserrat”,
+sans-serif;
+
+font-size: 20px;
+
+}
+
+.checkout-submit {
+
+width: 100%;
+
+height: 52px;
+
+margin-top: 15px;
+
+background: white;
+
+color: black;
+
+font-weight: 800;
+
+}
+
+.checkout-submit:hover {
+
+background: var(–gold-light);
+
+}
+
+/* =========================================================
+37. SUCCESS
+========================================================= */
+
+.success-content {
+
+width: min(
+450px,
+100%
+);
+
+padding:
+55px 30px;
+
+text-align: center;
+
+}
+
+.success-icon {
+
+width: 72px;
+
+height: 72px;
+
+margin:
+0 auto 20px;
+
+display: flex;
+
+align-items: center;
+
+justify-content: center;
+
+border-radius: 50%;
+
+background:
+rgba(88,214,141,0.12);
+
+border:
+1px solid rgba(88,214,141,0.3);
+
+color: var(–success);
+
+font-size: 35px;
+
+}
+
+.success-content > span {
+
+color: var(–gold);
+
+font-family:
+“Montserrat”,
+sans-serif;
+
+font-size: 9px;
+
+letter-spacing: 3px;
+
+}
+
+.success-content h2 {
+
+margin:
+10px 0;
+
+color: white;
+
+font-size: 25px;
+
+}
+
+.success-content p {
+
+color: #777;
+
+font-size: 12px;
+
+}
+
+.success-content > strong {
+
+display: block;
+
+margin:
+12px 0 25px;
+
+color: var(–white);
+
+font-family:
+“Montserrat”,
+sans-serif;
+
+}
+
+/* =========================================================
+38. TOAST
+========================================================= */
+
+.toast {
+
+position: fixed;
+
+left: 50%;
+
+bottom: 30px;
+
+z-index: 8000;
+
+min-width: 220px;
+
+max-width: 90vw;
+
+padding:
+12px 18px;
+
+transform:
+translate(-50%, 120px);
+
+opacity: 0;
+
+background:
+rgba(20,20,20,0.96);
+
+border:
+1px solid var(–border-light);
+
+border-radius: 5px;
+
+color: white;
+
+box-shadow:
+0 15px 40px rgba(0,0,0,0.5);
+
+text-align: center;
+
+font-size: 11px;
+
+transition:
+transform 0.3s ease,
+opacity 0.3s ease;
+
+}
+
+.toast.show {
+
+transform:
+translate(-50%, 0);
+
+opacity: 1;
+
+}
+
+/* =========================================================
+39. MOBILE BOTTOM NAV
+========================================================= */
+
+.mobile-bottom-nav {
+
+display: none;
+
+}
+
+/* =========================================================
+40. RESPONSIVE — LARGE
+========================================================= */
+
+@media (max-width: 1200px) {
+
+.header-inner {
+
+grid-template-columns:
+  auto 1fr auto;
+
+}
+
+.header-search {
+
+grid-column:
+  1 / -1;
+grid-row: 2;
+margin-bottom: 12px;
+
+}
+
+.site-header {
+
+padding-bottom: 12px;
+
+}
+
+.category-grid {
+
+grid-template-columns:
+  repeat(4, 1fr);
+
+}
+
+.product-grid {
+
+grid-template-columns:
+  repeat(3, 1fr);
+
+}
+
+}
+
+/* =========================================================
+41. RESPONSIVE — TABLET
+========================================================= */
+
+@media (max-width: 900px) {
+
+.top-bar-inner {
+
+padding:
+  0 16px;
+
+}
+
+.top-message {
+
+font-size: 10px;
+
+}
+
+.header-inner {
+
+min-height: 70px;
+padding:
+  0 16px;
+display: flex;
+justify-content: space-between;
+
+}
+
+.mobile-menu-button {
+
+display: flex;
+width: 42px;
+height: 42px;
+align-items: center;
+justify-content: center;
+background: transparent;
+color: white;
+font-size: 22px;
+
+}
+
+.logo {
+
+align-items: center;
+
+}
+
+.logo-main {
+
+font-size: 23px;
+
+}
+
+.header-search {
+
+display: none;
+
+}
+
+.header-actions {
+
+gap: 0;
+
+}
+
+.header-action {
+
+min-width: 43px;
+
+}
+
+.header-action small {
+
+display: none;
+
+}
+
+.main-navigation {
+
+display: none;
+
+}
+
+.hero-section {
+
+min-height: 530px;
+
+}
+
+.hero-content {
+
+width: 85%;
+margin:
+  auto;
+text-align: center;
+
+}
+
+.hero-label {
+
+justify-content: center;
+
+}
+
+.hero-content p {
+
+margin-right: auto;
+margin-left: auto;
+
+}
+
+.category-grid {
+
+grid-template-columns:
+  repeat(2, 1fr);
+
+}
+
+.product-grid {
+
+grid-template-columns:
+  repeat(2, 1fr);
+
+}
+
+.advanced-filters {
+
+grid-template-columns:
+  repeat(2, 1fr);
+
+}
+
+.delivery-section {
+
+grid-template-columns:
+  repeat(2, 1fr);
+gap: 20px;
+
+}
+
+.delivery-item {
+
+border-left: 0;
+
+}
+
+.reviews-grid {
+
+grid-template-columns:
+  1fr;
+
+}
+
+.newsletter-section {
+
+flex-direction: column;
+align-items: flex-start;
+
+}
+
+.newsletter-form {
+
+width: 100%;
+
+}
+
+}
+
+/* =========================================================
+42. RESPONSIVE — MOBILE
+========================================================= */
+
+@media (max-width: 600px) {
+
+body {
+
+padding-bottom: 68px;
+
+}
+
+.top-bar {
+
+display: none;
+
+}
+
+.site-header {
+
+position: sticky;
+top: 0;
+
+}
+
+.header-inner {
+
+min-height: 64px;
+
+}
+
+.logo-main {
+
+font-size: 20px;
+letter-spacing: 3px;
+
+}
+
+.logo-sub {
+
+font-size: 7px;
+letter-spacing: 4px;
+
+}
+
+.header-action {
+
+min-width: 38px;
+
+}
+
+.header-action span {
+
+font-size: 18px;
+
+}
+
+.action-count {
+
+top: 1px;
+right: 0;
+
+}
+
+.hero-section {
+
+min-height: 520px;
+background-position:
+  62% center;
+
+}
+
+.hero-content {
+
+width: calc(100% - 40px);
+
+}
+
+.hero-content h1 {
+
+font-size: 38px;
+
+}
+
+.hero-content p {
+
+font-size: 12px;
+line-height: 1.9;
+
+}
+
+.primary-button {
+
+min-height: 47px;
+padding:
+  0 22px;
+
+}
+
+.promo-strip {
+
+grid-template-columns:
+  repeat(2, 1fr);
+padding:
+  8px 12px;
+
+}
+
+.promo-strip > div {
+
+min-height: 35px;
+border: 0;
+font-size: 9px;
+
+}
+
+.section {
+
+width:
+  calc(100% - 28px);
+padding:
+  60px 0;
+
+}
+
+.section-heading {
+
+align-items: flex-start;
+flex-direction: column;
+gap: 14px;
+
+}
+
+.section-heading h2 {
+
+font-size: 25px;
+
+}
+
+.category-grid {
+
+gap: 9px;
+
+}
+
+.category-card {
+
+min-height: 220px;
+
+}
+
+.category-overlay {
+
+right: 14px;
+bottom: 14px;
+left: 14px;
+
+}
+
+.category-overlay strong {
+
+font-size: 17px;
+
+}
+
+.flash-sale-section {
+
+padding-right: 14px;
+padding-left: 14px;
+
+}
+
+.flash-sale-section
+.section-heading {
+
+align-items: center;
+flex-direction: row;
+
+}
+
+.countdown {
+
+gap: 3px;
+
+}
+
+.countdown > div {
+
+min-width: 43px;
+padding:
+  5px 4px;
+
+}
+
+.countdown strong {
+
+font-size: 13px;
+
+}
+
+.countdown small {
+
+font-size: 6px;
+
+}
+
+.product-grid {
+
+grid-template-columns:
+  repeat(2, minmax(0, 1fr));
+gap: 9px;
+
+}
+
+.product-info {
+
+padding:
+  11px;
+
+}
+
+.product-name {
+
+min-height: 40px;
+font-size: 11px;
+
+}
+
+.product-rating {
+
+font-size: 8px;
+
+}
+
+.product-price {
+
+font-size: 13px;
+
+}
+
+.product-old-price {
+
+font-size: 9px;
+
+}
+
+.product-add {
+
+height: 38px;
+margin-top: 10px;
+font-size: 9px;
+
+}
+
+.product-favorite {
+
+width: 31px;
+height: 31px;
+font-size: 16px;
+
+}
+
+.product-badge {
+
+top: 8px;
+right: 8px;
+padding:
+  4px 6px;
+font-size: 7px;
+
+}
+
+.sale-banner {
+
+min-height: 350px;
+
+}
+
+.sale-banner-content {
+
+width:
+  calc(100% - 28px);
+text-align: center;
+
+}
+
+.sale-banner h2 {
+
+font-size: 31px;
+
+}
+
+.sort-wrapper {
+
+width: 100%;
+justify-content: space-between;
+
+}
+
+.sort-wrapper select {
+
+flex: 1;
+
+}
+
+.advanced-filters {
+
+grid-template-columns:
+  1fr;
+
+}
+
+.form-grid {
+
+grid-template-columns:
+  1fr;
+
+}
+
+.form-field-full {
+
+grid-column:
+  auto;
+
+}
+
+.checkout-content {
+
+padding:
+  32px 18px;
+
+}
+
+.product-modal {
+
+grid-template-columns:
+  1fr;
+
+}
+
+.product-modal-gallery {
+
+min-height: 340px;
+
+}
+
+.product-modal-gallery img {
+
+min-height: 340px;
+
+}
+
+.product-modal-details {
+
+padding:
+  28px 20px;
+
+}
+
+.delivery-section {
+
+padding:
+  25px 14px;
+grid-template-columns:
+  1fr 1fr;
+
+}
+
+.delivery-item {
+
+justify-content: flex-start;
+padding:
+  8px;
+
+}
+
+.delivery-item > span {
+
+font-size: 18px;
+
+}
+
+.delivery-item strong {
+
+font-size: 9px;
+
+}
+
+.delivery-item small {
+
+font-size: 7px;
+
+}
+
+.newsletter-section {
+
+padding:
+  60px 20px;
+
+}
+
+.newsletter-section h2 {
+
+font-size: 22px;
+
+}
+
+.newsletter-form {
+
+height: 44px;
+
+}
+
+.mobile-bottom-nav {
+
+position: fixed;
+right: 0;
+bottom: 0;
+left: 0;
+z-index: 2500;
+height: 66px;
+display: grid;
+grid-template-columns:
+  repeat(5, 1fr);
+background:
+  rgba(8,8,8,0.96);
+backdrop-filter:
+  blur(15px);
+border-top:
+  1px solid var(--border);
+
+}
+
+.mobile-bottom-nav button {
+
+position: relative;
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+gap: 1px;
+background: transparent;
+color: #777;
+
+}
+
+.mobile-bottom-nav button:hover,
+.mobile-bottom-nav button.active {
+
+color: white;
+
+}
+
+.mobile-bottom-nav span {
+
+font-size: 19px;
+line-height: 1;
+
+}
+
+.mobile-bottom-nav small {
+
+font-size: 8px;
+
+}
+
+}
+
+/* =========================================================
+43. VERY SMALL DEVICES
+========================================================= */
+
+@media (max-width: 380px) {
+
+.header-actions {
+
+gap: 0;
+
+}
+
+.header-action {
+
+min-width: 33px;
+
+}
+
+.header-action span {
+
+font-size: 16px;
+
+}
+
+.logo-main {
+
+font-size: 18px;
+
+}
+
+.hero-content h1 {
+
+font-size: 33px;
+
+}
+
+.category-card {
+
+min-height: 190px;
+
+}
+
+.countdown > div {
+
+min-width: 37px;
+
+}
+
+}
+
+/* =========================================================
+44. ACCESSIBILITY
+========================================================= */
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+
+outline:
+2px solid var(–gold);
+
+outline-offset:
+3px;
+
+}
+
+/* =========================================================
+45. REDUCED MOTION
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+html {
+scroll-behavior: auto;
+}
+
+*,
+*::before,
+*::after {
+
+animation-duration:
+  0.01ms !important;
+animation-iteration-count:
+  1 !important;
+transition-duration:
+  0.01ms !important;
+
+}
+
+}
