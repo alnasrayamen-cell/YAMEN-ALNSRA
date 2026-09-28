@@ -71,10 +71,6 @@
       width: 100%;
     }
 
-    /* =========================
-       TOP BAR
-    ========================= */
-
     .top-bar {
       background: var(--black);
       color: white;
@@ -90,10 +86,6 @@
     .top-bar span {
       opacity: .9;
     }
-
-    /* =========================
-       HEADER
-    ========================= */
 
     header {
       position: sticky;
@@ -197,10 +189,6 @@
       align-items: center;
       justify-content: center;
     }
-
-    /* =========================
-       HERO
-    ========================= */
 
     .hero {
       max-width: var(--max);
@@ -313,10 +301,6 @@
       color: black;
     }
 
-    /* =========================
-       FEATURES
-    ========================= */
-
     .features {
       max-width: var(--max);
       margin: auto;
@@ -346,10 +330,6 @@
       font-size: 11px;
       color: var(--gray);
     }
-
-    /* =========================
-       SECTION
-    ========================= */
 
     .section {
       max-width: var(--max);
@@ -385,10 +365,6 @@
       border-bottom: 1px solid black;
       padding-bottom: 4px;
     }
-
-    /* =========================
-       CATEGORIES
-    ========================= */
 
     .categories {
       display: grid;
@@ -436,10 +412,6 @@
       font-size: 12px;
       opacity: .8;
     }
-
-    /* =========================
-       PRODUCTS
-    ========================= */
 
     .products-toolbar {
       display: flex;
@@ -594,10 +566,6 @@
       color: black;
     }
 
-    /* =========================
-       PROMO
-    ========================= */
-
     .promo {
       max-width: var(--max);
       margin: auto;
@@ -640,10 +608,6 @@
       font-size: 13px;
       margin-bottom: 25px;
     }
-
-    /* =========================
-       NEWSLETTER
-    ========================= */
 
     .newsletter {
       background: var(--soft);
@@ -690,10 +654,6 @@
       color: white;
       font-weight: 700;
     }
-
-    /* =========================
-       FOOTER
-    ========================= */
 
     footer {
       background: var(--black);
@@ -757,10 +717,6 @@
       color: #666;
       font-size: 10px;
     }
-
-    /* =========================
-       CART DRAWER
-    ========================= */
 
     .overlay {
       position: fixed;
@@ -871,10 +827,6 @@
       opacity: .5;
       cursor: not-allowed;
     }
-
-    /* =========================
-       RESPONSIVE
-    ========================= */
 
     @media (max-width: 1000px) {
       .nav {
@@ -1086,18 +1038,15 @@
 
 <body>
 
-  <!-- =========================
-       TOP BAR
-  ========================= -->
-
+  <!-- TOP BAR -->
   <div class="top-bar">
-    <span>شحن سريع • دفع آمن • KOSHI.WEAR</span>
+    <span>
+      شحن سريع • دفع آمن •
+      <span data-store-name>KOSHI.WEAR</span>
+    </span>
   </div>
 
-  <!-- =========================
-       HEADER
-  ========================= -->
-
+  <!-- HEADER -->
   <header>
     <nav class="nav">
 
@@ -1110,8 +1059,12 @@
         </div>
       </div>
 
-      <a class="brand" href="#home">
-        KOSHI<span>.WEAR</span>
+      <a
+        class="brand"
+        href="#home"
+        data-store-name
+      >
+        KOSHI.WEAR
       </a>
 
       <div class="nav-left">
@@ -1140,14 +1093,10 @@
     </nav>
   </header>
 
-  <!-- =========================
-       MAIN
-  ========================= -->
-
+  <!-- MAIN -->
   <main id="home">
 
     <!-- HERO -->
-
     <section class="hero">
 
       <div class="hero-card">
@@ -1158,9 +1107,8 @@
             NEW COLLECTION
           </div>
 
-          <h1>
-            KOSHI
-            <span>WEAR.</span>
+          <h1 data-store-name>
+            KOSHI.WEAR
           </h1>
 
           <p class="hero-text">
@@ -1194,7 +1142,6 @@
     </section>
 
     <!-- FEATURES -->
-
     <section class="features">
 
       <div class="feature">
@@ -1220,7 +1167,6 @@
     </section>
 
     <!-- COLLECTIONS -->
-
     <section
       class="section"
       id="collections"
@@ -1308,7 +1254,6 @@
     </section>
 
     <!-- SHOP -->
-
     <section
       class="section"
       id="shop"
@@ -1317,7 +1262,7 @@
       <div class="section-head">
 
         <div>
-          <div class="section-kicker">
+          <div class="section-kicker" data-store-name>
             KOSHI.WEAR
           </div>
 
@@ -1376,11 +1321,6 @@
 
       </div>
 
-      <!--
-        المنتجات الحقيقية تأتي من Supabase
-        عن طريق app.js
-      -->
-
       <div
         id="productsGrid"
         class="products-grid"
@@ -1402,7 +1342,6 @@
     </section>
 
     <!-- PROMO -->
-
     <section
       class="promo"
       id="offers"
@@ -1412,7 +1351,7 @@
 
         <div class="promo-content">
 
-          <div class="eyebrow">
+          <div class="eyebrow" data-store-name>
             KOSHI.WEAR
           </div>
 
@@ -1440,7 +1379,6 @@
     </section>
 
     <!-- NEWSLETTER -->
-
     <section class="newsletter">
 
       <h2>
@@ -1448,7 +1386,8 @@
       </h2>
 
       <p>
-        اشترك ليصلك كل جديد من KOSHI.WEAR.
+        اشترك ليصلك كل جديد من
+        <span data-store-name>KOSHI.WEAR</span>.
       </p>
 
       <form
@@ -1472,10 +1411,7 @@
 
   </main>
 
-  <!-- =========================
-       FOOTER
-  ========================= -->
-
+  <!-- FOOTER -->
   <footer>
 
     <div class="footer-inner">
@@ -1484,7 +1420,10 @@
 
         <div class="footer-brand-block">
 
-          <div class="footer-brand">
+          <div
+            class="footer-brand"
+            data-store-name
+          >
             KOSHI.WEAR
           </div>
 
@@ -1537,7 +1476,7 @@
 
         <div class="footer-column">
 
-          <h4>
+          <h4 data-store-name>
             KOSHI.WEAR
           </h4>
 
@@ -1560,7 +1499,9 @@
       <div class="footer-bottom">
 
         <span>
-          ©️ 2026 KOSHI.WEAR — جميع الحقوق محفوظة
+          ©️ 2026
+          <span data-store-name>KOSHI.WEAR</span>
+          — جميع الحقوق محفوظة
         </span>
 
         <span>
@@ -1573,20 +1514,14 @@
 
   </footer>
 
-  <!-- =========================
-       CART OVERLAY
-  ========================= -->
-
+  <!-- CART OVERLAY -->
   <div
     id="overlay"
     class="overlay"
     onclick="closeCart()"
   ></div>
 
-  <!-- =========================
-       REAL CART
-  ========================= -->
-
+  <!-- REAL CART -->
   <aside
     id="cartDrawer"
     class="cart-drawer"
@@ -1647,11 +1582,6 @@
 
       </div>
 
-      <!--
-        هذا هو زر Checkout الحقيقي.
-        app.js مربوط عليه.
-      -->
-
       <button
         id="checkoutButton"
         class="checkout-btn"
@@ -1664,16 +1594,10 @@
 
   </aside>
 
-  <!-- =========================
-       SUPABASE
-  ========================= -->
-
+  <!-- SUPABASE -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-  <!-- =========================
-       REAL STORE APP
-  ========================= -->
-
+  <!-- REAL STORE APP -->
   <script src="app.js"></script>
 
 </body>
