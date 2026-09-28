@@ -3,7 +3,7 @@
    ========================================================= */
 
 const SUPABASE_URL = "https://eflcolwdhddfncbuvjua.supabase.co";
-const SUPABASE_KEY = "YOUR_SUPABASE_PUBLISHABLE_KEY";
+const SUPABASE_KEY = "sb_publishable_J8K4FI12ExE5stcHVHviRQ_Uk__w4ko";
 
 const supabaseClient = window.supabase
   ? window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY)
