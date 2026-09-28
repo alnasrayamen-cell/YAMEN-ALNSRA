@@ -7,7 +7,7 @@ const SUPABASE_URL =
 // استخدم نفس Publishable Key الموجود عندك في Supabase
 // لا تستخدم Secret Key هنا.
 const SUPABASE_PUBLISHABLE_KEY =
-  "ضع_هنا_PUBLISHABLE_KEY_الخاص_بمشروعك";
+  "sb_publishable_J8K4FI12ExE5stcHVHviRQ_Uk__w4ko";
 const { createClient } = window.supabase;
 const supabaseClient = createClient(
   SUPABASE_URL,
