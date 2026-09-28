@@ -1,163 +1,246 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Login | YAMEN ALNSRA</title>
-    <style>
-        * {
-            box-sizing: border-box;
-        }
-        body {
-            margin: 0;
-            min-height: 100vh;
-            font-family: Arial, sans-serif;
-            background: #0f1115;
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .login-box {
-            width: min(420px, 90%);
-            padding: 35px;
-            background: #181b21;
-            border: 1px solid #292e38;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
-        }
-        .logo {
-            text-align: center;
-            font-size: 28px;
-            font-weight: 800;
-            margin-bottom: 8px;
-        }
-        .subtitle {
-            text-align: center;
-            color: #9ca3af;
-            margin-bottom: 30px;
-        }
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: bold;
-        }
-        input {
-            width: 100%;
-            padding: 14px;
-            margin-bottom: 20px;
-            background: #101217;
-            color: white;
-            border: 1px solid #303641;
-            border-radius: 10px;
-            font-size: 16px;
-            outline: none;
-        }
-        input:focus {
-            border-color: #ffffff;
-        }
-        button {
-            width: 100%;
-            padding: 14px;
-            border: none;
-            border-radius: 10px;
-            background: white;
-            color: #111;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-        button:hover {
-            opacity: 0.9;
-        }
-        .error {
-            display: none;
-            margin-top: 15px;
-            padding: 12px;
-            background: #351a1a;
-            color: #ff8d8d;
-            border-radius: 10px;
-            text-align: center;
-        }
-        .lock {
-            text-align: center;
-            font-size: 45px;
-            margin-bottom: 15px;
-        }
-        .footer {
-            text-align: center;
-            margin-top: 25px;
-            color: #6b7280;
-            font-size: 13px;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>تسجيل دخول الأدمن - YAMEN ALNSRA</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #0b0b0b;
+      font-family: Arial, sans-serif;
+      color: #fff;
+      padding: 20px;
+    }
+    .login-box {
+      width: 100%;
+      max-width: 420px;
+      background: #151515;
+      border: 1px solid #292929;
+      border-radius: 20px;
+      padding: 35px;
+      box-shadow: 0 20px 60px rgba(0,0,0,.4);
+    }
+    .logo {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      background: #fff;
+      color: #111;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+      font-size: 25px;
+      font-weight: bold;
+    }
+    h1 {
+      text-align: center;
+      font-size: 26px;
+      margin-bottom: 8px;
+    }
+    .subtitle {
+      text-align: center;
+      color: #999;
+      margin-bottom: 30px;
+      font-size: 14px;
+    }
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 14px;
+      color: #ddd;
+    }
+    input {
+      width: 100%;
+      padding: 14px;
+      margin-bottom: 18px;
+      border-radius: 10px;
+      border: 1px solid #333;
+      background: #0e0e0e;
+      color: white;
+      outline: none;
+      font-size: 15px;
+    }
+    input:focus {
+      border-color: #777;
+    }
+    button {
+      width: 100%;
+      padding: 14px;
+      border: 0;
+      border-radius: 10px;
+      background: white;
+      color: #111;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    button:disabled {
+      opacity: .6;
+      cursor: not-allowed;
+    }
+    .message {
+      display: none;
+      margin-top: 18px;
+      padding: 12px;
+      border-radius: 10px;
+      text-align: center;
+      font-size: 14px;
+    }
+    .error {
+      display: block;
+      background: #351515;
+      color: #ffb3b3;
+      border: 1px solid #6b2626;
+    }
+    .success {
+      display: block;
+      background: #15351e;
+      color: #b9f5c8;
+      border: 1px solid #28683a;
+    }
+    .back {
+      display: block;
+      text-align: center;
+      color: #777;
+      text-decoration: none;
+      margin-top: 22px;
+      font-size: 13px;
+    }
+    .back:hover {
+      color: #fff;
+    }
+  </style>
 </head>
 <body>
-    <main class="login-box">
-        <div class="lock">
-            🔐
-        </div>
-        <div class="logo">
-            YAMEN ALNSRA
-        </div>
-        <div class="subtitle">
-            لوحة الإدارة
-        </div>
-        <form id="loginForm">
-            <label for="username">
-                اسم المستخدم
-            </label>
-            <input
-                id="username"
-                type="text"
-                autocomplete="username"
-                placeholder="اسم المستخدم"
-                required
-            >
-            <label for="password">
-                كلمة المرور
-            </label>
-            <input
-                id="password"
-                type="password"
-                autocomplete="current-password"
-                placeholder="كلمة المرور"
-                required
-            >
-            <button type="submit">
-                تسجيل الدخول
-            </button>
-            <div
-                id="errorMessage"
-                class="error"
-            >
-                بيانات الدخول غير صحيحة
-            </div>
-        </form>
-        <div class="footer">
-            Admin Panel
-        </div>
-    </main>
-    <script>
-        /*
-         * واجهة تسجيل الدخول فقط.
-         *
-         * لن نضع اسم المستخدم أو كلمة المرور
-         * داخل هذا الملف.
-         *
-         * في الخطوة التالية سنربطها بنظام
-         * Authentication حقيقي.
-         */
-        document
-            .getElementById("loginForm")
-            .addEventListener("submit", function(event) {
-                event.preventDefault();
-                const error =
-                    document.getElementById("errorMessage");
-                error.style.display = "block";
-                error.textContent =
-                    "سيتم تفعيل تسجيل الدخول الحقيقي بعد ربط قاعدة البيانات.";
-            });
-    </script>
+  <div class="login-box">
+    <div class="logo">YA</div>
+    <h1>لوحة الإدارة</h1>
+    <div class="subtitle">
+      تسجيل الدخول إلى إدارة YAMEN ALNSRA
+    </div>
+    <form id="loginForm">
+      <label for="email">البريد الإلكتروني</label>
+      <input
+        id="email"
+        type="email"
+        placeholder="admin@example.com"
+        autocomplete="username"
+        required
+      >
+      <label for="password">كلمة المرور</label>
+      <input
+        id="password"
+        type="password"
+        placeholder="••••••••"
+        autocomplete="current-password"
+        required
+      >
+      <button id="loginButton" type="submit">
+        تسجيل الدخول
+      </button>
+    </form>
+    <div id="message" class="message"></div>
+    <a class="back" href="index.html">
+      العودة إلى المتجر
+    </a>
+  </div>
+  <script>
+    // ============================================
+    // SUPABASE CONFIG
+    // ============================================
+    const SUPABASE_URL =
+      "https://eflcolwdhddfncbuvjua.supabase.co";
+    const SUPABASE_PUBLISHABLE_KEY =
+      sb_publishable_J8K4FI12ExE5stcHVHviRQ_Uk__w4ko;
+    const { createClient } = window.supabase;
+    const supabaseClient = createClient(
+      SUPABASE_URL,
+      SUPABASE_PUBLISHABLE_KEY
+    );
+    // ============================================
+    // ELEMENTS
+    // ============================================
+    const loginForm = document.getElementById("loginForm");
+    const emailInput = document.getElementById("email");
+    const passwordInput = document.getElementById("password");
+    const loginButton = document.getElementById("loginButton");
+    const message = document.getElementById("message");
+    // ============================================
+    // MESSAGE
+    // ============================================
+    function showMessage(text, type) {
+      message.textContent = text;
+      message.className = "message " + type;
+    }
+    // ============================================
+    // CHECK EXISTING SESSION
+    // ============================================
+    async function checkSession() {
+      const {
+        data: { session }
+      } = await supabaseClient.auth.getSession();
+      if (session) {
+        window.location.href = "admin.html";
+      }
+    }
+    checkSession();
+    // ============================================
+    // LOGIN
+    // ============================================
+    loginForm.addEventListener("submit", async function(event) {
+      event.preventDefault();
+      const email = emailInput.value.trim();
+      const password = passwordInput.value;
+      if (!email || !password) {
+        showMessage(
+          "أدخل البريد الإلكتروني وكلمة المرور.",
+          "error"
+        );
+        return;
+      }
+      loginButton.disabled = true;
+      loginButton.textContent = "جاري تسجيل الدخول...";
+      message.className = "message";
+      try {
+        const { data, error } =
+          await supabaseClient.auth.signInWithPassword({
+            email: email,
+            password: password
+          });
+        if (error) {
+          throw error;
+        }
+        if (!data.session) {
+          throw new Error("لم يتم إنشاء جلسة تسجيل الدخول.");
+        }
+        showMessage(
+          "تم تسجيل الدخول بنجاح. جاري فتح لوحة الإدارة...",
+          "success"
+        );
+        setTimeout(() => {
+          window.location.href = "admin.html";
+        }, 700);
+      } catch (error) {
+        console.error("Supabase login error:", error);
+        showMessage(
+          "البريد الإلكتروني أو كلمة المرور غير صحيحة.",
+          "error"
+        );
+        loginButton.disabled = false;
+        loginButton.textContent = "تسجيل الدخول";
+      }
+    });
+  </script>
 </body>
 </html>
