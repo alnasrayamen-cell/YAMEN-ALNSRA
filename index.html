@@ -1,1 +1,1339 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
 
+<meta
+name=“viewport”
+content=“width=device-width, initial-scale=1.0”
+
+  <title>KOSHI.WEAR — ملابس أطفال</title>
+
+<meta
+name=“description”
+content=“KOSHI.WEAR — متجر ملابس أطفال عصري”
+
+  <link
+    rel="preconnect"
+    href="https://fonts.googleapis.com"
+  >
+  <link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+  >
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Montserrat:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  >
+  <link
+    rel="stylesheet"
+    href="style.css"
+  >
+</head>
+<body>
+  <!-- =====================================================
+       TOP BAR
+  ====================================================== -->
+  <div class="top-bar">
+<div class="top-bar-inner">
+  <div class="top-message">
+    🚚 شحن سريع وآمن لجميع الطلبات
+  </div>
+  <div class="top-links">
+    <button type="button">
+      العربية
+    </button>
+    <span>/</span>
+    <button type="button">
+      USD
+    </button>
+    <a href="#help">
+      المساعدة
+    </a>
+  </div>
+</div>
+  </div>
+  <!-- =====================================================
+       HEADER
+  ====================================================== -->
+  <header class="site-header">
+<div class="header-inner">
+  <!-- Mobile Menu -->
+  <button
+    class="icon-button mobile-menu-button"
+    id="mobileMenuButton"
+    type="button"
+    aria-label="فتح القائمة"
+  >
+    ☰
+  </button>
+  <!-- Logo -->
+  <a
+    href="#"
+    class="logo"
+    data-nav="home"
+  >
+    <span class="logo-main">
+      KOSHI
+    </span>
+    <span class="logo-sub">
+      WEAR
+    </span>
+  </a>
+  <!-- Search -->
+  <div class="header-search">
+    <span class="search-icon">
+      🔍
+    </span>
+    <input
+      id="searchInput"
+      type="search"
+      placeholder="ابحث عن فستان، طقم، جاكيت..."
+      autocomplete="off"
+    >
+    <button
+      id="searchButton"
+      type="button"
+      aria-label="بحث"
+    >
+      بحث
+    </button>
+  </div>
+  <!-- Header Actions -->
+  <div class="header-actions">
+    <button
+      class="header-action"
+      id="accountButton"
+      type="button"
+    >
+      <span>♙</span>
+      <small>الحساب</small>
+    </button>
+    <button
+      class="header-action"
+      id="favoritesButton"
+      type="button"
+    >
+      <span>♡</span>
+      <small>المفضلة</small>
+      <b
+        class="action-count"
+        id="favoritesCount"
+      >
+        0
+      </b>
+    </button>
+    <button
+      class="header-action"
+      id="cartButton"
+      type="button"
+    >
+      <span>🛍</span>
+      <small>الحقيبة</small>
+      <b
+        class="action-count"
+        id="cartCount"
+      >
+        0
+      </b>
+    </button>
+  </div>
+</div>
+<!-- ===================================================
+     NAVIGATION
+==================================================== -->
+<nav class="main-navigation">
+  <a
+    href="#"
+    data-nav="home"
+  >
+    الرئيسية
+  </a>
+  <a
+    href="#new"
+    data-category="new"
+  >
+    NEW IN
+  </a>
+  <a
+    href="#girls"
+    data-category="girls"
+  >
+    البنات
+  </a>
+  <a
+    href="#boys"
+    data-category="boys"
+  >
+    الأولاد
+  </a>
+  <a
+    href="#baby"
+    data-category="newborn"
+  >
+    المواليد
+  </a>
+  <a
+    href="#shoes"
+    data-category="shoes"
+  >
+    الأحذية
+  </a>
+  <a
+    href="#accessories"
+    data-category="accessories"
+  >
+    الإكسسوارات
+  </a>
+  <a
+    href="#sale"
+    data-category="sale"
+    class="sale-link"
+  >
+    SALE
+  </a>
+</nav>
+  </header>
+  <!-- =====================================================
+       MOBILE MENU
+  ====================================================== -->
+  <aside
+    class="mobile-menu"
+    id="mobileMenu"
+  >
+<div class="mobile-menu-header">
+  <strong>
+    KOSHI.WEAR
+  </strong>
+  <button
+    id="closeMobileMenu"
+    type="button"
+  >
+    ×
+  </button>
+</div>
+<div class="mobile-menu-links">
+  <a
+    href="#"
+    data-nav="home"
+  >
+    الرئيسية
+  </a>
+  <a
+    href="#new"
+    data-category="new"
+  >
+    NEW IN
+  </a>
+  <a
+    href="#girls"
+    data-category="girls"
+  >
+    البنات
+  </a>
+  <a
+    href="#boys"
+    data-category="boys"
+  >
+    الأولاد
+  </a>
+  <a
+    href="#baby"
+    data-category="newborn"
+  >
+    المواليد
+  </a>
+  <a
+    href="#shoes"
+    data-category="shoes"
+  >
+    الأحذية
+  </a>
+  <a
+    href="#accessories"
+    data-category="accessories"
+  >
+    الإكسسوارات
+  </a>
+  <a
+    href="#sale"
+    data-category="sale"
+  >
+    العروض
+  </a>
+</div>
+  </aside>
+  <!-- =====================================================
+       MAIN
+  ====================================================== -->
+  <main>
+<!-- ===================================================
+     HERO
+==================================================== -->
+<section class="hero-section">
+  <div class="hero-content">
+    <span class="hero-label">
+      NEW COLLECTION
+    </span>
+    <h1>
+      أجمل إطلالات
+      <br>
+      صغاركم تبدأ من هنا
+    </h1>
+    <p>
+      اكتشفوا أحدث تشكيلات ملابس الأطفال
+      بتصاميم عصرية ومميزة.
+    </p>
+    <button
+      class="primary-button"
+      id="heroShopButton"
+      type="button"
+    >
+      SHOP NOW
+      <span>←</span>
+    </button>
+  </div>
+</section>
+<!-- ===================================================
+     PROMO BAR
+==================================================== -->
+<section class="promo-strip">
+  <div>
+    🔥 خصومات تصل إلى 50%
+  </div>
+  <div>
+    🚚 شحن سريع
+  </div>
+  <div>
+    🎁 عروض حصرية
+  </div>
+  <div>
+    💳 دفع آمن
+  </div>
+</section>
+<!-- ===================================================
+     CATEGORIES
+==================================================== -->
+<section
+  class="section"
+  id="categories"
+>
+  <div class="section-heading">
+    <div>
+      <span class="section-kicker">
+        SHOP BY CATEGORY
+      </span>
+      <h2>
+        تسوق حسب الفئة
+      </h2>
+    </div>
+    <button
+      class="text-button"
+      type="button"
+      data-category="all"
+    >
+      عرض الكل ←
+    </button>
+  </div>
+  <div class="category-grid">
+    <button
+      class="category-card"
+      data-category="girls"
+      type="button"
+    >
+      <div class="category-image category-girls"></div>
+      <div class="category-overlay">
+        <span>
+          GIRLS
+        </span>
+        <strong>
+          بنات
+        </strong>
+      </div>
+    </button>
+    <button
+      class="category-card"
+      data-category="boys"
+      type="button"
+    >
+      <div class="category-image category-boys"></div>
+      <div class="category-overlay">
+        <span>
+          BOYS
+        </span>
+        <strong>
+          أولاد
+        </strong>
+      </div>
+    </button>
+    <button
+      class="category-card"
+      data-category="newborn"
+      type="button"
+    >
+      <div class="category-image category-baby"></div>
+      <div class="category-overlay">
+        <span>
+          BABY
+        </span>
+        <strong>
+          مواليد
+        </strong>
+      </div>
+    </button>
+    <button
+      class="category-card"
+      data-category="jackets"
+      type="button"
+    >
+      <div class="category-image category-jackets"></div>
+      <div class="category-overlay">
+        <span>
+          JACKETS
+        </span>
+        <strong>
+          جاكيتات
+        </strong>
+      </div>
+    </button>
+    <button
+      class="category-card"
+      data-category="sets"
+      type="button"
+    >
+      <div class="category-image category-sets"></div>
+      <div class="category-overlay">
+        <span>
+          SETS
+        </span>
+        <strong>
+          أطقم
+        </strong>
+      </div>
+    </button>
+    <button
+      class="category-card"
+      data-category="shoes"
+      type="button"
+    >
+      <div class="category-image category-shoes"></div>
+      <div class="category-overlay">
+        <span>
+          SHOES
+        </span>
+        <strong>
+          أحذية
+        </strong>
+      </div>
+    </button>
+    <button
+      class="category-card"
+      data-category="accessories"
+      type="button"
+    >
+      <div class="category-image category-accessories"></div>
+      <div class="category-overlay">
+        <span>
+          ACCESSORIES
+        </span>
+        <strong>
+          إكسسوارات
+        </strong>
+      </div>
+    </button>
+    <button
+      class="category-card sale-category"
+      data-category="sale"
+      type="button"
+    >
+      <div class="category-image category-sale"></div>
+      <div class="category-overlay">
+        <span>
+          SALE
+        </span>
+        <strong>
+          العروض
+        </strong>
+      </div>
+    </button>
+  </div>
+</section>
+<!-- ===================================================
+     FLASH SALE
+==================================================== -->
+<section
+  class="section flash-sale-section"
+  id="flash-sale"
+>
+  <div class="section-heading">
+    <div>
+      <span class="section-kicker">
+        LIMITED TIME
+      </span>
+      <h2>
+        FLASH SALE ⚡
+      </h2>
+    </div>
+    <div
+      class="countdown"
+      id="countdown"
+    >
+      <div>
+        <strong id="countHours">
+          02
+        </strong>
+        <small>
+          ساعة
+        </small>
+      </div>
+      <span>:</span>
+      <div>
+        <strong id="countMinutes">
+          18
+        </strong>
+        <small>
+          دقيقة
+        </small>
+      </div>
+      <span>:</span>
+      <div>
+        <strong id="countSeconds">
+          42
+        </strong>
+        <small>
+          ثانية
+        </small>
+      </div>
+    </div>
+  </div>
+  <div
+    class="product-grid"
+    id="flashProductsGrid"
+  >
+    <!-- Products inserted by app.js -->
+  </div>
+</section>
+<!-- ===================================================
+     NEW ARRIVALS
+==================================================== -->
+<section
+  class="section"
+  id="new"
+>
+  <div class="section-heading">
+    <div>
+      <span class="section-kicker">
+        JUST DROPPED
+      </span>
+      <h2>
+        NEW IN
+      </h2>
+    </div>
+    <div class="section-tabs">
+      <button
+        class="active"
+        data-new-filter="all"
+        type="button"
+      >
+        الكل
+      </button>
+      <button
+        data-new-filter="girls"
+        type="button"
+      >
+        بنات
+      </button>
+      <button
+        data-new-filter="boys"
+        type="button"
+      >
+        أولاد
+      </button>
+      <button
+        data-new-filter="newborn"
+        type="button"
+      >
+        مواليد
+      </button>
+    </div>
+  </div>
+  <div
+    class="product-grid"
+    id="newProductsGrid"
+  >
+    <div
+      class="products-loading"
+      id="productsLoading"
+    >
+      جاري تحميل المنتجات...
+    </div>
+  </div>
+</section>
+<!-- ===================================================
+     BEST SELLERS
+==================================================== -->
+<section
+  class="section"
+  id="best-sellers"
+>
+  <div class="section-heading">
+    <div>
+      <span class="section-kicker">
+        CUSTOMER FAVORITES
+      </span>
+      <h2>
+        BEST SELLERS
+      </h2>
+    </div>
+    <button
+      class="text-button"
+      type="button"
+      data-section="best"
+    >
+      عرض الكل ←
+    </button>
+  </div>
+  <div
+    class="product-grid"
+    id="bestProductsGrid"
+  >
+    <!-- Products inserted by app.js -->
+  </div>
+</section>
+<!-- ===================================================
+     SALE
+==================================================== -->
+<section
+  class="sale-banner"
+  id="sale"
+>
+  <div class="sale-banner-content">
+    <span>
+      KOSHI.WEAR SALE
+    </span>
+    <h2>
+      خصومات تصل إلى
+      <strong>
+        50%
+      </strong>
+    </h2>
+    <p>
+      لا تفوتوا عروضنا المحدودة.
+    </p>
+    <button
+      class="primary-button"
+      data-category="sale"
+      type="button"
+    >
+      تسوق العروض
+      <span>←</span>
+    </button>
+  </div>
+</section>
+<!-- ===================================================
+     ALL PRODUCTS
+==================================================== -->
+<section
+  class="section products-section"
+  id="products"
+>
+  <div class="section-heading">
+    <div>
+      <span class="section-kicker">
+        KOSHI.WEAR
+      </span>
+      <h2>
+        كل المنتجات
+      </h2>
+    </div>
+    <div class="sort-wrapper">
+      <label for="sortSelect">
+        ترتيب:
+      </label>
+      <select id="sortSelect">
+        <option value="newest">
+          الأحدث
+        </option>
+        <option value="price-low">
+          السعر: الأقل
+        </option>
+        <option value="price-high">
+          السعر: الأعلى
+        </option>
+        <option value="name">
+          الاسم
+        </option>
+      </select>
+    </div>
+  </div>
+  <!-- FILTERS -->
+  <div class="filters-bar">
+    <button
+      id="filterButton"
+      type="button"
+    >
+      ⚙ الفلاتر
+    </button>
+    <span id="resultsCount">
+      0 منتج
+    </span>
+  </div>
+  <div
+    class="advanced-filters"
+    id="advancedFilters"
+  >
+    <div class="filter-group">
+      <label>
+        الفئة
+      </label>
+      <select id="categoryFilter">
+        <option value="all">
+          الكل
+        </option>
+        <option value="girls">
+          بنات
+        </option>
+        <option value="boys">
+          أولاد
+        </option>
+        <option value="newborn">
+          مواليد
+        </option>
+        <option value="jackets">
+          جاكيتات
+        </option>
+        <option value="sets">
+          أطقم
+        </option>
+        <option value="shoes">
+          أحذية
+        </option>
+        <option value="accessories">
+          إكسسوارات
+        </option>
+        <option value="sale">
+          العروض
+        </option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <label>
+        العمر
+      </label>
+      <select id="ageFilter">
+        <option value="all">
+          كل الأعمار
+        </option>
+        <option value="0-3m">
+          0–3 أشهر
+        </option>
+        <option value="3-6m">
+          3–6 أشهر
+        </option>
+        <option value="6-12m">
+          6–12 شهر
+        </option>
+        <option value="1-2y">
+          1–2 سنة
+        </option>
+        <option value="3-5y">
+          3–5 سنوات
+        </option>
+        <option value="6-8y">
+          6–8 سنوات
+        </option>
+        <option value="9-12y">
+          9–12 سنة
+        </option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <label>
+        اللون
+      </label>
+      <select id="colorFilter">
+        <option value="all">
+          كل الألوان
+        </option>
+        <option value="white">
+          أبيض
+        </option>
+        <option value="black">
+          أسود
+        </option>
+        <option value="pink">
+          وردي
+        </option>
+        <option value="blue">
+          أزرق
+        </option>
+        <option value="yellow">
+          أصفر
+        </option>
+        <option value="beige">
+          بيج
+        </option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <label>
+        السعر
+      </label>
+      <div class="price-range">
+        <input
+          id="minPrice"
+          type="number"
+          min="0"
+          placeholder="من"
+        >
+        <input
+          id="maxPrice"
+          type="number"
+          min="0"
+          placeholder="إلى"
+        >
+      </div>
+    </div>
+    <button
+      id="clearFilters"
+      class="clear-filters"
+      type="button"
+    >
+      مسح الفلاتر
+    </button>
+  </div>
+  <div
+    class="product-grid"
+    id="productsGrid"
+  >
+    <!-- Products inserted by app.js -->
+  </div>
+  <div
+    class="products-empty"
+    id="productsEmpty"
+    hidden
+  >
+    <div>
+      🔎
+    </div>
+    <h3>
+      لم نجد منتجات
+    </h3>
+    <p>
+      جرب البحث أو تغيير الفلاتر.
+    </p>
+  </div>
+</section>
+<!-- ===================================================
+     REVIEWS
+==================================================== -->
+<section
+  class="section reviews-section"
+  id="reviews"
+>
+  <div class="section-heading">
+    <div>
+      <span class="section-kicker">
+        CUSTOMER LOVE
+      </span>
+      <h2>
+        آراء عملائنا
+      </h2>
+    </div>
+  </div>
+  <div class="reviews-grid">
+    <article class="review-card">
+      <div class="review-stars">
+        ★★★★★
+      </div>
+      <p>
+        "الملابس جودتها ممتازة والصور مطابقة للمنتج."
+      </p>
+      <strong>
+        سارة
+      </strong>
+    </article>
+    <article class="review-card">
+      <div class="review-stars">
+        ★★★★★
+      </div>
+      <p>
+        "وصل الطلب بسرعة والتغليف كان مرتب جداً."
+      </p>
+      <strong>
+        ليان
+      </strong>
+    </article>
+    <article class="review-card">
+      <div class="review-stars">
+        ★★★★★
+      </div>
+      <p>
+        "تشكيلة الأطفال جميلة والأسعار مناسبة."
+      </p>
+      <strong>
+        محمد
+      </strong>
+    </article>
+  </div>
+</section>
+<!-- ===================================================
+     DELIVERY
+==================================================== -->
+<section
+  class="delivery-section"
+  id="delivery"
+>
+  <div class="delivery-item">
+    <span>
+      🚚
+    </span>
+    <div>
+      <strong>
+        شحن سريع
+      </strong>
+      <small>
+        توصيل آمن حتى باب المنزل
+      </small>
+    </div>
+  </div>
+  <div class="delivery-item">
+    <span>
+      🔄
+    </span>
+    <div>
+      <strong>
+        استبدال
+      </strong>
+      <small>
+        حسب سياسة المتجر
+      </small>
+    </div>
+  </div>
+  <div class="delivery-item">
+    <span>
+      🔒
+    </span>
+    <div>
+      <strong>
+        دفع آمن
+      </strong>
+      <small>
+        حماية بيانات العملاء
+      </small>
+    </div>
+  </div>
+  <div class="delivery-item">
+    <span>
+      💬
+    </span>
+    <div>
+      <strong>
+        دعم العملاء
+      </strong>
+      <small>
+        نحن هنا لمساعدتك
+      </small>
+    </div>
+  </div>
+</section>
+<!-- ===================================================
+     NEWSLETTER
+==================================================== -->
+<section
+  class="newsletter-section"
+  id="newsletter"
+>
+  <div>
+    <span>
+      KOSHI.WEAR
+    </span>
+    <h2>
+      اشترك لتحصل على أحدث العروض
+    </h2>
+    <p>
+      كن أول من يعرف عن المنتجات الجديدة والخصومات.
+    </p>
+  </div>
+  <form
+    id="newsletterForm"
+    class="newsletter-form"
+  >
+    <input
+      type="email"
+      id="newsletterEmail"
+      placeholder="البريد الإلكتروني"
+      required
+    >
+    <button type="submit">
+      اشتراك
+    </button>
+  </form>
+</section>
+  </main>
+  <!-- =====================================================
+       PRODUCT MODAL
+  ====================================================== -->
+  <div
+    class="modal"
+    id="productModal"
+    hidden
+  >
+<div class="modal-backdrop"></div>
+<div
+  class="modal-content product-modal-content"
+  role="dialog"
+  aria-modal="true"
+>
+  <button
+    class="modal-close"
+    id="closeProductModal"
+    type="button"
+  >
+    ×
+  </button>
+  <div
+    class="product-modal"
+    id="productModalBody"
+  >
+    <!-- Product inserted by app.js -->
+  </div>
+</div>
+  </div>
+  <!-- =====================================================
+       CART DRAWER
+  ====================================================== -->
+  <aside
+    class="cart-drawer"
+    id="cartDrawer"
+  >
+<div class="cart-header">
+  <div>
+    <span>
+      YOUR BAG
+    </span>
+    <h2>
+      حقيبة التسوق
+    </h2>
+  </div>
+  <button
+    id="closeCart"
+    type="button"
+  >
+    ×
+  </button>
+</div>
+<div
+  class="cart-items"
+  id="cartItems"
+>
+  <!-- Cart items -->
+</div>
+<div class="cart-empty" id="cartEmpty">
+  <div>
+    🛍
+  </div>
+  <h3>
+    حقيبتك فارغة
+  </h3>
+  <p>
+    أضف بعض المنتجات الجميلة إليها.
+  </p>
+</div>
+<div class="cart-footer">
+  <div class="cart-total-row">
+    <span>
+      Subtotal
+    </span>
+    <strong id="cartSubtotal">
+      $0.00
+    </strong>
+  </div>
+  <div class="cart-total-row discount-row">
+    <span>
+      Discount
+    </span>
+    <strong id="cartDiscount">
+      -$0.00
+    </strong>
+  </div>
+  <div class="cart-total-row">
+    <span>
+      Shipping
+    </span>
+    <strong id="cartShipping">
+      $0.00
+    </strong>
+  </div>
+  <div class="cart-total-row cart-grand-total">
+    <span>
+      Total
+    </span>
+    <strong id="cartTotal">
+      $0.00
+    </strong>
+  </div>
+  <button
+    class="checkout-button"
+    id="checkoutButton"
+    type="button"
+  >
+    CHECKOUT
+  </button>
+</div>
+  </aside>
+  <!-- =====================================================
+       CART OVERLAY
+  ====================================================== -->
+  <div
+    class="drawer-overlay"
+    id="drawerOverlay"
+  ></div>
+  <!-- =====================================================
+       CHECKOUT MODAL
+  ====================================================== -->
+  <div
+    class="modal"
+    id="checkoutModal"
+    hidden
+  >
+<div class="modal-backdrop"></div>
+<div
+  class="modal-content checkout-content"
+  role="dialog"
+  aria-modal="true"
+>
+  <button
+    class="modal-close"
+    id="closeCheckoutModal"
+    type="button"
+  >
+    ×
+  </button>
+  <div class="checkout-header">
+    <span>
+      CHECKOUT
+    </span>
+    <h2>
+      إتمام الطلب
+    </h2>
+  </div>
+  <form id="checkoutForm">
+    <div class="form-grid">
+      <div class="form-field">
+        <label for="customerName">
+          الاسم الكامل
+        </label>
+        <input
+          id="customerName"
+          name="name"
+          type="text"
+          required
+          placeholder="اكتب اسمك"
+        >
+      </div>
+      <div class="form-field">
+        <label for="customerPhone">
+          رقم الهاتف
+        </label>
+        <input
+          id="customerPhone"
+          name="phone"
+          type="tel"
+          required
+          placeholder="05XXXXXXXX"
+        >
+      </div>
+      <div class="form-field">
+        <label for="customerRegion">
+          المحافظة / المنطقة
+        </label>
+        <input
+          id="customerRegion"
+          name="region"
+          type="text"
+          placeholder="مثال: نابلس"
+        >
+      </div>
+      <div class="form-field">
+        <label for="customerCity">
+          المدينة
+        </label>
+        <input
+          id="customerCity"
+          name="city"
+          type="text"
+          required
+          placeholder="المدينة"
+        >
+      </div>
+      <div class="form-field form-field-full">
+        <label for="customerAddress">
+          العنوان
+        </label>
+        <input
+          id="customerAddress"
+          name="address"
+          type="text"
+          required
+          placeholder="الشارع، الحي، رقم المنزل"
+        >
+      </div>
+      <div class="form-field form-field-full">
+        <label for="customerLandmark">
+          أقرب معلم
+        </label>
+        <input
+          id="customerLandmark"
+          name="landmark"
+          type="text"
+          placeholder="مثال: بجانب..."
+        >
+      </div>
+      <div class="form-field form-field-full">
+        <label for="customerNotes">
+          ملاحظات
+        </label>
+        <textarea
+          id="customerNotes"
+          name="notes"
+          rows="4"
+          placeholder="أي ملاحظات إضافية..."
+        ></textarea>
+      </div>
+    </div>
+    <div class="checkout-summary">
+      <div>
+        <span>
+          المجموع
+        </span>
+        <strong id="checkoutTotal">
+          $0.00
+        </strong>
+      </div>
+    </div>
+    <button
+      class="checkout-submit"
+      type="submit"
+    >
+      تأكيد الطلب
+    </button>
+  </form>
+</div>
+  </div>
+  <!-- =====================================================
+       ORDER SUCCESS
+  ====================================================== -->
+  <div
+    class="modal"
+    id="orderSuccessModal"
+    hidden
+  >
+<div class="modal-backdrop"></div>
+<div
+  class="modal-content success-content"
+  role="dialog"
+  aria-modal="true"
+>
+  <div class="success-icon">
+    ✓
+  </div>
+  <span>
+    ORDER CONFIRMED
+  </span>
+  <h2>
+    تم استلام طلبك 🎉
+  </h2>
+  <p>
+    شكراً لتسوقك من KOSHI.WEAR
+  </p>
+  <strong id="orderNumber">
+    #
+  </strong>
+  <button
+    id="closeSuccessModal"
+    class="primary-button"
+    type="button"
+  >
+    متابعة التسوق
+  </button>
+</div>
+  </div>
+  <!-- =====================================================
+       TOAST
+  ====================================================== -->
+  <div
+    class="toast"
+    id="toast"
+    role="status"
+  ></div>
+  <!-- =====================================================
+       MOBILE BOTTOM NAVIGATION
+  ====================================================== -->
+  <nav class="mobile-bottom-nav">
+<button
+  type="button"
+  data-nav="home"
+>
+  <span>
+    ⌂
+  </span>
+  <small>
+    الرئيسية
+  </small>
+</button>
+<button
+  type="button"
+  id="mobileCategoriesButton"
+>
+  <span>
+    ☰
+  </span>
+  <small>
+    الأقسام
+  </small>
+</button>
+<button
+  type="button"
+  id="mobileWishlistButton"
+>
+  <span>
+    ♡
+  </span>
+  <small>
+    المفضلة
+  </small>
+</button>
+<button
+  type="button"
+  id="mobileCartButton"
+>
+  <span>
+    🛍
+  </span>
+  <small>
+    الحقيبة
+  </small>
+</button>
+<button
+  type="button"
+  id="mobileAccountButton"
+>
+  <span>
+    ♙
+  </span>
+  <small>
+    حسابي
+  </small>
+</button>
+  </nav>
+  <!-- =====================================================
+       JAVASCRIPT
+  ====================================================== -->
+  <script
+    src="app.js"
+    defer
+  ></script>
+</body>
+</html>
