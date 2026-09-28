@@ -1196,154 +1196,488 @@ document
         saveSettings
     );
 /* =========================
-   19. PRODUCT MODAL
+   19. PRODUCT MODAL + REAL IMAGE UPLOAD
    ========================= */
+
 document
     .getElementById("productForm")
     ?.addEventListener(
         "submit",
         async function(event) {
+
             event.preventDefault();
-            const name =
-                document
-                    .getElementById("productName")
-                    .value
-                    .trim();
-            const description =
-                document
-                    .getElementById("productDescription")
-                    .value
-                    .trim();
-            const price =
-                Number(
+
+            const saveButton =
+                document.getElementById("saveProductBtn");
+
+            try {
+
+                if (saveButton) {
+                    saveButton.disabled = true;
+                    saveButton.textContent =
+                        "جاري حفظ المنتج...";
+                }
+
+                /* =========================
+                   PRODUCT DATA
+                   ========================= */
+
+                const name =
                     document
-                        .getElementById("productPrice")
+                        .getElementById("productName")
                         .value
-                );
-            const salePriceRaw =
-                document
-                    .getElementById("productSalePrice")
-                    .value
-                    .trim();
-            const salePrice =
-                salePriceRaw
-                ? Number(salePriceRaw)
-                : null;
-            const sku =
-                document
-                    .getElementById("productSku")
-                    .value
-                    .trim();
-            const barcode =
-                document
-                    .getElementById("productBarcode")
-                    .value
-                    .trim();
-            const stock =
-                Number(
+                        .trim();
+
+                const description =
                     document
-                        .getElementById("productStock")
+                        .getElementById("productDescription")
                         .value
+                        .trim();
+
+                const price =
+                    Number(
+                        document
+                            .getElementById("productPrice")
+                            .value
+                    );
+
+                const salePriceRaw =
+                    document
+                        .getElementById("productSalePrice")
+                        .value
+                        .trim();
+
+                const salePrice =
+                    salePriceRaw
+                    ? Number(salePriceRaw)
+                    : null;
+
+                const sku =
+                    document
+                        .getElementById("productSku")
+                        .value
+                        .trim();
+
+                const stock =
+                    Number(
+                        document
+                            .getElementById("productStock")
+                            .value
+                    );
+
+                const colorsText =
+                    document
+                        .getElementById("productColors")
+                        .value
+                        .trim();
+
+                const sizesText =
+                    document
+                        .getElementById("productSizes")
+                        .value
+                        .trim();
+
+                const activeCheckbox =
+                    document.getElementById("productActive");
+
+                const isActive =
+                    activeCheckbox
+                    ? activeCheckbox.checked
+                    : true;
+
+
+                /* =========================
+                   VALIDATION
+                   ========================= */
+
+                if (!name) {
+                    showMessage("اكتب اسم المنتج.");
+                    return;
+                }
+
+                if (!Number.isFinite(price) || price < 0) {
+                    showMessage("أدخل سعرًا صحيحًا.");
+                    return;
+                }
+
+                if (
+                    salePrice !== null &&
+                    (
+                        !Number.isFinite(salePrice) ||
+                        salePrice < 0
+                    )
+                ) {
+                    showMessage(
+                        "أدخل سعر تخفيض صحيح."
+                    );
+                    return;
+                }
+
+                if (!Number.isFinite(stock) || stock < 0) {
+                    showMessage(
+                        "أدخل كمية مخزون صحيحة."
+                    );
+                    return;
+                }
+
+
+                /* =========================
+                   COLORS
+                   ========================= */
+
+                const colors =
+                    colorsText
+                    ?
+                    colorsText
+                        .split(",")
+                        .map(item => item.trim())
+                        .filter(Boolean)
+                    :
+                    [];
+
+
+                /* =========================
+                   SIZES
+                   ========================= */
+
+                const sizes =
+                    sizesText
+                    ?
+                    sizesText
+                        .split(",")
+                        .map(item => item.trim())
+                        .filter(Boolean)
+                    :
+                    [];
+
+
+                /* =========================
+                   IMAGE FILE
+                   ========================= */
+
+                const imageInput =
+                    document.getElementById(
+                        "productImage"
+                    );
+
+                const imageFile =
+                    imageInput?.files?.[0] || null;
+
+                let imageUrl = null;
+                let uploadedImagePath = null;
+
+
+                /* =========================
+                   UPLOAD IMAGE TO SUPABASE
+                   STORAGE BUCKET: koshi
+                   ========================= */
+
+                if (imageFile) {
+
+                    if (
+                        !imageFile.type.startsWith(
+                            "image/"
+                        )
+                    ) {
+                        showMessage(
+                            "الملف المختار ليس صورة."
+                        );
+                        return;
+                    }
+
+                    /* منع الصور الضخمة جدًا */
+
+                    if (
+                        imageFile.size >
+                        10 * 1024 * 1024
+                    ) {
+                        showMessage(
+                            "حجم الصورة كبير جدًا. الحد الأقصى 10MB."
+                        );
+                        return;
+                    }
+
+                    if (saveButton) {
+                        saveButton.textContent =
+                            "جاري رفع الصورة...";
+                    }
+
+
+                    /* اسم آمن للملف */
+
+                    const extension =
+                        (
+                            imageFile.name
+                                .split(".")
+                                .pop() ||
+                            "jpg"
+                        )
+                        .toLowerCase()
+                        .replace(
+                            /[^a-z0-9]/g,
+                            ""
+                        ) || "jpg";
+
+
+                    const randomName =
+                        typeof crypto !== "undefined" &&
+                        crypto.randomUUID
+                        ?
+                        crypto.randomUUID()
+                        :
+                        Date.now().toString();
+
+
+                    uploadedImagePath =
+                        `products/${randomName}.${extension}`;
+
+
+                    const {
+                        error: uploadError
+                    } =
+                        await supabaseClient
+                            .storage
+                            .from("koshi")
+                            .upload(
+                                uploadedImagePath,
+                                imageFile,
+                                {
+                                    cacheControl: "3600",
+                                    upsert: false,
+                                    contentType:
+                                        imageFile.type
+                                }
+                            );
+
+
+                    if (uploadError) {
+
+                        console.error(
+                            "Image upload error:",
+                            uploadError
+                        );
+
+                        showMessage(
+                            "تعذر رفع الصورة:\n" +
+                            uploadError.message
+                        );
+
+                        return;
+                    }
+
+
+                    /* =========================
+                       GET PUBLIC IMAGE URL
+                       ========================= */
+
+                    const {
+                        data: publicUrlData
+                    } =
+                        supabaseClient
+                            .storage
+                            .from("koshi")
+                            .getPublicUrl(
+                                uploadedImagePath
+                            );
+
+
+                    imageUrl =
+                        publicUrlData?.publicUrl ||
+                        null;
+
+
+                    if (!imageUrl) {
+
+                        showMessage(
+                            "تم رفع الصورة لكن تعذر الحصول على رابطها."
+                        );
+
+                        return;
+                    }
+                }
+
+
+                /* =========================
+                   SAVE PRODUCT
+                   ========================= */
+
+                if (saveButton) {
+                    saveButton.textContent =
+                        "جاري حفظ المنتج...";
+                }
+
+
+                const {
+                    data: insertedProduct,
+                    error: productError
+                } =
+                    await supabaseClient
+                        .from("products")
+                        .insert({
+                            name,
+                            description:
+                                description || null,
+
+                            price,
+
+                            sale_price:
+                                salePrice,
+
+                            image_url:
+                                imageUrl,
+
+                            sku:
+                                sku || null,
+
+                            barcode:
+                                null,
+
+                            stock,
+
+                            colors,
+
+                            sizes,
+
+                            is_active:
+                                isActive
+                        })
+                        .select()
+                        .single();
+
+
+                /* =========================
+                   IF DATABASE INSERT FAILS
+                   DELETE UPLOADED IMAGE
+                   ========================= */
+
+                if (productError) {
+
+                    console.error(
+                        "Create product:",
+                        productError
+                    );
+
+
+                    if (uploadedImagePath) {
+
+                        await supabaseClient
+                            .storage
+                            .from("koshi")
+                            .remove([
+                                uploadedImagePath
+                            ]);
+                    }
+
+
+                    showMessage(
+                        "تعذر إضافة المنتج:\n" +
+                        productError.message
+                    );
+
+                    return;
+                }
+
+
+                /* =========================
+                   SUCCESS
+                   ========================= */
+
+                console.log(
+                    "Product created:",
+                    insertedProduct
                 );
-            const imageUrl =
-                document
-                    .getElementById("productImage")
-                    .value
-                    .trim();
-            const colorsText =
-                document
-                    .getElementById("productColors")
-                    .value
-                    .trim();
-            const sizesText =
-                document
-                    .getElementById("productSizes")
-                    .value
-                    .trim();
-            if (!name) {
+
                 showMessage(
-                    "اكتب اسم المنتج."
+                    "تمت إضافة المنتج والصورة بنجاح 🎉"
                 );
-                return;
-            }
-            if (!Number.isFinite(price) || price < 0) {
-                showMessage(
-                    "أدخل سعرًا صحيحًا."
-                );
-                return;
-            }
-            if (!Number.isFinite(stock) || stock < 0) {
-                showMessage(
-                    "أدخل كمية مخزون صحيحة."
-                );
-                return;
-            }
-            const colors =
-                colorsText
-                ?
-                colorsText
-                    .split(",")
-                    .map(item => item.trim())
-                    .filter(Boolean)
-                :
-                [];
-            const sizes =
-                sizesText
-                ?
-                sizesText
-                    .split(",")
-                    .map(item => item.trim())
-                    .filter(Boolean)
-                :
-                [];
-            const {
-                error
-            } = await supabaseClient
-                .from("products")
-                .insert({
-                    name,
-                    description:
-                        description || null,
-                    price,
-                    sale_price:
-                        salePrice,
-                    image_url:
-                        imageUrl || null,
-                    sku:
-                        sku || null,
-                    barcode:
-                        barcode || null,
-                    stock,
-                    colors,
-                    sizes,
-                    is_active:
-                        true
-                });
-            if (error) {
+
+
+                /* RESET FORM */
+
+                document
+                    .getElementById("productForm")
+                    .reset();
+
+
+                const stockInput =
+                    document.getElementById(
+                        "productStock"
+                    );
+
+                if (stockInput) {
+                    stockInput.value = "0";
+                }
+
+
+                /* RESET IMAGE PREVIEW */
+
+                const imagePreview =
+                    document.getElementById(
+                        "imagePreview"
+                    );
+
+                const uploadContent =
+                    document.getElementById(
+                        "uploadContent"
+                    );
+
+                const previewImage =
+                    document.getElementById(
+                        "previewImage"
+                    );
+
+                if (imagePreview) {
+                    imagePreview.style.display =
+                        "none";
+                }
+
+                if (uploadContent) {
+                    uploadContent.style.display =
+                        "block";
+                }
+
+                if (previewImage) {
+                    previewImage.src = "";
+                }
+
+
+                /* CLOSE MODAL */
+
+                document
+                    .getElementById(
+                        "productModal"
+                    )
+                    ?.classList.remove(
+                        "active"
+                    );
+
+
+                /* REFRESH DATA */
+
+                await loadProducts();
+                await loadDashboardStats();
+
+            } catch (error) {
+
                 console.error(
-                    "Create product:",
+                    "Unexpected product error:",
                     error
                 );
+
                 showMessage(
-                    "تعذر إضافة المنتج:\n" +
-                    error.message
+                    "حدث خطأ غير متوقع:\n" +
+                    (error.message || error)
                 );
-                return;
+
+            } finally {
+
+                if (saveButton) {
+                    saveButton.disabled = false;
+                    saveButton.textContent =
+                        "حفظ المنتج";
+                }
+
             }
-            showMessage(
-                "تمت إضافة المنتج بنجاح 🎉"
-            );
-            document
-                .getElementById("productForm")
-                .reset();
-            document
-                .getElementById("productStock")
-                .value = "0";
-            document
-                .getElementById("productModal")
-                .classList.remove("open");
-            await loadProducts();
-            await loadDashboardStats();
         }
     );
 /* =========================
