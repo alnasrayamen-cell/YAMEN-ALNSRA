@@ -6,6 +6,9 @@
 const SUPABASE_URL =
   "https://eflcolwdhddfncbuvjua.supabase.co";
 
+// IMPORTANT:
+// Keep your existing Supabase Publishable Key here.
+// Do not use the secret/service_role key.
 const SUPABASE_PUBLISHABLE_KEY =
   "sb_publishable_J8K4FI12ExE5stcHVHviRQ_Uk__w4ko";
 
@@ -22,6 +25,7 @@ const supabaseClient = createClient(
 
 let products = [];
 let cart = [];
+let visitorTrackingStarted = false;
 
 // ============================================================
 // DOM
@@ -203,9 +207,7 @@ function renderProducts(list) {
           لا توجد منتجات حاليًا
         </div>
 
-        <div style="
-          font-size:13px;
-        ">
+        <div style="font-size:13px;">
           أضف المنتجات من لوحة الإدارة.
         </div>
 
@@ -379,9 +381,7 @@ async function addProductToCart(productId) {
     );
 
   if (!product) {
-
     alert("تعذر العثور على المنتج.");
-
     return;
   }
 
@@ -389,9 +389,7 @@ async function addProductToCart(productId) {
     Number(product.stock || 0);
 
   if (stock <= 0) {
-
     alert("هذا المنتج نفدت كميته.");
-
     return;
   }
 
@@ -436,32 +434,27 @@ async function addProductToCart(productId) {
 
     cart.push({
 
-      product_id:
-        product.id,
+      product_id: product.id,
 
-      name:
-        product.name,
+      name: product.name,
 
-      image_url:
-        product.image_url,
+      image_url: product.image_url,
 
-      price:
-        finalPrice,
+      price: finalPrice,
 
-      original_price:
-        price,
+      original_price: price,
 
-      quantity:
-        1,
+      quantity: 1,
 
-      stock:
-        stock,
+      stock: stock,
 
-      colors:
-        normalizeArray(product.colors),
+      colors: normalizeArray(product.colors),
 
-      sizes:
-        normalizeArray(product.sizes)
+      sizes: normalizeArray(product.sizes),
+
+      selected_color: null,
+
+      selected_size: null
 
     });
   }
@@ -497,17 +490,14 @@ function removeCartItem(index) {
 // CHANGE QUANTITY
 // ============================================================
 
-function changeCartQuantity(
-  index,
-  change
-) {
+function changeCartQuantity(index, change) {
 
   const item = cart[index];
 
   if (!item) return;
 
   const newQuantity =
-    item.quantity + change;
+    Number(item.quantity || 0) + Number(change || 0);
 
   if (newQuantity <= 0) {
 
@@ -518,7 +508,7 @@ function changeCartQuantity(
 
   if (
     item.stock &&
-    newQuantity > item.stock
+    newQuantity > Number(item.stock)
   ) {
 
     alert(
@@ -552,17 +542,10 @@ function updateCartUI() {
       0
     );
 
-  cartCount.textContent =
-    count;
+  cartCount.textContent = count;
 
   const total =
-    cart.reduce(
-      (sum, item) =>
-        sum +
-        Number(item.price || 0) *
-        Number(item.quantity || 0),
-      0
-    );
+    calculateCartTotal();
 
   if (cartTotal) {
 
@@ -604,7 +587,6 @@ function updateCartUI() {
           Number(item.quantity || 0);
 
         return `
-
           <div style="
             display:flex;
             gap:12px;
@@ -727,7 +709,6 @@ function updateCartUI() {
             </div>
 
           </div>
-
         `;
 
       }
@@ -735,16 +716,14 @@ function updateCartUI() {
 }
 
 // ============================================================
-// REAL CHECKOUT
+// CHECKOUT SETUP
 // ============================================================
 
 function setupCheckout() {
 
   const checkoutButton =
     document.getElementById("checkoutButton") ||
-    document.querySelector(
-      "[data-checkout]"
-    );
+    document.querySelector("[data-checkout]");
 
   if (!checkoutButton) {
 
@@ -755,9 +734,20 @@ function setupCheckout() {
     return;
   }
 
-  checkoutButton.addEventListener(
+  checkoutButton.removeEventListener(
     "click",
     openCheckout
+  );
+
+  checkoutButton.addEventListener(
+    "click",
+    function(event) {
+
+      event.preventDefault();
+
+      openCheckout();
+
+    }
   );
 }
 
@@ -780,7 +770,6 @@ function openCheckout() {
     );
 
   if (existing) {
-
     existing.remove();
   }
 
@@ -816,11 +805,12 @@ function openCheckout() {
       max-height:90vh;
       overflow:auto;
       direction:rtl;
+      box-sizing:border-box;
     ">
 
       <button
         type="button"
-        onclick="closeCheckout()"
+        id="closeKoshiCheckout"
         style="
           position:absolute;
           left:18px;
@@ -852,9 +842,16 @@ function openCheckout() {
         أدخل معلومات التوصيل لإتمام طلبك.
       </p>
 
-      <form id="koshiCheckoutForm">
+      <form
+        id="koshiCheckoutForm"
+        novalidate
+      >
 
-        <label style="display:block;margin-bottom:6px;font-weight:700;">
+        <label style="
+          display:block;
+          margin-bottom:6px;
+          font-weight:700;
+        ">
           الاسم الكامل
         </label>
 
@@ -862,10 +859,15 @@ function openCheckout() {
           name="full_name"
           required
           placeholder="الاسم الكامل"
+          autocomplete="name"
           style="${checkoutInputStyle()}"
         >
 
-        <label style="display:block;margin-bottom:6px;font-weight:700;">
+        <label style="
+          display:block;
+          margin-bottom:6px;
+          font-weight:700;
+        ">
           رقم الهاتف
         </label>
 
@@ -874,10 +876,15 @@ function openCheckout() {
           required
           placeholder="05xxxxxxxx"
           inputmode="tel"
+          autocomplete="tel"
           style="${checkoutInputStyle()}"
         >
 
-        <label style="display:block;margin-bottom:6px;font-weight:700;">
+        <label style="
+          display:block;
+          margin-bottom:6px;
+          font-weight:700;
+        ">
           المحافظة / المنطقة
         </label>
 
@@ -892,7 +899,11 @@ function openCheckout() {
           <option>المدن والبلدات داخل إسرائيل</option>
         </select>
 
-        <label style="display:block;margin-bottom:6px;font-weight:700;">
+        <label style="
+          display:block;
+          margin-bottom:6px;
+          font-weight:700;
+        ">
           المدينة / البلدة
         </label>
 
@@ -900,10 +911,15 @@ function openCheckout() {
           name="city"
           required
           placeholder="مثال: جنين"
+          autocomplete="address-level2"
           style="${checkoutInputStyle()}"
         >
 
-        <label style="display:block;margin-bottom:6px;font-weight:700;">
+        <label style="
+          display:block;
+          margin-bottom:6px;
+          font-weight:700;
+        ">
           العنوان بالتفصيل
         </label>
 
@@ -912,12 +928,20 @@ function openCheckout() {
           required
           placeholder="اسم الشارع، الحي، رقم المنزل..."
           rows="3"
+          autocomplete="street-address"
           style="${checkoutInputStyle()}resize:vertical;"
         ></textarea>
 
-        <label style="display:block;margin-bottom:6px;font-weight:700;">
+        <label style="
+          display:block;
+          margin-bottom:6px;
+          font-weight:700;
+        ">
           أقرب معلم
-          <span style="font-weight:400;color:#999;">
+          <span style="
+            font-weight:400;
+            color:#999;
+          ">
             اختياري
           </span>
         </label>
@@ -928,9 +952,16 @@ function openCheckout() {
           style="${checkoutInputStyle()}"
         >
 
-        <label style="display:block;margin-bottom:6px;font-weight:700;">
+        <label style="
+          display:block;
+          margin-bottom:6px;
+          font-weight:700;
+        ">
           ملاحظات
-          <span style="font-weight:400;color:#999;">
+          <span style="
+            font-weight:400;
+            color:#999;
+          ">
             اختياري
           </span>
         </label>
@@ -988,6 +1019,7 @@ function openCheckout() {
             border-radius:10px;
             margin-top:12px;
             font-size:13px;
+            line-height:1.7;
           "
         ></div>
 
@@ -998,15 +1030,80 @@ function openCheckout() {
 
   document.body.appendChild(modal);
 
+  // ==========================================================
+  // IMPORTANT:
+  // Bind the form AFTER the modal has been inserted.
+  // ==========================================================
+
   const form =
-    document.getElementById(
-      "koshiCheckoutForm"
+    modal.querySelector(
+      "#koshiCheckoutForm"
     );
+
+  const closeButton =
+    modal.querySelector(
+      "#closeKoshiCheckout"
+    );
+
+  if (closeButton) {
+
+    closeButton.addEventListener(
+      "click",
+      closeCheckout
+    );
+  }
+
+  if (!form) {
+
+    console.error(
+      "KOSHI.WEAR: checkout form was not created."
+    );
+
+    alert(
+      "تعذر فتح نموذج الطلب. أعد تحميل الصفحة."
+    );
+
+    return;
+  }
 
   form.addEventListener(
     "submit",
     submitRealOrder
   );
+
+  // Allow pressing Enter to submit normally.
+  form.querySelectorAll("input, select, textarea")
+    .forEach(field => {
+
+      field.addEventListener(
+        "keydown",
+        function(event) {
+
+          if (
+            event.key === "Enter" &&
+            field.tagName !== "TEXTAREA"
+          ) {
+
+            event.preventDefault();
+
+            form.requestSubmit();
+
+          }
+
+        }
+      );
+
+    });
+
+  // Focus first field.
+  const firstInput =
+    form.querySelector(
+      'input[name="full_name"]'
+    );
+
+  if (firstInput) {
+    setTimeout(() => firstInput.focus(), 50);
+  }
 }
 
 // ============================================================
@@ -1017,23 +1114,28 @@ async function submitRealOrder(event) {
 
   event.preventDefault();
 
+  event.stopPropagation();
+
   const form =
     event.currentTarget;
 
+  if (!form) return;
+
   const button =
-    document.getElementById(
-      "submitKoshiOrder"
+    form.querySelector(
+      "#submitKoshiOrder"
     );
 
   const errorBox =
-    document.getElementById(
-      "checkoutError"
+    form.querySelector(
+      "#checkoutError"
     );
 
   if (!cart.length) {
 
     showCheckoutError(
-      "السلة فارغة."
+      "السلة فارغة.",
+      errorBox
     );
 
     return;
@@ -1077,10 +1179,15 @@ async function submitRealOrder(event) {
       formData.get("notes") || ""
     ).trim();
 
+  // ==========================================================
+  // VALIDATION
+  // ==========================================================
+
   if (!fullName) {
 
     showCheckoutError(
-      "اكتب الاسم الكامل."
+      "اكتب الاسم الكامل.",
+      errorBox
     );
 
     return;
@@ -1089,7 +1196,8 @@ async function submitRealOrder(event) {
   if (!validatePalestinePhone(phone)) {
 
     showCheckoutError(
-      "رقم الهاتف غير صحيح. استخدم 05xxxxxxxx أو +9705xxxxxxxx أو +9725xxxxxxxx."
+      "رقم الهاتف غير صحيح. استخدم 05xxxxxxxx أو +9705xxxxxxxx أو +9725xxxxxxxx.",
+      errorBox
     );
 
     return;
@@ -1098,7 +1206,8 @@ async function submitRealOrder(event) {
   if (!region) {
 
     showCheckoutError(
-      "اختر المنطقة."
+      "اختر المنطقة.",
+      errorBox
     );
 
     return;
@@ -1107,7 +1216,8 @@ async function submitRealOrder(event) {
   if (!city) {
 
     showCheckoutError(
-      "اكتب المدينة أو البلدة."
+      "اكتب المدينة أو البلدة.",
+      errorBox
     );
 
     return;
@@ -1116,35 +1226,43 @@ async function submitRealOrder(event) {
   if (!address) {
 
     showCheckoutError(
-      "اكتب العنوان بالتفصيل."
+      "اكتب العنوان بالتفصيل.",
+      errorBox
     );
 
     return;
   }
 
-  button.disabled = true;
+  // ==========================================================
+  // DISABLE BUTTON
+  // ==========================================================
 
-  button.style.opacity =
-    "0.6";
+  if (button) {
 
-  button.style.cursor =
-    "wait";
+    button.disabled = true;
 
-  button.textContent =
-    "جاري تأكيد الطلب...";
+    button.style.opacity = "0.6";
+
+    button.style.cursor = "wait";
+
+    button.textContent =
+      "جاري تأكيد الطلب...";
+  }
 
   if (errorBox) {
 
     errorBox.style.display =
       "none";
+
+    errorBox.textContent =
+      "";
   }
 
   try {
 
-    /*
-      We send only product IDs + quantities.
-      The database calculates the real prices.
-    */
+    // ========================================================
+    // BUILD ORDER ITEMS
+    // ========================================================
 
     const items =
       cart.map(item => ({
@@ -1163,10 +1281,31 @@ async function submitRealOrder(event) {
 
       }));
 
+    if (!items.length) {
+
+      throw new Error(
+        "السلة فارغة."
+      );
+    }
+
+    // ========================================================
+    // TRAFFIC SOURCE
+    // ========================================================
 
     const trafficSource =
       getTrafficSource();
 
+    console.log(
+      "KOSHI.WEAR: creating real order...",
+      {
+        items,
+        trafficSource
+      }
+    );
+
+    // ========================================================
+    // REAL SUPABASE RPC
+    // ========================================================
 
     const {
       data,
@@ -1204,6 +1343,14 @@ async function submitRealOrder(event) {
         }
       );
 
+    console.log(
+      "KOSHI.WEAR RPC response:",
+      {
+        data,
+        error
+      }
+    );
+
     if (error) {
 
       console.error(
@@ -1214,32 +1361,52 @@ async function submitRealOrder(event) {
       throw error;
     }
 
-    if (
-      !data ||
-      data.success !== true
-    ) {
+    // ========================================================
+    // CHECK RESPONSE
+    // ========================================================
+
+    if (!data) {
 
       throw new Error(
+        "لم تصل استجابة من قاعدة البيانات."
+      );
+    }
+
+    if (data.success !== true) {
+
+      throw new Error(
+        data.message ||
+        data.error ||
         "تعذر إنشاء الطلب."
       );
     }
 
+    if (!data.order_number) {
 
-    // Clear cart only AFTER successful order
+      throw new Error(
+        "تم إنشاء الطلب لكن لم يتم استلام رقم الطلب."
+      );
+    }
+
+    // ========================================================
+    // SUCCESS
+    // ========================================================
+
     cart = [];
 
     saveCart();
 
     updateCartUI();
 
-    showOrderSuccess(
-      data
-    );
+    // Close the shopping drawer if open.
+    closeCart();
+
+    showOrderSuccess(data);
 
   } catch (error) {
 
     console.error(
-      "REAL ORDER ERROR:",
+      "KOSHI.WEAR REAL ORDER ERROR:",
       error
     );
 
@@ -1247,8 +1414,41 @@ async function submitRealOrder(event) {
       error?.message ||
       "حدث خطأ أثناء إنشاء الطلب.";
 
+    const lowerMessage =
+      String(message).toLowerCase();
+
     if (
-      message.includes(
+      lowerMessage.includes(
+        "failed to fetch"
+      )
+    ) {
+
+      message =
+        "تعذر الاتصال بقاعدة البيانات. تأكد من اتصال الإنترنت وإعدادات Supabase.";
+
+    } else if (
+      lowerMessage.includes(
+        "permission denied"
+      )
+    ) {
+
+      message =
+        "قاعدة البيانات رفضت إنشاء الطلب بسبب الصلاحيات. يجب مراجعة صلاحيات دالة الطلب في Supabase.";
+
+    } else if (
+      lowerMessage.includes(
+        "function"
+      ) &&
+      lowerMessage.includes(
+        "does not exist"
+      )
+    ) {
+
+      message =
+        "دالة إنشاء الطلب غير موجودة في Supabase.";
+
+    } else if (
+      lowerMessage.includes(
         "الكمية غير متوفرة"
       )
     ) {
@@ -1257,39 +1457,33 @@ async function submitRealOrder(event) {
         message;
 
     } else if (
-      message.includes(
+      lowerMessage.includes(
         "المنتج غير موجود"
       )
     ) {
 
       message =
         "أحد المنتجات لم يعد متاحًا. حدّث الصفحة وحاول مرة أخرى.";
-
-    } else if (
-      message.includes(
-        "Failed to fetch"
-      )
-    ) {
-
-      message =
-        "تعذر الاتصال بقاعدة البيانات.";
-
     }
 
     showCheckoutError(
-      message
+      message,
+      errorBox
     );
 
-    button.disabled = false;
+    if (button) {
 
-    button.style.opacity =
-      "1";
+      button.disabled = false;
 
-    button.style.cursor =
-      "pointer";
+      button.style.opacity =
+        "1";
 
-    button.textContent =
-      "تأكيد الطلب";
+      button.style.cursor =
+        "pointer";
+
+      button.textContent =
+        "تأكيد الطلب";
+    }
   }
 }
 
@@ -1306,6 +1500,13 @@ function showOrderSuccess(data) {
 
   if (!modal) return;
 
+  const orderNumber =
+    data?.order_number ||
+    "—";
+
+  const total =
+    Number(data?.total || 0);
+
   modal.innerHTML = `
 
     <div style="
@@ -1315,6 +1516,7 @@ function showOrderSuccess(data) {
       padding:35px 25px;
       text-align:center;
       direction:rtl;
+      box-sizing:border-box;
     ">
 
       <div style="
@@ -1366,9 +1568,7 @@ function showOrderSuccess(data) {
           font-size:19px;
           letter-spacing:.5px;
         ">
-          ${escapeHTML(
-            data.order_number
-          )}
+          ${escapeHTML(orderNumber)}
         </strong>
 
       </div>
@@ -1379,12 +1579,12 @@ function showOrderSuccess(data) {
         margin-bottom:25px;
       ">
         الإجمالي:
-        ${formatPrice(data.total)}
+        ${formatPrice(total)}
       </div>
 
       <button
         type="button"
-        onclick="closeCheckout()"
+        id="successCloseButton"
         style="
           width:100%;
           background:#000;
@@ -1401,6 +1601,19 @@ function showOrderSuccess(data) {
 
     </div>
   `;
+
+  const closeButton =
+    modal.querySelector(
+      "#successCloseButton"
+    );
+
+  if (closeButton) {
+
+    closeButton.addEventListener(
+      "click",
+      closeCheckout
+    );
+  }
 }
 
 // ============================================================
@@ -1420,9 +1633,13 @@ function closeCheckout() {
   }
 }
 
-function showCheckoutError(message) {
+function showCheckoutError(
+  message,
+  target
+) {
 
   const errorBox =
+    target ||
     document.getElementById(
       "checkoutError"
     );
@@ -1435,10 +1652,15 @@ function showCheckoutError(message) {
   }
 
   errorBox.textContent =
-    message;
+    String(message);
 
   errorBox.style.display =
     "block";
+
+  errorBox.scrollIntoView({
+    behavior: "smooth",
+    block: "nearest"
+  });
 }
 
 function checkoutInputStyle() {
@@ -1470,10 +1692,11 @@ function calculateCartTotal() {
 function validatePalestinePhone(phone) {
 
   const cleaned =
-    phone.replace(
-      /[\s()-]/g,
-      ""
-    );
+    String(phone || "")
+      .replace(
+        /[\s()-]/g,
+        ""
+      );
 
   return (
     /^05\d{8}$/.test(cleaned) ||
@@ -1527,6 +1750,10 @@ function getTrafficSource() {
 
 async function startVisitorTracking() {
 
+  if (visitorTrackingStarted) return;
+
+  visitorTrackingStarted = true;
+
   try {
 
     let sessionId =
@@ -1536,8 +1763,25 @@ async function startVisitorTracking() {
 
     if (!sessionId) {
 
-      sessionId =
-        crypto.randomUUID();
+      if (
+        window.crypto &&
+        typeof window.crypto.randomUUID === "function"
+      ) {
+
+        sessionId =
+          window.crypto.randomUUID();
+
+      } else {
+
+        sessionId =
+          "visitor-" +
+          Date.now() +
+          "-" +
+          Math.random()
+            .toString(36)
+            .slice(2);
+
+      }
 
       localStorage.setItem(
         "koshi_visitor_session",
@@ -1549,8 +1793,7 @@ async function startVisitorTracking() {
       getTrafficSource();
 
     const currentPage =
-      window.location.pathname ||
-      "/";
+      window.location.pathname || "/";
 
     const {
       error
@@ -1586,11 +1829,6 @@ async function startVisitorTracking() {
 
       return;
     }
-
-    /*
-      Update the visitor every 30 seconds
-      while the store remains open.
-    */
 
     setInterval(
       async () => {
@@ -1677,9 +1915,7 @@ function setupSearch() {
           }
         );
 
-      renderProducts(
-        filtered
-      );
+      renderProducts(filtered);
     }
   );
 }
@@ -1701,14 +1937,10 @@ function setupFilters() {
           document
             .querySelectorAll(".filter")
             .forEach(btn =>
-              btn.classList.remove(
-                "active"
-              )
+              btn.classList.remove("active")
             );
 
-          this.classList.add(
-            "active"
-          );
+          this.classList.add("active");
 
           const category =
             this.dataset.category;
@@ -1718,16 +1950,12 @@ function setupFilters() {
             category === "all"
           ) {
 
-            renderProducts(
-              products
-            );
+            renderProducts(products);
 
             return;
           }
 
-          if (
-            category === "sale"
-          ) {
+          if (category === "sale") {
 
             const saleProducts =
               products.filter(
@@ -1750,30 +1978,21 @@ function setupFilters() {
                 }
               );
 
+            renderProducts(saleProducts);
+
+            return;
+          }
+
+          if (category === "new") {
+
             renderProducts(
-              saleProducts
+              products.slice(0, 8)
             );
 
             return;
           }
 
-          if (
-            category === "new"
-          ) {
-
-            renderProducts(
-              products.slice(
-                0,
-                8
-              )
-            );
-
-            return;
-          }
-
-          renderProducts(
-            products
-          );
+          renderProducts(products);
         }
       );
 
@@ -1786,10 +2005,20 @@ function setupFilters() {
 
 function saveCart() {
 
-  localStorage.setItem(
-    "koshi_cart",
-    JSON.stringify(cart)
-  );
+  try {
+
+    localStorage.setItem(
+      "koshi_cart",
+      JSON.stringify(cart)
+    );
+
+  } catch (error) {
+
+    console.error(
+      "Cart save error:",
+      error
+    );
+  }
 }
 
 function loadCart() {
@@ -1811,9 +2040,7 @@ function loadCart() {
     const parsed =
       JSON.parse(saved);
 
-    if (
-      Array.isArray(parsed)
-    ) {
+    if (Array.isArray(parsed)) {
 
       cart = parsed;
 
@@ -1851,16 +2078,12 @@ function openCart() {
 
   if (drawer) {
 
-    drawer.classList.add(
-      "active"
-    );
+    drawer.classList.add("active");
   }
 
   if (overlay) {
 
-    overlay.classList.add(
-      "active"
-    );
+    overlay.classList.add("active");
   }
 }
 
@@ -1878,16 +2101,12 @@ function closeCart() {
 
   if (drawer) {
 
-    drawer.classList.remove(
-      "active"
-    );
+    drawer.classList.remove("active");
   }
 
   if (overlay) {
 
-    overlay.classList.remove(
-      "active"
-    );
+    overlay.classList.remove("active");
   }
 }
 
@@ -1911,9 +2130,7 @@ function normalizeArray(value) {
       const parsed =
         JSON.parse(value);
 
-      if (
-        Array.isArray(parsed)
-      ) {
+      if (Array.isArray(parsed)) {
 
         return parsed;
       }
@@ -1945,8 +2162,8 @@ function formatPrice(price) {
     number.toLocaleString(
       "en-US",
       {
-        minimumFractionDigits:0,
-        maximumFractionDigits:2
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 2
       }
     ) +
     " ₪"
@@ -1960,26 +2177,11 @@ function formatPrice(price) {
 function escapeHTML(value) {
 
   return String(value ?? "")
-    .replace(
-      /&/g,
-      "&amp;"
-    )
-    .replace(
-      /</g,
-      "&lt;"
-    )
-    .replace(
-      />/g,
-      "&gt;"
-    )
-    .replace(
-      /"/g,
-      "&quot;"
-    )
-    .replace(
-      /'/g,
-      "&#039;"
-    );
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
 }
 
 function escapeAttribute(value) {
@@ -1990,26 +2192,11 @@ function escapeAttribute(value) {
 function escapeJS(value) {
 
   return String(value ?? "")
-    .replace(
-      /\\/g,
-      "\\\\"
-    )
-    .replace(
-      /'/g,
-      "\\'"
-    )
-    .replace(
-      /"/g,
-      '\\"'
-    )
-    .replace(
-      /\n/g,
-      "\\n"
-    )
-    .replace(
-      /\r/g,
-      "\\r"
-    );
+    .replace(/\\/g, "\\\\")
+    .replace(/'/g, "\\'")
+    .replace(/"/g, '\\"')
+    .replace(/\n/g, "\\n")
+    .replace(/\r/g, "\\r");
 }
 
 // ============================================================
