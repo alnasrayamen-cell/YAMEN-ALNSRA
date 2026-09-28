@@ -2310,53 +2310,40 @@ document
 
 /* =========================================================
    NAV CATEGORY LINKS
-   FIXED
+   FIXED EVENT DELEGATION
    ========================================================= */
 
-document
-  .querySelectorAll(
+document.addEventListener("click", (event) => {
+  const element = event.target.closest(
     ".main-navigation [data-category], #mobileNav [data-category]"
-  )
-  .forEach((element) => {
+  );
 
-    element.addEventListener(
-      "click",
-      (event) => {
+  if (!element) return;
 
-        event.preventDefault();
-        event.stopPropagation();
+  const category = element.dataset.category;
 
-        const category =
-          element.dataset.category;
+  if (!category) return;
 
-        if (!category) return;
+  event.preventDefault();
 
-        currentCategory =
-          category;
+  currentCategory = category;
+  currentSearch = "";
 
-        currentSearch = "";
+  if (searchInput) {
+    searchInput.value = "";
+  }
 
-        if (searchInput) {
-          searchInput.value = "";
-        }
+  applyFilters();
 
-        applyFilters();
+  document
+    .getElementById("products")
+    ?.scrollIntoView({
+      behavior: "smooth",
+      block: "start"
+    });
 
-        document
-          .getElementById("products")
-          ?.scrollIntoView({
-            behavior: "smooth",
-            block: "start"
-          });
-
-        mobileNav?.classList.remove(
-          "active"
-        );
-      }
-    );
-
-  });
-
+  mobileNav?.classList.remove("active");
+});
 
 /* =========================================================
    HOME NAVIGATION
