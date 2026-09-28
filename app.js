@@ -41,32 +41,77 @@ let currentSort = "newest";
    DOM
    ========================================================= */
 
-const productsGrid = document.getElementById("productsGrid");
-const productsLoading = document.getElementById("productsLoading");
-const productsEmpty = document.getElementById("productsEmpty");
+const productsGrid =
+  document.getElementById("productsGrid");
 
-const cartButton = document.getElementById("cartButton");
-const cartDrawer = document.getElementById("cartDrawer");
-const closeCart = document.getElementById("closeCart");
-const overlay = document.getElementById("overlay");
+const productsLoading =
+  document.getElementById("productsLoading");
 
-const cartBody = document.getElementById("cartBody");
-const cartCount = document.getElementById("cartCount");
-const cartTotal = document.getElementById("cartTotal");
-const checkoutButton = document.getElementById("checkoutButton");
+const productsEmpty =
+  document.getElementById("productsEmpty");
 
-const searchBtn = document.getElementById("searchBtn");
-const searchPanel = document.getElementById("searchPanel");
-const closeSearch = document.getElementById("closeSearch");
-const searchInput = document.getElementById("searchInput");
+const newProductsGrid =
+  document.getElementById("newProductsGrid");
 
-const sortProducts = document.getElementById("sortProducts");
+const bestProductsGrid =
+  document.getElementById("bestProductsGrid");
 
-const mobileMenuBtn = document.getElementById("mobileMenuBtn");
-const mobileNav = document.getElementById("mobileNav");
+const offersProductsGrid =
+  document.getElementById("offersProductsGrid");
 
-const productModal = document.getElementById("productModal");
-const productModalBody = document.getElementById("productModalBody");
+const favoritesGrid =
+  document.getElementById("favoritesGrid");
+
+const cartButton =
+  document.getElementById("cartButton");
+
+const cartDrawer =
+  document.getElementById("cartDrawer");
+
+const closeCart =
+  document.getElementById("closeCart");
+
+const overlay =
+  document.getElementById("overlay");
+
+const cartBody =
+  document.getElementById("cartBody");
+
+const cartCount =
+  document.getElementById("cartCount");
+
+const cartTotal =
+  document.getElementById("cartTotal");
+
+const checkoutButton =
+  document.getElementById("checkoutButton");
+
+const searchBtn =
+  document.getElementById("searchBtn");
+
+const searchPanel =
+  document.getElementById("searchPanel");
+
+const closeSearch =
+  document.getElementById("closeSearch");
+
+const searchInput =
+  document.getElementById("searchInput");
+
+const sortProducts =
+  document.getElementById("sortProducts");
+
+const mobileMenuBtn =
+  document.getElementById("mobileMenuBtn");
+
+const mobileNav =
+  document.getElementById("mobileNav");
+
+const productModal =
+  document.getElementById("productModal");
+
+const productModalBody =
+  document.getElementById("productModalBody");
 
 
 /* =========================================================
