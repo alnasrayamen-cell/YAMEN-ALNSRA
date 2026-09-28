@@ -1,22 +1,24 @@
 /* =========================================================
    KOSHI.WEAR — CUSTOMER STORE APP
-   Supabase + Products + Cart + Checkout
+   Supabase + Products + Cart + Favorites + Checkout
    ========================================================= */
 
-const SUPABASE_URL = "https://eflcolwdhddfncbuvjua.supabase.co";
+const SUPABASE_URL =
+  "https://eflcolwdhddfncbuvjua.supabase.co";
 
 /*
-  مهم:
-  ضع هنا نفس Supabase Publishable Key الموجود عندك حاليًا.
-  لا تضع Secret Key.
+  IMPORTANT:
+  Keep your existing Supabase Publishable Key here.
+  NEVER use the Supabase Secret Key in this file.
 */
 const SUPABASE_PUBLISHABLE_KEY =
-  "sb_publishable_J8K4FI12ExE5stcHVHviRQ_Uk__w4ko";
+  "YOUR_EXISTING_PUBLISHABLE_KEY";
 
-const supabaseClient = window.supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_PUBLISHABLE_KEY
-);
+const supabaseClient =
+  window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_PUBLISHABLE_KEY
+  );
 
 
 /* =========================================================
@@ -25,7 +27,9 @@ const supabaseClient = window.supabase.createClient(
 
 let products = [];
 let filteredProducts = [];
+
 let cart = [];
+let favorites = [];
 
 let selectedProduct = null;
 let selectedColor = null;
@@ -130,17 +134,17 @@ function escapeHTML(value) {
 
 function formatPrice(value) {
   const number = Number(value || 0);
-
   return `${number.toFixed(2)} ₪`;
 }
 
 
 function getProductPrice(product) {
-  const price = Number(product.price || 0);
+  const price = Number(product?.price || 0);
+
   const salePrice =
-    product.sale_price !== null &&
-    product.sale_price !== undefined &&
-    product.sale_price !== ""
+    product?.sale_price !== null &&
+    product?.sale_price !== undefined &&
+    product?.sale_price !== ""
       ? Number(product.sale_price)
       : null;
 
@@ -158,10 +162,12 @@ function getProductPrice(product) {
 
 
 function getDiscount(product) {
-  const price = Number(product.price || 0);
+  const price = Number(product?.price || 0);
+
   const salePrice =
-    product.sale_price !== null &&
-    product.sale_price !== undefined
+    product?.sale_price !== null &&
+    product?.sale_price !== undefined &&
+    product?.sale_price !== ""
       ? Number(product.sale_price)
       : null;
 
@@ -174,7 +180,9 @@ function getDiscount(product) {
     return 0;
   }
 
-  return Math.round(((price - salePrice) / price) * 100);
+  return Math.round(
+    ((price - salePrice) / price) * 100
+  );
 }
 
 
@@ -219,6 +227,7 @@ function colorToCSS(color) {
     beige: "#d9c7a7",
     gold: "#c9a227",
     silver: "#c0c0c0",
+
     أسود: "#111",
     أبيض: "#fff",
     رمادي: "#888",
@@ -234,7 +243,65 @@ function colorToCSS(color) {
     فضي: "#c0c0c0"
   };
 
-  return map[String(color).toLowerCase()] || "#ddd";
+  return (
+    map[String(color || "").toLowerCase()] ||
+    "#ddd"
+  );
+}
+
+
+function getImage(product) {
+  return (
+    product?.image_url ||
+    "https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=900&q=85"
+  );
+}
+
+
+function showToast(message) {
+  let toast =
+    document.getElementById("koshiToast");
+
+  if (!toast) {
+    toast = document.createElement("div");
+    toast.id = "koshiToast";
+
+    toast.style.cssText = `
+      position:fixed;
+      left:50%;
+      bottom:85px;
+      transform:translateX(-50%) translateY(20px);
+      background:#111;
+      color:#fff;
+      padding:13px 20px;
+      border-radius:999px;
+      z-index:99999;
+      font-size:14px;
+      opacity:0;
+      transition:.25s ease;
+      pointer-events:none;
+      white-space:nowrap;
+      box-shadow:0 10px 30px rgba(0,0,0,.18);
+    `;
+
+    document.body.appendChild(toast);
+  }
+
+  toast.textContent = message;
+
+  requestAnimationFrame(() => {
+    toast.style.opacity = "1";
+    toast.style.transform =
+      "translateX(-50%) translateY(0)";
+  });
+
+  clearTimeout(toast._timer);
+
+  toast._timer = setTimeout(() => {
+    toast.style.opacity = "0";
+    toast.style.transform =
+      "translateX(-50%) translateY(20px)";
+  }, 2200);
 }
 
 
@@ -244,7 +311,8 @@ function colorToCSS(color) {
 
 function loadCart() {
   try {
-    const saved = localStorage.getItem("koshi_cart");
+    const saved =
+      localStorage.getItem("koshi_cart");
 
     if (saved) {
       const parsed = JSON.parse(saved);
@@ -263,7 +331,110 @@ function loadCart() {
 
 
 function saveCart() {
-  localStorage.setItem("koshi_cart", JSON.stringify(cart));
+  localStorage.setItem(
+    "koshi_cart",
+    JSON.stringify(cart)
+  );
+}
+
+
+function loadFavorites() {
+  try {
+    const saved =
+      localStorage.getItem("koshi_favorites");
+
+    if (saved) {
+      const parsed = JSON.parse(saved);
+
+      if (Array.isArray(parsed)) {
+        favorites = parsed;
+      }
+    }
+  } catch (error) {
+    console.error(
+      "Favorites load error:",
+      error
+    );
+
+    favorites = [];
+  }
+}
+
+
+function saveFavorites() {
+  localStorage.setItem(
+    "koshi_favorites",
+    JSON.stringify(favorites)
+  );
+}
+
+
+/* =========================================================
+   FAVORITES
+   ========================================================= */
+
+function isFavorite(productId) {
+  return favorites.includes(productId);
+}
+
+
+function toggleFavorite(product) {
+  if (!product?.id) {
+    return;
+  }
+
+  if (isFavorite(product.id)) {
+    favorites = favorites.filter(
+      (id) => id !== product.id
+    );
+
+    showToast("تمت إزالة المنتج من المفضلة");
+  } else {
+    favorites.push(product.id);
+
+    showToast("تمت إضافة المنتج إلى المفضلة ❤️");
+  }
+
+  saveFavorites();
+
+  renderProducts();
+  renderSpecialSections();
+  renderFavorites();
+}
+
+
+function renderFavorites() {
+  if (!favoritesGrid) {
+    return;
+  }
+
+  const favoriteProducts =
+    products.filter((product) =>
+      favorites.includes(product.id)
+    );
+
+  if (!favoriteProducts.length) {
+    favoritesGrid.innerHTML = `
+      <div style="
+        grid-column:1/-1;
+        text-align:center;
+        padding:35px 15px;
+        color:#777;
+      ">
+        لا توجد منتجات في المفضلة حاليًا ❤️
+      </div>
+    `;
+
+    return;
+  }
+
+  favoritesGrid.innerHTML = "";
+
+  favoriteProducts.forEach((product) => {
+    favoritesGrid.appendChild(
+      createProductCard(product)
+    );
+  });
 }
 
 
@@ -272,12 +443,22 @@ function saveCart() {
    ========================================================= */
 
 async function loadProducts() {
-  productsLoading.hidden = false;
-  productsEmpty.hidden = true;
+  if (productsLoading) {
+    productsLoading.hidden = false;
+  }
 
-  productsGrid.innerHTML = "";
+  if (productsEmpty) {
+    productsEmpty.hidden = true;
+  }
 
-  const { data, error } = await supabaseClient
+  if (productsGrid) {
+    productsGrid.innerHTML = "";
+  }
+
+  const {
+    data,
+    error
+  } = await supabaseClient
     .from("products")
     .select("*")
     .eq("is_active", true)
@@ -286,31 +467,153 @@ async function loadProducts() {
     });
 
   if (error) {
-    console.error("Products loading error:", error);
+    console.error(
+      "Products loading error:",
+      error
+    );
 
-    productsLoading.hidden = true;
+    if (productsLoading) {
+      productsLoading.hidden = true;
+    }
 
-    productsGrid.innerHTML = `
-      <div style="
-        grid-column:1/-1;
-        padding:50px 20px;
-        text-align:center;
-      ">
-        <strong>تعذر تحميل المنتجات.</strong>
-        <p style="margin-top:8px;color:#777;">
-          يرجى تحديث الصفحة والمحاولة مرة أخرى.
-        </p>
-      </div>
-    `;
+    if (productsGrid) {
+      productsGrid.innerHTML = `
+        <div style="
+          grid-column:1/-1;
+          padding:50px 20px;
+          text-align:center;
+        ">
+          <strong>
+            تعذر تحميل المنتجات.
+          </strong>
+
+          <p style="
+            margin-top:8px;
+            color:#777;
+          ">
+            يرجى تحديث الصفحة والمحاولة مرة أخرى.
+          </p>
+        </div>
+      `;
+    }
 
     return;
   }
 
   products = data || [];
 
-  productsLoading.hidden = true;
+  if (productsLoading) {
+    productsLoading.hidden = true;
+  }
 
   applyFilters();
+  renderSpecialSections();
+  renderFavorites();
+}
+
+
+/* =========================================================
+   CATEGORY MATCHING
+   ========================================================= */
+
+function productText(product) {
+  return `
+    ${product?.name || ""}
+    ${product?.description || ""}
+    ${product?.sku || ""}
+  `.toLowerCase();
+}
+
+
+function matchesCategory(product, category) {
+  if (!category || category === "all") {
+    return true;
+  }
+
+  const text = productText(product);
+
+  const categories = {
+    girls: [
+      "girl",
+      "girls",
+      "girl's",
+      "بنات",
+      "بنت",
+      "فستان",
+      "تنورة"
+    ],
+
+    boys: [
+      "boy",
+      "boys",
+      "boy's",
+      "أولاد",
+      "ولد",
+      "شورت",
+      "بدلة"
+    ],
+
+    newborn: [
+      "newborn",
+      "baby",
+      "infant",
+      "مواليد",
+      "مولود",
+      "رضيع",
+      "بيبي"
+    ],
+
+    jackets: [
+      "jacket",
+      "coat",
+      "hoodie",
+      "جاكيت",
+      "معطف",
+      "هودي"
+    ],
+
+    sets: [
+      "set",
+      "sets",
+      "طقم",
+      "أطقم"
+    ],
+
+    shoes: [
+      "shoe",
+      "shoes",
+      "trainer",
+      "sneaker",
+      "حذاء",
+      "أحذية",
+      "كوتشي"
+    ],
+
+    accessories: [
+      "accessor",
+      "watch",
+      "bag",
+      "wallet",
+      "إكسس",
+      "اكسس",
+      "حقيبة",
+      "ساعة",
+      "محفظة"
+    ],
+
+    sale: []
+  };
+
+  if (category === "sale") {
+    return getDiscount(product) > 0;
+  }
+
+  const words =
+    categories[category] || [];
+
+  return words.some((word) =>
+    text.includes(word)
+  );
 }
 
 
@@ -321,62 +624,30 @@ async function loadProducts() {
 function applyFilters() {
   let result = [...products];
 
-  /* Category */
-
-  if (currentCategory === "sale") {
-    result = result.filter(
-      (product) => getDiscount(product) > 0
+  if (currentCategory !== "all") {
+    result = result.filter((product) =>
+      matchesCategory(
+        product,
+        currentCategory
+      )
     );
   }
 
-  if (currentCategory === "new") {
-    result = result.slice(0, 12);
-  }
-
-  /* Search */
-
   if (currentSearch.trim()) {
-    const search = currentSearch.trim().toLowerCase();
+    const search =
+      currentSearch
+        .trim()
+        .toLowerCase();
 
-    result = result.filter((product) => {
-      const name = String(product.name || "").toLowerCase();
-      const description = String(
-        product.description || ""
-      ).toLowerCase();
-      const sku = String(product.sku || "").toLowerCase();
+    result = result.filter(
+      (product) => {
+        const text =
+          productText(product);
 
-      return (
-        name.includes(search) ||
-        description.includes(search) ||
-        sku.includes(search)
-      );
-    });
+        return text.includes(search);
+      }
+    );
   }
-
-  /* Accessories */
-
-  if (currentCategory === "accessories") {
-    result = result.filter((product) => {
-      const text = `
-        ${product.name || ""}
-        ${product.description || ""}
-      `.toLowerCase();
-
-      return (
-        text.includes("accessor") ||
-        text.includes("إكسس") ||
-        text.includes("اكسس") ||
-        text.includes("watch") ||
-        text.includes("ساعة") ||
-        text.includes("bag") ||
-        text.includes("حقيبة") ||
-        text.includes("محفظة") ||
-        text.includes("wallet")
-      );
-    });
-  }
-
-  /* Sort */
 
   if (currentSort === "price-low") {
     result.sort(
@@ -403,6 +674,18 @@ function applyFilters() {
     );
   }
 
+  if (currentSort === "newest") {
+    result.sort(
+      (a, b) =>
+        new Date(
+          b.created_at || 0
+        ) -
+        new Date(
+          a.created_at || 0
+        )
+    );
+  }
+
   filteredProducts = result;
 
   renderProducts();
@@ -410,67 +693,96 @@ function applyFilters() {
 
 
 /* =========================================================
-   RENDER PRODUCTS
+   PRODUCT CARD
    ========================================================= */
 
-function renderProducts() {
-  productsGrid.innerHTML = "";
-
-  if (!filteredProducts.length) {
-    productsEmpty.hidden = false;
-    return;
-  }
-
-  productsEmpty.hidden = true;
-
-  filteredProducts.forEach((product) => {
-    productsGrid.appendChild(
-      createProductCard(product)
-    );
-  });
-}
-
-
 function createProductCard(product) {
-  const card = document.createElement("article");
+  const card =
+    document.createElement("article");
 
-  card.className = "product-card";
+  card.className =
+    "product-card";
 
-  const price = Number(product.price || 0);
-  const finalPrice = getProductPrice(product);
-  const discount = getDiscount(product);
+  const price =
+    Number(product.price || 0);
 
-  const stock = Number(product.stock || 0);
+  const finalPrice =
+    getProductPrice(product);
+
+  const discount =
+    getDiscount(product);
+
+  const stock =
+    Number(product.stock || 0);
 
   const image =
-    product.image_url ||
-    "https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=900&q=85";
+    getImage(product);
 
-  const colors = normalizeArray(product.colors);
+  const colors =
+    normalizeArray(product.colors);
+
+  const sizes =
+    normalizeArray(product.sizes);
+
+  const favorite =
+    isFavorite(product.id);
 
   card.innerHTML = `
-    <div class="product-image-wrap">
+    <div
+      class="product-image-wrap"
+      style="cursor:pointer;"
+    >
 
       ${
         discount > 0
-          ? `<span class="product-badge sale">
-              -${discount}%
-            </span>`
+          ? `
+            <span class="product-badge sale">
+              خصم ${discount}%
+            </span>
+          `
           : ""
       }
 
       ${
         stock <= 0
-          ? `<span class="product-badge">
+          ? `
+            <span class="product-badge">
               نفدت الكمية
-            </span>`
+            </span>
+          `
           : ""
       }
+
+      ${
+        discount === 0 &&
+        stock > 0
+          ? `
+            <span class="product-badge">
+              جديد
+            </span>
+          `
+          : ""
+      }
+
+      <button
+        type="button"
+        class="product-favorite ${
+          favorite ? "active" : ""
+        }"
+        data-favorite-product="${escapeHTML(
+          product.id
+        )}"
+        aria-label="المفضلة"
+      >
+        ${favorite ? "♥️" : "♡"}
+      </button>
 
       <img
         class="product-image"
         src="${escapeHTML(image)}"
-        alt="${escapeHTML(product.name)}"
+        alt="${escapeHTML(
+          product.name
+        )}"
         loading="lazy"
       >
 
@@ -478,19 +790,31 @@ function createProductCard(product) {
 
     <div class="product-info">
 
-      <h3 class="product-name">
-        ${escapeHTML(product.name)}
+      <h3
+        class="product-name"
+        style="cursor:pointer;"
+      >
+        ${escapeHTML(
+          product.name
+        )}
       </h3>
 
       ${
         product.description
           ? `
             <p class="product-description">
-              ${escapeHTML(product.description)}
+              ${escapeHTML(
+                product.description
+              )}
             </p>
           `
           : ""
       }
+
+      <div class="product-rating">
+        <span>★★★★★</span>
+        <small>جديد</small>
+      </div>
 
       <div class="product-price-row">
 
@@ -503,10 +827,6 @@ function createProductCard(product) {
             ? `
               <span class="product-old-price">
                 ${formatPrice(price)}
-              </span>
-
-              <span class="product-discount">
-                ${discount}%
               </span>
             `
             : ""
@@ -524,9 +844,36 @@ function createProductCard(product) {
                   (color) => `
                     <span
                       class="color-dot"
-                      title="${escapeHTML(color)}"
-                      style="background:${colorToCSS(color)}"
+                      title="${escapeHTML(
+                        color
+                      )}"
+                      style="
+                        background:${colorToCSS(
+                          color
+                        )}
+                      "
                     ></span>
+                  `
+                )
+                .join("")}
+            </div>
+          `
+          : ""
+      }
+
+      ${
+        sizes.length
+          ? `
+            <div class="product-card-sizes">
+              ${sizes
+                .slice(0, 5)
+                .map(
+                  (size) => `
+                    <span>
+                      ${escapeHTML(
+                        size
+                      )}
+                    </span>
                   `
                 )
                 .join("")}
@@ -538,44 +885,198 @@ function createProductCard(product) {
       <button
         class="add-to-cart-mini"
         type="button"
-        data-add-product="${escapeHTML(product.id)}"
+        data-add-product="${escapeHTML(
+          product.id
+        )}"
         ${stock <= 0 ? "disabled" : ""}
       >
-        ${stock <= 0 ? "غير متوفر" : "إضافة إلى السلة"}
+        ${
+          stock <= 0
+            ? "غير متوفر"
+            : "إضافة إلى السلة"
+        }
       </button>
 
     </div>
   `;
 
-  card
-    .querySelector(".product-image-wrap")
-    .addEventListener("click", () => {
-      openProductModal(product);
-    });
+  const imageWrap =
+    card.querySelector(
+      ".product-image-wrap"
+    );
 
-  card
-    .querySelector(".product-name")
-    .addEventListener("click", () => {
-      openProductModal(product);
-    });
-
-  const addButton = card.querySelector(
-    "[data-add-product]"
-  );
-
-  if (addButton) {
-    addButton.addEventListener("click", (event) => {
-      event.stopPropagation();
-
-      if (stock <= 0) {
+  imageWrap?.addEventListener(
+    "click",
+    (event) => {
+      if (
+        event.target.closest(
+          "[data-favorite-product]"
+        )
+      ) {
         return;
       }
 
-      addToCart(product);
-    });
-  }
+      openProductModal(product);
+    }
+  );
+
+  card
+    .querySelector(".product-name")
+    ?.addEventListener(
+      "click",
+      () => {
+        openProductModal(product);
+      }
+    );
+
+  card
+    .querySelector(
+      "[data-favorite-product]"
+    )
+    ?.addEventListener(
+      "click",
+      (event) => {
+        event.stopPropagation();
+        toggleFavorite(product);
+      }
+    );
+
+  card
+    .querySelector(
+      "[data-add-product]"
+    )
+    ?.addEventListener(
+      "click",
+      (event) => {
+        event.stopPropagation();
+
+        if (stock <= 0) {
+          return;
+        }
+
+        addToCart(product);
+      }
+    );
 
   return card;
+}
+
+
+/* =========================================================
+   RENDER PRODUCTS
+   ========================================================= */
+
+function renderProducts() {
+  if (!productsGrid) {
+    return;
+  }
+
+  productsGrid.innerHTML = "";
+
+  if (!filteredProducts.length) {
+    if (productsEmpty) {
+      productsEmpty.hidden = false;
+    }
+
+    return;
+  }
+
+  if (productsEmpty) {
+    productsEmpty.hidden = true;
+  }
+
+  filteredProducts.forEach(
+    (product) => {
+      productsGrid.appendChild(
+        createProductCard(product)
+      );
+    }
+  );
+}
+
+
+/* =========================================================
+   SPECIAL PRODUCT SECTIONS
+   ========================================================= */
+
+function renderGrid(
+  element,
+  items
+) {
+  if (!element) {
+    return;
+  }
+
+  element.innerHTML = "";
+
+  if (!items.length) {
+    element.innerHTML = `
+      <div style="
+        grid-column:1/-1;
+        text-align:center;
+        padding:30px;
+        color:#777;
+      ">
+        لا توجد منتجات حاليًا.
+      </div>
+    `;
+
+    return;
+  }
+
+  items.forEach((product) => {
+    element.appendChild(
+      createProductCard(product)
+    );
+  });
+}
+
+
+function renderSpecialSections() {
+  const newest =
+    [...products]
+      .sort(
+        (a, b) =>
+          new Date(
+            b.created_at || 0
+          ) -
+          new Date(
+            a.created_at || 0
+          )
+      )
+      .slice(0, 8);
+
+  const offers =
+    products
+      .filter(
+        (product) =>
+          getDiscount(product) > 0
+      )
+      .slice(0, 8);
+
+  /*
+    Until the database has a dedicated
+    sales-count field, "best sellers"
+    uses the first active products.
+    Later we can connect it to real order data.
+  */
+  const best =
+    [...products].slice(0, 8);
+
+  renderGrid(
+    newProductsGrid,
+    newest
+  );
+
+  renderGrid(
+    bestProductsGrid,
+    best
+  );
+
+  renderGrid(
+    offersProductsGrid,
+    offers
+  );
 }
 
 
@@ -584,21 +1085,40 @@ function createProductCard(product) {
    ========================================================= */
 
 function openProductModal(product) {
+  if (!productModalBody) {
+    return;
+  }
+
   selectedProduct = product;
-  selectedColor = null;
-  selectedSize = null;
   selectedQuantity = 1;
 
   const image =
-    product.image_url ||
-    "https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=900&q=85";
+    getImage(product);
 
-  const price = Number(product.price || 0);
-  const finalPrice = getProductPrice(product);
-  const discount = getDiscount(product);
+  const price =
+    Number(product.price || 0);
 
-  const colors = normalizeArray(product.colors);
-  const sizes = normalizeArray(product.sizes);
+  const finalPrice =
+    getProductPrice(product);
+
+  const discount =
+    getDiscount(product);
+
+  const colors =
+    normalizeArray(product.colors);
+
+  const sizes =
+    normalizeArray(product.sizes);
+
+  selectedColor =
+    colors.length
+      ? colors[0]
+      : null;
+
+  selectedSize =
+    sizes.length
+      ? sizes[0]
+      : null;
 
   productModalBody.innerHTML = `
     <div class="product-details">
@@ -607,7 +1127,9 @@ function openProductModal(product) {
 
         <img
           src="${escapeHTML(image)}"
-          alt="${escapeHTML(product.name)}"
+          alt="${escapeHTML(
+            product.name
+          )}"
           class="product-details-image"
         >
 
@@ -620,21 +1142,24 @@ function openProductModal(product) {
         </span>
 
         <h2>
-          ${escapeHTML(product.name)}
+          ${escapeHTML(
+            product.name
+          )}
         </h2>
 
         ${
           product.description
             ? `
               <p class="product-details-description">
-                ${escapeHTML(product.description)}
+                ${escapeHTML(
+                  product.description
+                )}
               </p>
             `
             : ""
         }
 
         <div class="details-price">
-
           ${formatPrice(finalPrice)}
 
           ${
@@ -646,7 +1171,6 @@ function openProductModal(product) {
               `
               : ""
           }
-
         </div>
 
         ${
@@ -662,7 +1186,10 @@ function openProductModal(product) {
 
                   ${colors
                     .map(
-                      (color, index) => `
+                      (
+                        color,
+                        index
+                      ) => `
                         <button
                           type="button"
                           class="color-option ${
@@ -670,9 +1197,27 @@ function openProductModal(product) {
                               ? "active"
                               : ""
                           }"
-                          data-color="${escapeHTML(color)}"
+                          data-color="${escapeHTML(
+                            color
+                          )}"
                         >
-                          ${escapeHTML(color)}
+                          <span
+                            style="
+                              display:inline-block;
+                              width:14px;
+                              height:14px;
+                              border-radius:50%;
+                              background:${colorToCSS(
+                                color
+                              )};
+                              margin-left:6px;
+                              vertical-align:middle;
+                            "
+                          ></span>
+
+                          ${escapeHTML(
+                            color
+                          )}
                         </button>
                       `
                     )
@@ -698,7 +1243,10 @@ function openProductModal(product) {
 
                   ${sizes
                     .map(
-                      (size, index) => `
+                      (
+                        size,
+                        index
+                      ) => `
                         <button
                           type="button"
                           class="size-option ${
@@ -706,9 +1254,13 @@ function openProductModal(product) {
                               ? "active"
                               : ""
                           }"
-                          data-size="${escapeHTML(size)}"
+                          data-size="${escapeHTML(
+                            size
+                          )}"
                         >
-                          ${escapeHTML(size)}
+                          ${escapeHTML(
+                            size
+                          )}
                         </button>
                       `
                     )
@@ -751,14 +1303,35 @@ function openProductModal(product) {
 
         </div>
 
+        <div style="
+          margin:15px 0;
+          padding:14px;
+          border-radius:12px;
+          background:#faf8f5;
+          font-size:13px;
+          color:#666;
+        ">
+          🚚 توصيل متاح
+          <br>
+          🔄 إمكانية الاستبدال حسب سياسة المتجر
+        </div>
+
         <button
           type="button"
           class="detail-add-cart"
           id="detailAddCart"
-          ${Number(product.stock || 0) <= 0 ? "disabled" : ""}
+          ${
+            Number(
+              product.stock || 0
+            ) <= 0
+              ? "disabled"
+              : ""
+          }
         >
           ${
-            Number(product.stock || 0) <= 0
+            Number(
+              product.stock || 0
+            ) <= 0
               ? "غير متوفر"
               : "إضافة إلى السلة"
           }
@@ -770,101 +1343,137 @@ function openProductModal(product) {
   `;
 
   productModal.hidden = false;
-  document.body.classList.add("no-scroll");
 
-  if (colors.length) {
-    selectedColor = colors[0];
+  document.body.classList.add(
+    "no-scroll"
+  );
 
-    productModalBody
-      .querySelectorAll("[data-color]")
-      .forEach((button) => {
-        button.addEventListener("click", () => {
+  productModalBody
+    .querySelectorAll("[data-color]")
+    .forEach((button) => {
+      button.addEventListener(
+        "click",
+        () => {
           productModalBody
-            .querySelectorAll("[data-color]")
+            .querySelectorAll(
+              "[data-color]"
+            )
             .forEach((item) =>
-              item.classList.remove("active")
+              item.classList.remove(
+                "active"
+              )
             );
 
-          button.classList.add("active");
+          button.classList.add(
+            "active"
+          );
 
           selectedColor =
             button.dataset.color;
-        });
-      });
-  }
+        }
+      );
+    });
 
-  if (sizes.length) {
-    selectedSize = sizes[0];
-
-    productModalBody
-      .querySelectorAll("[data-size]")
-      .forEach((button) => {
-        button.addEventListener("click", () => {
+  productModalBody
+    .querySelectorAll("[data-size]")
+    .forEach((button) => {
+      button.addEventListener(
+        "click",
+        () => {
           productModalBody
-            .querySelectorAll("[data-size]")
+            .querySelectorAll(
+              "[data-size]"
+            )
             .forEach((item) =>
-              item.classList.remove("active")
+              item.classList.remove(
+                "active"
+              )
             );
 
-          button.classList.add("active");
+          button.classList.add(
+            "active"
+          );
 
           selectedSize =
             button.dataset.size;
-        });
-      });
-  }
+        }
+      );
+    });
 
   const qtyElement =
-    document.getElementById("detailQty");
+    document.getElementById(
+      "detailQty"
+    );
 
   document
-    .getElementById("detailQtyMinus")
-    .addEventListener("click", () => {
+    .getElementById(
+      "detailQtyMinus"
+    )
+    ?.addEventListener(
+      "click",
+      () => {
+        selectedQuantity =
+          Math.max(
+            1,
+            selectedQuantity - 1
+          );
 
-      selectedQuantity = Math.max(
-        1,
-        selectedQuantity - 1
-      );
-
-      qtyElement.textContent =
-        selectedQuantity;
-    });
-
-  document
-    .getElementById("detailQtyPlus")
-    .addEventListener("click", () => {
-
-      const maxStock =
-        Number(product.stock || 0);
-
-      selectedQuantity = Math.min(
-        maxStock,
-        selectedQuantity + 1
-      );
-
-      qtyElement.textContent =
-        selectedQuantity;
-    });
+        qtyElement.textContent =
+          selectedQuantity;
+      }
+    );
 
   document
-    .getElementById("detailAddCart")
-    .addEventListener("click", () => {
+    .getElementById(
+      "detailQtyPlus"
+    )
+    ?.addEventListener(
+      "click",
+      () => {
+        const maxStock =
+          Number(
+            product.stock || 0
+          );
 
-      addToCart(
-        product,
-        selectedQuantity,
-        selectedColor,
-        selectedSize
-      );
+        selectedQuantity =
+          Math.min(
+            maxStock,
+            selectedQuantity + 1
+          );
 
-      closeProductModal();
-    });
+        qtyElement.textContent =
+          selectedQuantity;
+      }
+    );
+
+  document
+    .getElementById(
+      "detailAddCart"
+    )
+    ?.addEventListener(
+      "click",
+      () => {
+        addToCart(
+          product,
+          selectedQuantity,
+          selectedColor,
+          selectedSize
+        );
+
+        closeProductModal();
+      }
+    );
 }
 
 
 function closeProductModal() {
-  productModal.hidden = true;
-  document.body.classList.remove("no-scroll");
+  if (productModal) {
+    productModal.hidden = true;
+  }
+
+  document.body.classList.remove(
+    "no-scroll"
+  );
 }
 
 
@@ -878,31 +1487,67 @@ function addToCart(
   color = null,
   size = null
 ) {
-  const price = getProductPrice(product);
+  const stock =
+    Number(product.stock || 0);
 
-  const existing = cart.find(
-    (item) =>
-      item.product_id === product.id &&
-      item.selected_color === color &&
-      item.selected_size === size
-  );
+  if (stock <= 0) {
+    showToast("هذا المنتج غير متوفر");
+    return;
+  }
+
+  const existing =
+    cart.find(
+      (item) =>
+        item.product_id ===
+          product.id &&
+        item.selected_color ===
+          color &&
+        item.selected_size ===
+          size
+    );
 
   if (existing) {
-    existing.quantity += quantity;
+    existing.quantity =
+      Math.min(
+        stock,
+        existing.quantity +
+          quantity
+      );
   } else {
     cart.push({
-      product_id: product.id,
-      name: product.name,
-      image_url: product.image_url,
-      unit_price: price,
-      quantity,
-      selected_color: color,
-      selected_size: size
+      product_id:
+        product.id,
+
+      name:
+        product.name,
+
+      image_url:
+        product.image_url,
+
+      unit_price:
+        getProductPrice(product),
+
+      quantity:
+        Math.min(
+          stock,
+          quantity
+        ),
+
+      selected_color:
+        color,
+
+      selected_size:
+        size
     });
   }
 
   saveCart();
   renderCart();
+
+  showToast(
+    "تمت إضافة المنتج إلى السلة 🛒"
+  );
+
   openCart();
 }
 
@@ -912,22 +1557,34 @@ function removeFromCart(index) {
 
   saveCart();
   renderCart();
+
+  showToast(
+    "تم حذف المنتج من السلة"
+  );
 }
 
 
-function changeCartQuantity(index, change) {
+function changeCartQuantity(
+  index,
+  change
+) {
   const item = cart[index];
 
   if (!item) {
     return;
   }
 
-  const product = products.find(
-    (p) => p.id === item.product_id
-  );
+  const product =
+    products.find(
+      (p) =>
+        p.id ===
+        item.product_id
+    );
 
   const maxStock = product
-    ? Number(product.stock || 0)
+    ? Number(
+        product.stock || 0
+      )
     : 999;
 
   item.quantity += change;
@@ -936,8 +1593,19 @@ function changeCartQuantity(index, change) {
     item.quantity = 1;
   }
 
-  if (item.quantity > maxStock) {
+  if (
+    maxStock > 0 &&
+    item.quantity > maxStock
+  ) {
     item.quantity = maxStock;
+
+    showToast(
+      "لا توجد كمية أكبر من المتوفر"
+    );
+  }
+
+  if (maxStock <= 0) {
+    cart.splice(index, 1);
   }
 
   saveCart();
@@ -949,159 +1617,217 @@ function getCartTotal() {
   return cart.reduce(
     (total, item) =>
       total +
-      Number(item.unit_price || 0) *
-        Number(item.quantity || 0),
+      Number(
+        item.unit_price || 0
+      ) *
+        Number(
+          item.quantity || 0
+        ),
     0
   );
 }
 
 
 function renderCart() {
-  const totalQuantity = cart.reduce(
-    (total, item) =>
-      total + Number(item.quantity || 0),
-    0
-  );
+  if (!cartBody) {
+    return;
+  }
 
-  cartCount.textContent = totalQuantity;
+  const totalQuantity =
+    cart.reduce(
+      (total, item) =>
+        total +
+        Number(
+          item.quantity || 0
+        ),
+      0
+    );
 
-  cartTotal.textContent =
-    formatPrice(getCartTotal());
+  if (cartCount) {
+    cartCount.textContent =
+      totalQuantity;
+  }
+
+  if (cartTotal) {
+    cartTotal.textContent =
+      formatPrice(
+        getCartTotal()
+      );
+  }
 
   if (!cart.length) {
     cartBody.innerHTML = `
       <div class="cart-empty">
-        السلة فارغة حاليًا.
+        السلة فارغة حاليًا 🛒
       </div>
     `;
 
     return;
   }
 
-  cartBody.innerHTML = cart
-    .map(
-      (item, index) => `
-        <div class="cart-item">
+  cartBody.innerHTML =
+    cart
+      .map(
+        (item, index) => `
+          <div class="cart-item">
 
-          <img
-            src="${escapeHTML(
-              item.image_url ||
-                "https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=500&q=80"
-            )}"
-            class="cart-item-image"
-            alt="${escapeHTML(item.name)}"
-          >
+            <img
+              src="${escapeHTML(
+                item.image_url ||
+                  "https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=500&q=80"
+              )}"
+              class="cart-item-image"
+              alt="${escapeHTML(
+                item.name
+              )}"
+            >
 
-          <div class="cart-item-info">
+            <div class="cart-item-info">
 
-            <h4>
-              ${escapeHTML(item.name)}
-            </h4>
+              <h4>
+                ${escapeHTML(
+                  item.name
+                )}
+              </h4>
 
-            <div class="cart-item-price">
-              ${formatPrice(item.unit_price)}
-            </div>
+              <div class="cart-item-price">
+                ${formatPrice(
+                  item.unit_price
+                )}
+              </div>
 
-            ${
-              item.selected_color ||
-              item.selected_size
-                ? `
-                  <div class="cart-item-options">
+              ${
+                item.selected_color ||
+                item.selected_size
+                  ? `
+                    <div class="cart-item-options">
 
-                    ${
-                      item.selected_color
-                        ? `اللون: ${escapeHTML(
-                            item.selected_color
-                          )}`
-                        : ""
-                    }
+                      ${
+                        item.selected_color
+                          ? `
+                            اللون:
+                            ${escapeHTML(
+                              item.selected_color
+                            )}
+                          `
+                          : ""
+                      }
 
-                    ${
-                      item.selected_size
-                        ? ` ${
-                            item.selected_color
-                              ? " | "
-                              : ""
-                          }المقاس: ${escapeHTML(
-                            item.selected_size
-                          )}`
-                        : ""
-                    }
+                      ${
+                        item.selected_size
+                          ? `
+                            ${
+                              item.selected_color
+                                ? " | "
+                                : ""
+                            }
 
-                  </div>
-                `
-                : ""
-            }
+                            المقاس:
+                            ${escapeHTML(
+                              item.selected_size
+                            )}
+                          `
+                          : ""
+                      }
 
-            <div class="cart-item-actions">
+                    </div>
+                  `
+                  : ""
+              }
 
-              <button
-                type="button"
-                class="qty-btn"
-                data-cart-minus="${index}"
-              >
-                −
-              </button>
+              <div class="cart-item-actions">
 
-              <strong>
-                ${item.quantity}
-              </strong>
+                <button
+                  type="button"
+                  class="qty-btn"
+                  data-cart-minus="${index}"
+                >
+                  −
+                </button>
 
-              <button
-                type="button"
-                class="qty-btn"
-                data-cart-plus="${index}"
-              >
-                +
-              </button>
+                <strong>
+                  ${item.quantity}
+                </strong>
 
-              <button
-                type="button"
-                class="remove-cart-item"
-                data-cart-remove="${index}"
-              >
-                حذف
-              </button>
+                <button
+                  type="button"
+                  class="qty-btn"
+                  data-cart-plus="${index}"
+                >
+                  +
+                </button>
+
+                <button
+                  type="button"
+                  class="remove-cart-item"
+                  data-cart-remove="${index}"
+                >
+                  حذف
+                </button>
+
+              </div>
 
             </div>
 
           </div>
+        `
+      )
+      .join("");
 
-        </div>
-      `
+  cartBody
+    .querySelectorAll(
+      "[data-cart-minus]"
     )
-    .join("");
-
-  cartBody
-    .querySelectorAll("[data-cart-minus]")
     .forEach((button) => {
-      button.addEventListener("click", () => {
-        changeCartQuantity(
-          Number(button.dataset.cartMinus),
-          -1
-        );
-      });
+      button.addEventListener(
+        "click",
+        () => {
+          changeCartQuantity(
+            Number(
+              button.dataset
+                .cartMinus
+            ),
+            -1
+          );
+        }
+      );
     });
 
   cartBody
-    .querySelectorAll("[data-cart-plus]")
+    .querySelectorAll(
+      "[data-cart-plus]"
+    )
     .forEach((button) => {
-      button.addEventListener("click", () => {
-        changeCartQuantity(
-          Number(button.dataset.cartPlus),
-          1
-        );
-      });
+      button.addEventListener(
+        "click",
+        () => {
+          changeCartQuantity(
+            Number(
+              button.dataset
+                .cartPlus
+            ),
+            1
+          );
+        }
+      );
     });
 
   cartBody
-    .querySelectorAll("[data-cart-remove]")
+    .querySelectorAll(
+      "[data-cart-remove]"
+    )
     .forEach((button) => {
-      button.addEventListener("click", () => {
-        removeFromCart(
-          Number(button.dataset.cartRemove)
-        );
-      });
+      button.addEventListener(
+        "click",
+        () => {
+          removeFromCart(
+            Number(
+              button.dataset
+                .cartRemove
+            )
+          );
+        }
+      );
     });
 }
 
@@ -1111,28 +1837,46 @@ function renderCart() {
    ========================================================= */
 
 function openCart() {
-  cartDrawer.classList.add("active");
-  overlay.classList.add("active");
+  if (!cartDrawer) {
+    return;
+  }
+
+  cartDrawer.classList.add(
+    "active"
+  );
+
+  overlay?.classList.add(
+    "active"
+  );
 
   cartDrawer.setAttribute(
     "aria-hidden",
     "false"
   );
 
-  document.body.classList.add("no-scroll");
+  document.body.classList.add(
+    "no-scroll"
+  );
 }
 
 
 function closeCartDrawer() {
-  cartDrawer.classList.remove("active");
-  overlay.classList.remove("active");
+  cartDrawer?.classList.remove(
+    "active"
+  );
 
-  cartDrawer.setAttribute(
+  overlay?.classList.remove(
+    "active"
+  );
+
+  cartDrawer?.setAttribute(
     "aria-hidden",
     "true"
   );
 
-  document.body.classList.remove("no-scroll");
+  document.body.classList.remove(
+    "no-scroll"
+  );
 }
 
 
@@ -1141,14 +1885,24 @@ function closeCartDrawer() {
    ========================================================= */
 
 function createCheckoutModal() {
-  if (document.getElementById("checkoutModal")) {
+  if (
+    document.getElementById(
+      "checkoutModal"
+    )
+  ) {
     return;
   }
 
-  const modal = document.createElement("div");
+  const modal =
+    document.createElement(
+      "div"
+    );
 
-  modal.id = "checkoutModal";
-  modal.className = "modal";
+  modal.id =
+    "checkoutModal";
+
+  modal.className =
+    "modal";
 
   modal.innerHTML = `
     <div
@@ -1172,11 +1926,17 @@ function createCheckoutModal() {
           KOSHI.WEAR
         </span>
 
-        <h2 style="font-size:30px;margin-bottom:8px;">
+        <h2 style="
+          font-size:30px;
+          margin-bottom:8px;
+        ">
           إتمام الطلب
         </h2>
 
-        <p style="color:#777;margin-bottom:25px;">
+        <p style="
+          color:#777;
+          margin-bottom:25px;
+        ">
           أدخل معلومات التوصيل لإرسال طلبك.
         </p>
 
@@ -1189,7 +1949,10 @@ function createCheckoutModal() {
           ">
 
             <div>
-              <label>الاسم الكامل</label>
+              <label>
+                الاسم الكامل
+              </label>
+
               <input
                 id="checkoutName"
                 required
@@ -1199,7 +1962,10 @@ function createCheckoutModal() {
             </div>
 
             <div>
-              <label>رقم الهاتف</label>
+              <label>
+                رقم الهاتف
+              </label>
+
               <input
                 id="checkoutPhone"
                 required
@@ -1209,9 +1975,14 @@ function createCheckoutModal() {
             </div>
 
             <div>
-              <label>المنطقة</label>
-              <select id="checkoutRegion" required>
+              <label>
+                المنطقة
+              </label>
 
+              <select
+                id="checkoutRegion"
+                required
+              >
                 <option value="">
                   اختر المنطقة
                 </option>
@@ -1223,12 +1994,14 @@ function createCheckoutModal() {
                 <option value="inside_israel">
                   داخل إسرائيل
                 </option>
-
               </select>
             </div>
 
             <div>
-              <label>المدينة</label>
+              <label>
+                المدينة
+              </label>
+
               <input
                 id="checkoutCity"
                 required
@@ -1239,9 +2012,13 @@ function createCheckoutModal() {
 
           </div>
 
-          <div style="margin-top:14px;">
+          <div style="
+            margin-top:14px;
+          ">
 
-            <label>العنوان بالتفصيل</label>
+            <label>
+              العنوان بالتفصيل
+            </label>
 
             <textarea
               id="checkoutAddress"
@@ -1252,9 +2029,13 @@ function createCheckoutModal() {
 
           </div>
 
-          <div style="margin-top:14px;">
+          <div style="
+            margin-top:14px;
+          ">
 
-            <label>أقرب معلم</label>
+            <label>
+              أقرب معلم
+            </label>
 
             <input
               id="checkoutLandmark"
@@ -1264,9 +2045,13 @@ function createCheckoutModal() {
 
           </div>
 
-          <div style="margin-top:14px;">
+          <div style="
+            margin-top:14px;
+          ">
 
-            <label>ملاحظات الطلب</label>
+            <label>
+              ملاحظات الطلب
+            </label>
 
             <textarea
               id="checkoutNotes"
@@ -1317,10 +2102,14 @@ function createCheckoutModal() {
     </div>
   `;
 
-  document.body.appendChild(modal);
+  document.body.appendChild(
+    modal
+  );
 
   modal
-    .querySelectorAll("[data-close-checkout]")
+    .querySelectorAll(
+      "[data-close-checkout]"
+    )
     .forEach((button) => {
       button.addEventListener(
         "click",
@@ -1329,8 +2118,10 @@ function createCheckoutModal() {
     });
 
   document
-    .getElementById("checkoutForm")
-    .addEventListener(
+    .getElementById(
+      "checkoutForm"
+    )
+    ?.addEventListener(
       "submit",
       submitCheckout
     );
@@ -1339,7 +2130,9 @@ function createCheckoutModal() {
 
 function openCheckoutModal() {
   if (!cart.length) {
-    alert("السلة فارغة.");
+    showToast(
+      "السلة فارغة"
+    );
     return;
   }
 
@@ -1350,9 +2143,16 @@ function openCheckoutModal() {
       "checkoutModal"
     );
 
-  modal.style.display = "grid";
+  if (!modal) {
+    return;
+  }
 
-  document.body.classList.add("no-scroll");
+  modal.style.display =
+    "grid";
+
+  document.body.classList.add(
+    "no-scroll"
+  );
 }
 
 
@@ -1366,7 +2166,8 @@ function closeCheckoutModal() {
     return;
   }
 
-  modal.style.display = "none";
+  modal.style.display =
+    "none";
 
   document.body.classList.remove(
     "no-scroll"
@@ -1378,7 +2179,9 @@ function closeCheckoutModal() {
    CHECKOUT
    ========================================================= */
 
-async function submitCheckout(event) {
+async function submitCheckout(
+  event
+) {
   event.preventDefault();
 
   const submitButton =
@@ -1396,13 +2199,23 @@ async function submitCheckout(event) {
       "checkoutSuccess"
     );
 
-  errorBox.style.display = "none";
-  successBox.style.display = "none";
+  if (!submitButton) {
+    return;
+  }
+
+  errorBox.style.display =
+    "none";
+
+  successBox.style.display =
+    "none";
 
   if (!cart.length) {
     errorBox.textContent =
       "السلة فارغة.";
-    errorBox.style.display = "block";
+
+    errorBox.style.display =
+      "block";
+
     return;
   }
 
@@ -1457,38 +2270,67 @@ async function submitCheckout(event) {
     return;
   }
 
-  submitButton.disabled = true;
+  submitButton.disabled =
+    true;
+
   submitButton.textContent =
     "جاري إرسال الطلب...";
 
   const trafficSource =
     detectTrafficSource();
 
-  const items = cart.map((item) => ({
-    product_id: item.product_id,
-    quantity: Number(item.quantity || 1),
-    selected_color:
-      item.selected_color || null,
-    selected_size:
-      item.selected_size || null
-  }));
+  const items =
+    cart.map((item) => ({
+      product_id:
+        item.product_id,
 
-  const { data, error } =
+      quantity:
+        Number(
+          item.quantity || 1
+        ),
+
+      selected_color:
+        item.selected_color ||
+        null,
+
+      selected_size:
+        item.selected_size ||
+        null
+    }));
+
+  const {
+    data,
+    error
+  } =
     await supabaseClient.rpc(
       "create_store_order",
       {
-        p_full_name: fullName,
-        p_phone: phone,
-        p_region: region,
-        p_city: city,
-        p_address: address,
+        p_full_name:
+          fullName,
+
+        p_phone:
+          phone,
+
+        p_region:
+          region,
+
+        p_city:
+          city,
+
+        p_address:
+          address,
+
         p_landmark:
           landmark || null,
+
         p_notes:
           notes || null,
+
         p_traffic_source:
           trafficSource,
-        p_items: items
+
+        p_items:
+          items
       }
     );
 
@@ -1504,14 +2346,19 @@ async function submitCheckout(event) {
     errorBox.style.display =
       "block";
 
-    submitButton.disabled = false;
+    submitButton.disabled =
+      false;
+
     submitButton.textContent =
       "تأكيد الطلب";
 
     return;
   }
 
-  if (!data || !data.success) {
+  if (
+    !data ||
+    !data.success
+  ) {
     errorBox.textContent =
       data?.message ||
       "تعذر إنشاء الطلب.";
@@ -1519,7 +2366,9 @@ async function submitCheckout(event) {
     errorBox.style.display =
       "block";
 
-    submitButton.disabled = false;
+    submitButton.disabled =
+      false;
+
     submitButton.textContent =
       "تأكيد الطلب";
 
@@ -1531,19 +2380,26 @@ async function submitCheckout(event) {
       تم إرسال طلبك بنجاح 🎉
     </strong>
 
-    <div style="margin-top:7px;">
+    <div style="
+      margin-top:7px;
+    ">
       رقم الطلب:
       <strong>
         ${escapeHTML(
-          data.order_number || ""
+          data.order_number ||
+            ""
         )}
       </strong>
     </div>
 
-    <div style="margin-top:4px;">
+    <div style="
+      margin-top:4px;
+    ">
       المجموع:
       <strong>
-        ${formatPrice(data.total)}
+        ${formatPrice(
+          data.total
+        )}
       </strong>
     </div>
   `;
@@ -1570,6 +2426,342 @@ async function submitCheckout(event) {
 
 
 /* =========================================================
+   SEARCH
+   ========================================================= */
+
+function openSearchPanel() {
+  if (!searchPanel) {
+    return;
+  }
+
+  searchPanel.classList.add(
+    "active"
+  );
+
+  setTimeout(() => {
+    searchInput?.focus();
+  }, 100);
+}
+
+
+searchBtn?.addEventListener(
+  "click",
+  openSearchPanel
+);
+
+
+closeSearch?.addEventListener(
+  "click",
+  () => {
+    searchPanel?.classList.remove(
+      "active"
+    );
+  }
+);
+
+
+searchInput?.addEventListener(
+  "input",
+  (event) => {
+    currentSearch =
+      event.target.value;
+
+    applyFilters();
+
+    if (
+      currentSearch.trim()
+    ) {
+      document
+        .getElementById(
+          "products"
+        )
+        ?.scrollIntoView({
+          behavior: "smooth",
+          block: "start"
+        });
+    }
+  }
+);
+
+
+/* =========================================================
+   SORT
+   ========================================================= */
+
+sortProducts?.addEventListener(
+  "change",
+  (event) => {
+    currentSort =
+      event.target.value;
+
+    applyFilters();
+  }
+);
+
+
+/* =========================================================
+   CATEGORY BUTTONS
+   ========================================================= */
+
+document
+  .querySelectorAll(
+    ".category-card"
+  )
+  .forEach((button) => {
+    button.addEventListener(
+      "click",
+      () => {
+        currentCategory =
+          button.dataset.category ||
+          "all";
+
+        applyFilters();
+
+        document
+          .getElementById(
+            "products"
+          )
+          ?.scrollIntoView({
+            behavior: "smooth"
+          });
+      }
+    );
+  });
+
+
+/* =========================================================
+   NAV CATEGORY LINKS
+   ========================================================= */
+
+document
+  .querySelectorAll(
+    "[data-category]"
+  )
+  .forEach((element) => {
+    if (
+      element.classList.contains(
+        "category-card"
+      )
+    ) {
+      return;
+    }
+
+    element.addEventListener(
+      "click",
+      (event) => {
+        const category =
+          element.dataset.category;
+
+        if (!category) {
+          return;
+        }
+
+        event.preventDefault();
+
+        currentCategory =
+          category;
+
+        applyFilters();
+
+        document
+          .getElementById(
+            "products"
+          )
+          ?.scrollIntoView({
+            behavior: "smooth"
+          });
+
+        mobileNav?.classList.remove(
+          "active"
+        );
+      }
+    );
+  });
+
+
+/* =========================================================
+   MOBILE MENU
+   ========================================================= */
+
+mobileMenuBtn?.addEventListener(
+  "click",
+  () => {
+    mobileNav?.classList.toggle(
+      "active"
+    );
+  }
+);
+
+
+mobileNav
+  ?.querySelectorAll("a")
+  .forEach((link) => {
+    link.addEventListener(
+      "click",
+      () => {
+        mobileNav.classList.remove(
+          "active"
+        );
+      }
+    );
+  });
+
+
+/* =========================================================
+   CART EVENTS
+   ========================================================= */
+
+cartButton?.addEventListener(
+  "click",
+  (event) => {
+    event.preventDefault();
+    openCart();
+  }
+);
+
+
+closeCart?.addEventListener(
+  "click",
+  closeCartDrawer
+);
+
+
+overlay?.addEventListener(
+  "click",
+  closeCartDrawer
+);
+
+
+checkoutButton?.addEventListener(
+  "click",
+  openCheckoutModal
+);
+
+
+/* =========================================================
+   PRODUCT MODAL EVENTS
+   ========================================================= */
+
+productModal
+  ?.querySelectorAll(
+    "[data-close-product]"
+  )
+  .forEach((button) => {
+    button.addEventListener(
+      "click",
+      closeProductModal
+    );
+  });
+
+
+/* =========================================================
+   ACCOUNT BUTTON
+   ========================================================= */
+
+document
+  .querySelectorAll(
+    "#accountButton, [data-account]"
+  )
+  .forEach((button) => {
+    button.addEventListener(
+      "click",
+      (event) => {
+        event.preventDefault();
+
+        showToast(
+          "قسم الحساب سيتم تفعيله قريبًا 👤"
+        );
+      }
+    );
+  });
+
+
+/* =========================================================
+   FAVORITES BUTTON
+   ========================================================= */
+
+document
+  .querySelectorAll(
+    "#favoritesButton, [data-favorites]"
+  )
+  .forEach((button) => {
+    button.addEventListener(
+      "click",
+      (event) => {
+        event.preventDefault();
+
+        if (favoritesGrid) {
+          favoritesGrid.scrollIntoView({
+            behavior: "smooth"
+          });
+        } else {
+          showToast(
+            `لديك ${favorites.length} منتج في المفضلة ❤️`
+          );
+        }
+      }
+    );
+  });
+
+
+/* =========================================================
+   HERO / SHOP NOW BUTTON
+   ========================================================= */
+
+document
+  .querySelectorAll(
+    "[data-shop-now], #shopNowButton"
+  )
+  .forEach((button) => {
+    button.addEventListener(
+      "click",
+      (event) => {
+        event.preventDefault();
+
+        currentCategory =
+          "all";
+
+        applyFilters();
+
+        document
+          .getElementById(
+            "products"
+          )
+          ?.scrollIntoView({
+            behavior: "smooth"
+          });
+      }
+    );
+  });
+
+
+/* =========================================================
+   ESC KEY
+   ========================================================= */
+
+document.addEventListener(
+  "keydown",
+  (event) => {
+    if (event.key !== "Escape") {
+      return;
+    }
+
+    closeCartDrawer();
+    closeProductModal();
+    closeCheckoutModal();
+
+    searchPanel?.classList.remove(
+      "active"
+    );
+
+    mobileNav?.classList.remove(
+      "active"
+    );
+  }
+);
+
+
+/* =========================================================
    TRAFFIC SOURCE
    ========================================================= */
 
@@ -1589,23 +2781,43 @@ function detectTrafficSource() {
   const referrer =
     document.referrer || "";
 
-  if (referrer.includes("instagram.com")) {
+  if (
+    referrer.includes(
+      "instagram.com"
+    )
+  ) {
     return "instagram";
   }
 
-  if (referrer.includes("facebook.com")) {
+  if (
+    referrer.includes(
+      "facebook.com"
+    )
+  ) {
     return "facebook";
   }
 
-  if (referrer.includes("tiktok.com")) {
+  if (
+    referrer.includes(
+      "tiktok.com"
+    )
+  ) {
     return "tiktok";
   }
 
-  if (referrer.includes("google.")) {
+  if (
+    referrer.includes(
+      "google."
+    )
+  ) {
     return "google";
   }
 
-  if (referrer.includes("youtube.com")) {
+  if (
+    referrer.includes(
+      "youtube.com"
+    )
+  ) {
     return "youtube";
   }
 
@@ -1629,8 +2841,22 @@ async function trackVisitor() {
       );
 
     if (!sessionId) {
-      sessionId =
-        crypto.randomUUID();
+      if (
+        window.crypto &&
+        typeof crypto.randomUUID ===
+          "function"
+      ) {
+        sessionId =
+          crypto.randomUUID();
+      } else {
+        sessionId =
+          "koshi-" +
+          Date.now() +
+          "-" +
+          Math.random()
+            .toString(36)
+            .slice(2);
+      }
 
       localStorage.setItem(
         "koshi_visitor_session",
@@ -1647,12 +2873,20 @@ async function trackVisitor() {
 
     const { error } =
       await supabaseClient
-        .from("visitor_sessions")
+        .from(
+          "visitor_sessions"
+        )
         .upsert(
           {
-            session_id: sessionId,
-            traffic_source: source,
-            current_page: page,
+            session_id:
+              sessionId,
+
+            traffic_source:
+              source,
+
+            current_page:
+              page,
+
             last_seen_at:
               new Date().toISOString()
           },
@@ -1668,7 +2902,6 @@ async function trackVisitor() {
         error
       );
     }
-
   } catch (error) {
     console.error(
       "Visitor tracking failed:",
@@ -1679,211 +2912,18 @@ async function trackVisitor() {
 
 
 /* =========================================================
-   SEARCH
-   ========================================================= */
-
-searchBtn?.addEventListener(
-  "click",
-  () => {
-
-    searchPanel.classList.add(
-      "active"
-    );
-
-    setTimeout(() => {
-      searchInput.focus();
-    }, 100);
-  }
-);
-
-
-closeSearch?.addEventListener(
-  "click",
-  () => {
-    searchPanel.classList.remove(
-      "active"
-    );
-  }
-);
-
-
-searchInput?.addEventListener(
-  "input",
-  (event) => {
-
-    currentSearch =
-      event.target.value;
-
-    applyFilters();
-  }
-);
-
-
-/* =========================================================
-   SORT
-   ========================================================= */
-
-sortProducts?.addEventListener(
-  "change",
-  (event) => {
-
-    currentSort =
-      event.target.value;
-
-    applyFilters();
-  }
-);
-
-
-/* =========================================================
-   CATEGORY BUTTONS
-   ========================================================= */
-
-document
-  .querySelectorAll(
-    ".category-card"
-  )
-  .forEach((button) => {
-
-    button.addEventListener(
-      "click",
-      () => {
-
-        currentCategory =
-          button.dataset.category ||
-          "all";
-
-        document
-          .getElementById(
-            "products"
-          )
-          ?.scrollIntoView({
-            behavior: "smooth"
-          });
-
-        applyFilters();
-      }
-    );
-  });
-
-
-/* =========================================================
-   MOBILE MENU
-   ========================================================= */
-
-mobileMenuBtn?.addEventListener(
-  "click",
-  () => {
-
-    mobileNav.classList.toggle(
-      "active"
-    );
-  }
-);
-
-
-mobileNav
-  ?.querySelectorAll("a")
-  .forEach((link) => {
-
-    link.addEventListener(
-      "click",
-      () => {
-        mobileNav.classList.remove(
-          "active"
-        );
-      }
-    );
-  });
-
-
-/* =========================================================
-   CART EVENTS
-   ========================================================= */
-
-cartButton?.addEventListener(
-  "click",
-  openCart
-);
-
-closeCart?.addEventListener(
-  "click",
-  closeCartDrawer
-);
-
-overlay?.addEventListener(
-  "click",
-  closeCartDrawer
-);
-
-checkoutButton?.addEventListener(
-  "click",
-  openCheckoutModal
-);
-
-
-/* =========================================================
-   PRODUCT MODAL EVENTS
-   ========================================================= */
-
-productModal
-  ?.querySelectorAll(
-    "[data-close-product]"
-  )
-  .forEach((button) => {
-
-    button.addEventListener(
-      "click",
-      closeProductModal
-    );
-  });
-
-
-/* =========================================================
-   ESC KEY
-   ========================================================= */
-
-document.addEventListener(
-  "keydown",
-  (event) => {
-
-    if (event.key !== "Escape") {
-      return;
-    }
-
-    closeCartDrawer();
-    closeProductModal();
-
-    const checkoutModal =
-      document.getElementById(
-        "checkoutModal"
-      );
-
-    if (checkoutModal) {
-      closeCheckoutModal();
-    }
-
-    searchPanel?.classList.remove(
-      "active"
-    );
-
-    mobileNav?.classList.remove(
-      "active"
-    );
-  }
-);
-
-
-/* =========================================================
    INITIALIZE
    ========================================================= */
 
 async function initializeStore() {
   loadCart();
 
+  loadFavorites();
+
   await loadProducts();
 
   await trackVisitor();
 }
+
 
 initializeStore();
