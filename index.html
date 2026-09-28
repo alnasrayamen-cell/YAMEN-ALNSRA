@@ -2,43 +2,109 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
-
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0, viewport-fit=cover"
-  >
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <meta
     name="description"
-    content="KOSHI.WEAR - متجر أزياء عصري"
+    content="KOSHI.WEAR - متجر ملابس أطفال"
   >
 
-  <title>KOSHI.WEAR</title>
+  <title>KOSHI.WEAR | ملابس أطفال</title>
 
   <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-  <!-- =========================
+  <!-- =========================================
+       TOP BAR
+  ========================================== -->
+  <div class="top-bar">
+    <div class="container">
+      <span>🚚 توصيل سريع لجميع المناطق</span>
+      <span>✨ تشكيلات جديدة باستمرار</span>
+    </div>
+  </div>
+
+
+  <!-- =========================================
        HEADER
-  ========================== -->
+  ========================================== -->
   <header class="site-header">
 
-    <div class="header-main container">
+    <div class="container header-main">
 
-      <!-- Logo -->
+      <!-- Mobile Menu -->
+      <button
+        id="mobileMenuButton"
+        class="header-icon"
+        type="button"
+        aria-label="القائمة"
+      >
+        ☰
+      </button>
+
+      <!-- Store Logo -->
       <a href="#" class="site-logo" id="siteLogo">
         KOSHI<span>.WEAR</span>
       </a>
 
+
+      <!-- Desktop Navigation -->
+      <nav class="main-navigation">
+
+        <a href="#" data-nav="home">
+          الرئيسية
+        </a>
+
+        <a href="#boys" data-category="boys">
+          الأولاد
+        </a>
+
+        <a href="#girls" data-category="girls">
+          البنات
+        </a>
+
+        <a href="#newborn" data-category="newborn">
+          حديثي الولادة
+        </a>
+
+        <a href="#offers" data-category="offers">
+          العروض
+        </a>
+
+      </nav>
+
+
       <!-- Header Actions -->
       <div class="header-actions">
+
+        <!-- Search -->
+        <button
+          id="searchButton"
+          class="header-icon"
+          type="button"
+          aria-label="البحث"
+        >
+          🔍
+        </button>
+
+
+        <!-- Account -->
+        <button
+          id="accountButton"
+          class="header-icon account-button"
+          type="button"
+          aria-label="حساب المستخدم"
+        >
+          👤
+        </button>
+
 
         <!-- Favorites -->
         <button
           id="favoritesButton"
-          class="icon-btn favorite-header-btn"
+          class="header-icon favorite-button"
           type="button"
           aria-label="المفضلة"
           aria-pressed="false"
@@ -46,12 +112,13 @@
           ♡
         </button>
 
+
         <!-- Cart -->
         <button
           id="cartButton"
-          class="icon-btn cart-header-btn"
+          class="header-icon cart-button"
           type="button"
-          aria-label="السلة"
+          aria-label="سلة المشتريات"
         >
           🛒
           <span id="cartCount" class="cart-count">0</span>
@@ -62,25 +129,28 @@
     </div>
 
 
-    <!-- Search -->
-    <div class="header-search container">
+    <!-- Search Box -->
+    <div
+      id="searchArea"
+      class="search-area container"
+      hidden
+    >
 
       <div class="search-box">
 
-        <span class="search-icon">🔍</span>
+        <span>🔍</span>
 
         <input
-          type="search"
           id="searchInput"
-          placeholder="ابحث عن منتج..."
+          type="search"
+          placeholder="ابحث عن فستان، طقم، جاكيت..."
           autocomplete="off"
         >
 
         <button
           id="closeSearch"
-          class="search-clear"
           type="button"
-          aria-label="مسح البحث"
+          aria-label="إغلاق البحث"
         >
           ×
         </button>
@@ -92,52 +162,116 @@
   </header>
 
 
-  <!-- =========================
+  <!-- =========================================
+       MOBILE MENU
+  ========================================== -->
+  <aside
+    id="mobileMenu"
+    class="mobile-menu"
+    aria-hidden="true"
+  >
+
+    <div class="mobile-menu-header">
+
+      <strong>KOSHI.WEAR</strong>
+
+      <button
+        id="closeMobileMenu"
+        type="button"
+      >
+        ×
+      </button>
+
+    </div>
+
+
+    <nav>
+
+      <a href="#">
+        🏠 الرئيسية
+      </a>
+
+      <a href="#boys" data-category="boys">
+        👦 الأولاد
+      </a>
+
+      <a href="#girls" data-category="girls">
+        👧 البنات
+      </a>
+
+      <a href="#newborn" data-category="newborn">
+        👶 حديثي الولادة
+      </a>
+
+      <a href="#offers" data-category="offers">
+        🔥 العروض
+      </a>
+
+      <a href="#new">
+        ✨ وصل حديثًا
+      </a>
+
+      <a href="#bestsellers">
+        ⭐ الأكثر مبيعًا
+      </a>
+
+    </nav>
+
+  </aside>
+
+
+  <!-- =========================================
        MAIN
-  ========================== -->
+  ========================================== -->
   <main>
 
 
-    <!-- =========================
+    <!-- =========================================
          HERO
-    ========================== -->
-    <section
-      id="heroSection"
-      class="hero"
-      aria-label="KOSHI.WEAR"
-    >
+    ========================================== -->
+    <section class="hero-section">
 
-      <div class="hero-media">
+      <div class="container">
 
-        <!-- Hero Image -->
-        <div
-          id="heroImage"
-          class="hero-image"
-        ></div>
+        <div class="hero-banner">
 
+          <!--
+            صورة تجريبية لملابس أطفال.
+            لاحقًا يمكن ربطها بصورة البانر من لوحة الإدارة.
+          -->
 
-        <!-- Store Logo Over Hero -->
-        <div
-          id="heroBrand"
-          class="hero-brand"
-        >
-
-          <!-- Logo from Admin -->
           <img
-            id="heroLogoImage"
-            class="hero-logo-image"
-            src=""
-            alt="KOSHI.WEAR"
-            hidden
+            src="https://www.carrefour.es/crs/cdn-static/promo-content/Carrefour/contenidos/moda/2018/sept/bebe/bebe-2-res.jpg"
+            alt="ملابس أطفال"
+            class="hero-image"
           >
 
-          <!-- Fallback Logo -->
-          <span
-            id="heroLogoText"
-            class="hero-logo-text"
-          >
-            KOSHI<span>.WEAR</span>
-          </span>
+
+          <div class="hero-overlay">
+
+            <div class="hero-brand">
+              KOSHI<span>.WEAR</span>
+            </div>
+
+            <h1>
+              أجمل إطلالات صغاركم
+              <br>
+              تبدأ من هنا
+            </h1>
+
+            <p>
+              اختيارات ناعمة وأنيقة لأطفالكم
+            </p>
+
+            <button
+              id="shopNowButton"
+              class="primary-button"
+              type="button"
+            >
+              تسوّق الآن
+            </button>
+
+          </div>
 
         </div>
 
@@ -146,56 +280,239 @@
     </section>
 
 
-    <!-- =========================
-         QUICK CATEGORIES
-    ========================== -->
-    <section class="quick-categories-section">
+    <!-- =========================================
+         CATEGORIES
+    ========================================== -->
+    <section
+      id="categories"
+      class="categories-section"
+    >
 
       <div class="container">
 
-        <div
-          id="quickCategories"
-          class="quick-categories"
-        >
+        <div class="section-heading">
+
+          <div>
+            <span class="section-kicker">
+              اكتشف مجموعتنا
+            </span>
+
+            <h2>
+              تسوّق حسب القسم
+            </h2>
+          </div>
+
+        </div>
+
+
+        <div class="categories-grid">
+
+
+          <!-- Girls -->
+          <button
+            class="category-card"
+            data-category="girls"
+            type="button"
+          >
+
+            <img
+              src="https://cdn.shopify.com/s/files/1/0646/0211/2255/files/new_07_10_2024_aadaeed9-0a39-477f-965f-510af8a966ab084A4693.jpg?v=1739253145"
+              alt="ملابس بنات"
+            >
+
+            <div class="category-card-overlay">
+              <span>👧</span>
+              <strong>بنات</strong>
+            </div>
+
+          </button>
+
+
+          <!-- Boys -->
+          <button
+            class="category-card"
+            data-category="boys"
+            type="button"
+          >
+
+            <img
+              src="https://www.panachekids.co.uk/images/thumbs/0074627_mitch-son-boys-easy-onoff-jump-large-m-trainer-white.jpeg"
+              alt="ملابس أولاد"
+            >
+
+            <div class="category-card-overlay">
+              <span>👦</span>
+              <strong>أولاد</strong>
+            </div>
+
+          </button>
+
+
+          <!-- Newborn -->
+          <button
+            class="category-card"
+            data-category="newborn"
+            type="button"
+          >
+
+            <img
+              src="https://cotandcandybaby.com/cdn/shop/files/Z1233826.jpg?v=1752494283&width=1946"
+              alt="ملابس حديثي الولادة"
+            >
+
+            <div class="category-card-overlay">
+              <span>👶</span>
+              <strong>مواليد</strong>
+            </div>
+
+          </button>
+
+
+          <!-- Jackets -->
+          <button
+            class="category-card"
+            data-category="jackets"
+            type="button"
+          >
+
+            <img
+              src="https://down-br.img.susercontent.com/file/cn-11134208-7ras8-m7aaomai6vqm9b"
+              alt="جاكيتات أطفال"
+            >
+
+            <div class="category-card-overlay">
+              <span>🧥</span>
+              <strong>جاكيتات</strong>
+            </div>
+
+          </button>
+
+
+          <!-- Sets -->
+          <button
+            class="category-card"
+            data-category="sets"
+            type="button"
+          >
+
+            <img
+              src="https://funly.co.in/cdn/shop/files/MDC01.jpg?v=1772998790"
+              alt="أطقم أطفال"
+            >
+
+            <div class="category-card-overlay">
+              <span>👕</span>
+              <strong>أطقم</strong>
+            </div>
+
+          </button>
+
+
+          <!-- Shoes -->
+          <button
+            class="category-card"
+            data-category="shoes"
+            type="button"
+          >
+
+            <img
+              src="https://www.panachekids.co.uk/images/thumbs/0074627_mitch-son-boys-easy-onoff-jump-large-m-trainer-white.jpeg"
+              alt="أحذية أطفال"
+            >
+
+            <div class="category-card-overlay">
+              <span>👟</span>
+              <strong>أحذية</strong>
+            </div>
+
+          </button>
+
+
+          <!-- Accessories -->
+          <button
+            class="category-card"
+            data-category="accessories"
+            type="button"
+          >
+
+            <img
+              src="https://s.alicdn.com/%40sc04/kf/H8c94e16a353e43e69c6ad58854362a1c6/Korean-Style-Summer-Dress-for-Newborn-Baby-Girls-Stylish-Dress-Clothes-for-Babies.jpg"
+              alt="إكسسوارات أطفال"
+            >
+
+            <div class="category-card-overlay">
+              <span>🎀</span>
+              <strong>إكسسوارات</strong>
+            </div>
+
+          </button>
+
+
+          <!-- Offers -->
+          <button
+            class="category-card offer-category"
+            data-category="offers"
+            type="button"
+          >
+
+            <img
+              src="https://www.wilsonandfrenchy.com.au/cdn/shop/files/AW25_WEB_StyledFlatlay_16_023.jpg?v=1743050483&width=2000"
+              alt="عروض ملابس أطفال"
+            >
+
+            <div class="category-card-overlay">
+              <span>🔥</span>
+              <strong>العروض</strong>
+            </div>
+
+          </button>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =========================================
+         FILTER BAR
+    ========================================== -->
+    <section class="filter-section">
+
+      <div class="container">
+
+        <div class="filter-bar">
 
           <button
-            class="category-chip active"
-            data-category="all"
+            class="filter-button active"
+            data-filter="all"
             type="button"
           >
             الكل
           </button>
 
           <button
-            class="category-chip"
-            data-category="new"
+            class="filter-button"
+            data-filter="new"
             type="button"
           >
-            جديد
+            ✨ وصل حديثًا
           </button>
 
           <button
-            class="category-chip"
-            data-category="boys"
+            class="filter-button"
+            data-filter="bestseller"
             type="button"
           >
-            شباب
+            ⭐ الأكثر مبيعًا
           </button>
 
           <button
-            class="category-chip"
-            data-category="girls"
+            class="filter-button"
+            data-filter="offers"
             type="button"
           >
-            بنات
-          </button>
-
-          <button
-            class="category-chip"
-            data-category="sets"
-            type="button"
-          >
-            أطقم
+            🔥 العروض
           </button>
 
         </div>
@@ -205,11 +522,11 @@
     </section>
 
 
-    <!-- =========================
+    <!-- =========================================
          NEW PRODUCTS
-    ========================== -->
+    ========================================== -->
     <section
-      id="newProductsSection"
+      id="new"
       class="products-section"
     >
 
@@ -218,14 +535,19 @@
         <div class="section-heading">
 
           <div>
-            <h2>وصل حديثًا</h2>
-            <p>أحدث المنتجات</p>
+            <span class="section-kicker">
+              ✨ جديدنا
+            </span>
+
+            <h2>
+              وصل حديثًا
+            </h2>
           </div>
 
           <button
-            id="showAllNewProducts"
             class="section-link"
             type="button"
+            data-show-all="new"
           >
             عرض الكل
           </button>
@@ -238,25 +560,16 @@
           class="products-grid"
         ></div>
 
-
-        <div
-          id="newProductsEmpty"
-          class="empty-state"
-          hidden
-        >
-          لا توجد منتجات جديدة حاليًا.
-        </div>
-
       </div>
 
     </section>
 
 
-    <!-- =========================
+    <!-- =========================================
          ALL PRODUCTS
-    ========================== -->
+    ========================================== -->
     <section
-      id="productsSection"
+      id="products"
       class="products-section"
     >
 
@@ -265,9 +578,61 @@
         <div class="section-heading">
 
           <div>
-            <h2>المنتجات</h2>
-            <p>اختار القطعة اللي بتعجبك</p>
+            <span class="section-kicker">
+              KOSHI.WEAR
+            </span>
+
+            <h2>
+              منتجاتنا
+            </h2>
           </div>
+
+        </div>
+
+
+        <!-- Advanced Filters -->
+        <div class="advanced-filters">
+
+          <select id="ageFilter">
+            <option value="">العمر</option>
+            <option value="newborn">حديثي الولادة</option>
+            <option value="0-3">0 - 3 أشهر</option>
+            <option value="3-6">3 - 6 أشهر</option>
+            <option value="6-12">6 - 12 شهر</option>
+            <option value="1-3">1 - 3 سنوات</option>
+            <option value="4-7">4 - 7 سنوات</option>
+            <option value="8-12">8 - 12 سنة</option>
+          </select>
+
+
+          <select id="sizeFilter">
+            <option value="">المقاس</option>
+            <option value="XS">XS</option>
+            <option value="S">S</option>
+            <option value="M">M</option>
+            <option value="L">L</option>
+            <option value="XL">XL</option>
+          </select>
+
+
+          <select id="colorFilter">
+            <option value="">اللون</option>
+            <option value="white">أبيض</option>
+            <option value="beige">بيج</option>
+            <option value="pink">زهري</option>
+            <option value="blue">أزرق</option>
+            <option value="green">أخضر</option>
+            <option value="black">أسود</option>
+          </select>
+
+
+          <select id="priceFilter">
+            <option value="">السعر</option>
+            <option value="0-50">أقل من 50 ₪</option>
+            <option value="50-100">50 - 100 ₪</option>
+            <option value="100-150">100 - 150 ₪</option>
+            <option value="150+">أكثر من 150 ₪</option>
+          </select>
 
         </div>
 
@@ -283,7 +648,7 @@
           class="empty-state"
           hidden
         >
-          لا توجد منتجات مطابقة للبحث.
+          لا توجد منتجات مطابقة.
         </div>
 
       </div>
@@ -291,12 +656,104 @@
     </section>
 
 
-    <!-- =========================
+    <!-- =========================================
+         BEST SELLERS
+    ========================================== -->
+    <section
+      id="bestsellers"
+      class="products-section"
+    >
+
+      <div class="container">
+
+        <div class="section-heading">
+
+          <div>
+            <span class="section-kicker">
+              ⭐ المفضلة
+            </span>
+
+            <h2>
+              الأكثر مبيعًا
+            </h2>
+          </div>
+
+        </div>
+
+
+        <div
+          id="bestSellingGrid"
+          class="products-grid"
+        ></div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =========================================
+         OFFERS
+    ========================================== -->
+    <section
+      id="offers"
+      class="offers-section"
+    >
+
+      <div class="container">
+
+        <div class="offers-banner">
+
+          <div>
+
+            <span>
+              🔥 لفترة محدودة
+            </span>
+
+            <h2>
+              عروض KOSHI.WEAR
+            </h2>
+
+            <p>
+              اختاروا القطع المفضلة بأسعار مميزة.
+            </p>
+
+          </div>
+
+
+          <div class="offer-countdown">
+
+            <small>
+              ينتهي العرض خلال
+            </small>
+
+            <div
+              id="offerCountdown"
+              class="countdown"
+            >
+              00 : 00 : 00
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <div
+          id="offersGrid"
+          class="products-grid"
+        ></div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =========================================
          FAVORITES
-    ========================== -->
+    ========================================== -->
     <section
       id="favoritesSection"
-      class="products-section favorites-section"
+      class="products-section"
       hidden
     >
 
@@ -305,8 +762,15 @@
         <div class="section-heading">
 
           <div>
-            <h2>المفضلة</h2>
-            <p>المنتجات التي حفظتها</p>
+
+            <span class="section-kicker">
+              ❤️ محفوظاتك
+            </span>
+
+            <h2>
+              المفضلة
+            </h2>
+
           </div>
 
         </div>
@@ -323,7 +787,7 @@
           class="empty-state"
           hidden
         >
-          لم تضف أي منتج إلى المفضلة بعد.
+          لم تضف أي منتج للمفضلة بعد.
         </div>
 
       </div>
@@ -331,9 +795,160 @@
     </section>
 
 
-    <!-- =========================
+    <!-- =========================================
+         REVIEWS
+    ========================================== -->
+    <section class="reviews-section">
+
+      <div class="container">
+
+        <div class="section-heading centered">
+
+          <span class="section-kicker">
+            ⭐ آراء العملاء
+          </span>
+
+          <h2>
+            ماذا يقول عملاؤنا؟
+          </h2>
+
+        </div>
+
+
+        <div class="reviews-grid">
+
+          <article class="review-card">
+
+            <div class="review-stars">
+              ★★★★★
+            </div>
+
+            <p>
+              "الملابس كثير مرتبة والخامة ممتازة."
+            </p>
+
+            <strong>
+              عميل KOSHI.WEAR
+            </strong>
+
+          </article>
+
+
+          <article class="review-card">
+
+            <div class="review-stars">
+              ★★★★★
+            </div>
+
+            <p>
+              "الطلب وصل بسرعة والتغليف كان مرتب."
+            </p>
+
+            <strong>
+              عميل KOSHI.WEAR
+            </strong>
+
+          </article>
+
+
+          <article class="review-card">
+
+            <div class="review-stars">
+              ★★★★★
+            </div>
+
+            <p>
+              "تشكيلة حلوة ومقاسات كثيرة."
+            </p>
+
+            <strong>
+              عميل KOSHI.WEAR
+            </strong>
+
+          </article>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =========================================
+         DELIVERY INFO
+    ========================================== -->
+    <section class="delivery-section">
+
+      <div class="container">
+
+        <div class="delivery-grid">
+
+          <div class="delivery-card">
+            <span>🚚</span>
+            <h3>توصيل سريع</h3>
+            <p>نوصل طلبك بأسرع وقت ممكن.</p>
+          </div>
+
+
+          <div class="delivery-card">
+            <span>🔄</span>
+            <h3>استبدال</h3>
+            <p>سياسة استبدال واضحة وسهلة.</p>
+          </div>
+
+
+          <div class="delivery-card">
+            <span>💬</span>
+            <h3>خدمة العملاء</h3>
+            <p>تواصل معنا لأي استفسار.</p>
+          </div>
+
+
+          <div class="delivery-card">
+            <span>🔒</span>
+            <h3>طلب آمن</h3>
+            <p>بيانات طلبك محفوظة بأمان.</p>
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =========================================
+         ABOUT
+    ========================================== -->
+    <section class="about-section">
+
+      <div class="container">
+
+        <div class="about-content">
+
+          <span class="section-kicker">
+            KOSHI.WEAR
+          </span>
+
+          <h2>
+            ملابس صغيرة، إطلالات كبيرة
+          </h2>
+
+          <p>
+            في KOSHI.WEAR نختار لكم ملابس أطفال تجمع
+            بين الراحة والأناقة والتصاميم الجميلة.
+          </p>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =========================================
          CUSTOMER SERVICE
-    ========================== -->
+    ========================================== -->
     <section class="customer-service">
 
       <div class="container">
@@ -344,9 +959,11 @@
             💬
           </div>
 
-          <div class="service-info">
+          <div>
 
-            <h3>خدمة العملاء</h3>
+            <h3>
+              تحتاج مساعدة؟
+            </h3>
 
             <p>
               وليد الكوشي
@@ -361,6 +978,16 @@
 
           </div>
 
+
+          <a
+            href="https://wa.me/970593805242"
+            class="whatsapp-button"
+            target="_blank"
+            rel="noopener"
+          >
+            تواصل واتساب
+          </a>
+
         </div>
 
       </div>
@@ -370,28 +997,66 @@
   </main>
 
 
-  <!-- =========================
+  <!-- =========================================
+       PRODUCT MODAL
+  ========================================== -->
+  <div
+    id="productModal"
+    class="modal"
+    aria-hidden="true"
+  >
+
+    <div
+      id="productModalOverlay"
+      class="modal-overlay"
+    ></div>
+
+    <div class="modal-content product-modal-content">
+
+      <button
+        id="closeProductModal"
+        class="modal-close"
+        type="button"
+      >
+        ×
+      </button>
+
+      <div
+        id="productModalBody"
+        class="product-modal-body"
+      ></div>
+
+    </div>
+
+  </div>
+
+
+  <!-- =========================================
        CART DRAWER
-  ========================== -->
+  ========================================== -->
   <aside
     id="cartDrawer"
     class="cart-drawer"
     aria-hidden="true"
   >
 
-    <div class="cart-overlay" id="cartOverlay"></div>
+    <div
+      id="cartOverlay"
+      class="cart-overlay"
+    ></div>
 
     <div class="cart-panel">
 
       <div class="cart-header">
 
-        <h2>السلة</h2>
+        <h2>
+          🛒 سلة المشتريات
+        </h2>
 
         <button
           id="closeCart"
           class="close-btn"
           type="button"
-          aria-label="إغلاق"
         >
           ×
         </button>
@@ -409,14 +1074,17 @@
         id="cartEmpty"
         class="cart-empty"
       >
-        <div class="cart-empty-icon">
+
+        <div>
           🛒
         </div>
 
-        <h3>السلة فارغة</h3>
+        <h3>
+          السلة فارغة
+        </h3>
 
         <p>
-          أضف المنتجات التي تريد شراءها إلى السلة.
+          أضف المنتجات التي تعجبك إلى السلة.
         </p>
 
       </div>
@@ -456,45 +1124,9 @@
   </aside>
 
 
-  <!-- =========================
-       PRODUCT MODAL
-  ========================== -->
-  <div
-    id="productModal"
-    class="modal"
-    aria-hidden="true"
-  >
-
-    <div
-      class="modal-overlay"
-      id="productModalOverlay"
-    ></div>
-
-    <div class="modal-content product-modal-content">
-
-      <button
-        id="closeProductModal"
-        class="modal-close"
-        type="button"
-        aria-label="إغلاق"
-      >
-        ×
-      </button>
-
-
-      <div
-        id="productModalBody"
-        class="product-modal-body"
-      ></div>
-
-    </div>
-
-  </div>
-
-
-  <!-- =========================
+  <!-- =========================================
        CHECKOUT MODAL
-  ========================== -->
+  ========================================== -->
   <div
     id="checkoutModal"
     class="modal"
@@ -502,8 +1134,8 @@
   >
 
     <div
-      class="modal-overlay"
       id="checkoutModalOverlay"
+      class="modal-overlay"
     ></div>
 
     <div class="modal-content checkout-modal-content">
@@ -512,7 +1144,6 @@
         id="closeCheckoutModal"
         class="modal-close"
         type="button"
-        aria-label="إغلاق"
       >
         ×
       </button>
@@ -520,12 +1151,16 @@
 
       <div class="checkout-header">
 
+        <span class="section-kicker">
+          KOSHI.WEAR
+        </span>
+
         <h2>
           إتمام الطلب
         </h2>
 
         <p>
-          أدخل بياناتك لإرسال الطلب.
+          أدخل بيانات التوصيل الخاصة بك.
         </p>
 
       </div>
@@ -547,7 +1182,6 @@
             name="full_name"
             type="text"
             required
-            autocomplete="name"
           >
 
         </div>
@@ -564,22 +1198,6 @@
             name="phone"
             type="tel"
             required
-            autocomplete="tel"
-          >
-
-        </div>
-
-
-        <div class="form-group">
-
-          <label for="customerRegion">
-            المنطقة
-          </label>
-
-          <input
-            id="customerRegion"
-            name="region"
-            type="text"
           >
 
         </div>
@@ -619,15 +1237,25 @@
 
         <div class="form-group">
 
-          <label for="customerLandmark">
-            أقرب معلم
+          <label for="paymentMethod">
+            طريقة الدفع
           </label>
 
-          <input
-            id="customerLandmark"
-            name="landmark"
-            type="text"
+          <select
+            id="paymentMethod"
+            name="payment_method"
+            required
           >
+
+            <option value="">
+              اختر طريقة الدفع
+            </option>
+
+            <option value="cod">
+              الدفع عند الاستلام
+            </option>
+
+          </select>
 
         </div>
 
@@ -635,7 +1263,7 @@
         <div class="form-group">
 
           <label for="customerNotes">
-            ملاحظات
+            ملاحظات الطلب
           </label>
 
           <textarea
@@ -655,8 +1283,8 @@
 
         <button
           id="submitOrderButton"
-          type="submit"
           class="submit-order-button"
+          type="submit"
         >
           تأكيد الطلب
         </button>
@@ -668,9 +1296,9 @@
   </div>
 
 
-  <!-- =========================
+  <!-- =========================================
        ORDER SUCCESS
-  ========================== -->
+  ========================================== -->
   <div
     id="orderSuccessModal"
     class="modal"
@@ -686,15 +1314,11 @@
       </div>
 
       <h2>
-        تم إرسال طلبك
+        تم إرسال طلبك بنجاح
       </h2>
 
       <p>
-        شكرًا لطلبك من KOSHI.WEAR
-      </p>
-
-      <p>
-        سنتواصل معك لتأكيد الطلب.
+        شكرًا لثقتك بـ KOSHI.WEAR
       </p>
 
       <strong id="successOrderNumber"></strong>
@@ -712,33 +1336,79 @@
   </div>
 
 
-  <!-- =========================
-       FOOTER
-  ========================== -->
-  <footer class="site-footer">
+  <!-- =========================================
+       MOBILE BOTTOM NAVIGATION
+  ========================================== -->
+  <nav class="mobile-bottom-nav">
 
-    <div class="container">
-
-      <div class="footer-brand">
-        KOSHI<span>.WEAR</span>
-      </div>
-
-      <p>
-        أزياء عصرية بأسلوبك.
-      </p>
-
-      <p class="footer-copy">
-        ©️ 2026 KOSHI.WEAR
-      </p>
-
-    </div>
-
-  </footer>
+    <button
+      type="button"
+      data-bottom-nav="home"
+    >
+      <span>⌂</span>
+      <small>الرئيسية</small>
+    </button>
 
 
-  <!-- =========================
-       APP
-  ========================== -->
+    <button
+      type="button"
+      data-bottom-nav="categories"
+    >
+      <span>☰</span>
+      <small>الأقسام</small>
+    </button>
+
+
+    <button
+      id="mobileCartButton"
+      type="button"
+      data-bottom-nav="cart"
+    >
+      <span class="bottom-cart-icon">
+        🛒
+        <b id="mobileCartCount">0</b>
+      </span>
+
+      <small>
+        السلة
+      </small>
+    </button>
+
+
+    <button
+      type="button"
+      data-bottom-nav="favorites"
+    >
+      <span>♡</span>
+      <small>المفضلة</small>
+    </button>
+
+
+    <button
+      type="button"
+      data-bottom-nav="account"
+    >
+      <span>👤</span>
+      <small>حسابي</small>
+    </button>
+
+  </nav>
+
+
+  <!-- =========================================
+       TOAST
+  ========================================== -->
+  <div
+    id="toast"
+    class="toast"
+    role="status"
+    aria-live="polite"
+  ></div>
+
+
+  <!-- =========================================
+       APP JS
+  ========================================== -->
   <script src="app.js"></script>
 
 </body>
