@@ -12,7 +12,7 @@ const SUPABASE_URL =
   NEVER use the Supabase Secret Key in this file.
 */
 const SUPABASE_PUBLISHABLE_KEY =
-  "YOUR_EXISTING_PUBLISHABLE_KEY";
+  "sb_publishable_J8K4FI12ExE5stcHVHviRQ_Uk__w4ko";
 
 const supabaseClient =
   window.supabase.createClient(
