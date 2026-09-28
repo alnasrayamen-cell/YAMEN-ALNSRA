@@ -2229,3 +2229,34 @@ window.closeCheckout =
 
 window.updateCartUI =
   updateCartUI;
+async function loadStoreSettings() {
+  try {
+    const { data, error } = await supabaseClient
+      .from("store_settings")
+      .select("store_name, logo_url")
+      .eq("id", 1)
+      .single();
+
+    if (error) throw error;
+
+    const storeName = data?.store_name?.trim() || "KOSHI.WEAR";
+
+    // تغيير اسم المتجر في كل الأماكن التي تحمل data-store-name
+    document.querySelectorAll("[data-store-name]").forEach((el) => {
+      el.textContent = storeName;
+    });
+
+    // عنوان الصفحة
+    document.title = storeName;
+
+    // الشعار النصي إذا كان موجودًا
+    const logoText = document.querySelector(".logo");
+    if (logoText) {
+      logoText.textContent = storeName;
+    }
+
+  } catch (error) {
+    console.error("تعذر تحميل إعدادات المتجر:", error);
+  }
+}
+loadStoreSettings();
