@@ -5,7 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <title>KOSHI.WEAR</title>
-  <meta name="description" content="KOSHI.WEAR — اكتشف أحدث تشكيلات الأزياء والإكسسوارات.">
+
+  <meta
+    name="description"
+    content="KOSHI.WEAR — أزياء أطفال مختارة بعناية."
+  >
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -36,6 +40,7 @@
     <div class="header-main container">
 
       <!-- Mobile Menu -->
+
       <button
         class="icon-btn mobile-menu-btn"
         id="mobileMenuBtn"
@@ -45,21 +50,42 @@
         ☰
       </button>
 
+
       <!-- Logo -->
-      <a href="#" class="logo" id="storeLogo">
+
+      <a
+        href="#home"
+        class="logo"
+        id="storeLogo"
+      >
         KOSHI<span>.WEAR</span>
       </a>
 
+
       <!-- Desktop Navigation -->
+
       <nav class="main-nav">
-        <a href="#home">الرئيسية</a>
-        <a href="#products">المنتجات</a>
-        <a href="#new">وصل حديثًا</a>
-        <a href="#offers">العروض</a>
+
+        <a href="#home">
+          الرئيسية
+        </a>
+
+        <a href="#products">
+          المنتجات
+        </a>
+
+        <a href="#new">
+          وصل حديثًا
+        </a>
+
       </nav>
 
+
       <!-- Header Actions -->
+
       <div class="header-actions">
+
+        <!-- Search -->
 
         <button
           class="icon-btn"
@@ -70,6 +96,27 @@
           🔍
         </button>
 
+
+        <!-- Favorites -->
+
+        <button
+          class="icon-btn favorite-header-btn"
+          id="favoritesButton"
+          type="button"
+          aria-label="المفضلة"
+        >
+          ♡
+          <span
+            id="favoritesCount"
+            class="favorites-count"
+          >
+            0
+          </span>
+        </button>
+
+
+        <!-- Cart -->
+
         <button
           class="icon-btn cart-btn"
           id="cartButton"
@@ -77,20 +124,40 @@
           aria-label="السلة"
         >
           🛒
-          <span id="cartCount">0</span>
+
+          <span id="cartCount">
+            0
+          </span>
+
         </button>
 
       </div>
 
     </div>
 
-    <!-- Mobile Navigation -->
-    <nav class="mobile-nav" id="mobileNav">
 
-      <a href="#home">الرئيسية</a>
-      <a href="#products">المنتجات</a>
-      <a href="#new">وصل حديثًا</a>
-      <a href="#offers">العروض</a>
+    <!-- Mobile Navigation -->
+
+    <nav
+      class="mobile-nav"
+      id="mobileNav"
+    >
+
+      <a href="#home">
+        الرئيسية
+      </a>
+
+      <a href="#products">
+        المنتجات
+      </a>
+
+      <a href="#new">
+        وصل حديثًا
+      </a>
+
+      <a href="#favorites">
+        المفضلة
+      </a>
 
     </nav>
 
@@ -99,7 +166,10 @@
 
   <!-- ================= SEARCH ================= -->
 
-  <div class="search-panel" id="searchPanel">
+  <div
+    class="search-panel"
+    id="searchPanel"
+  >
 
     <div class="container search-inner">
 
@@ -114,6 +184,7 @@
         type="button"
         id="closeSearch"
         class="close-btn"
+        aria-label="إغلاق البحث"
       >
         ×
       </button>
@@ -127,27 +198,48 @@
 
   <main id="home">
 
-    <!-- HERO -->
 
-    <section class="hero">
+    <!-- ================= HERO ================= -->
+
+    <section
+      class="hero"
+      id="heroSection"
+    >
+
+      <!--
+        لاحقًا app.js سيضع صورة الـHero
+        التي تختارها من لوحة الإدارة.
+      -->
+
+      <div
+        class="hero-image"
+        id="heroImage"
+      ></div>
+
 
       <div class="hero-content container">
 
         <div class="hero-text">
 
-          <span class="hero-label">
+          <span
+            class="hero-label"
+            id="heroStoreName"
+          >
             KOSHI.WEAR
           </span>
 
-          <h1>
+
+          <h1 id="heroTitle">
             أسلوبك يبدأ<br>
             من هنا.
           </h1>
 
-          <p>
+
+          <p id="heroDescription">
             اكتشف أحدث القطع المختارة بعناية
             وصمّم إطلالتك بطريقتك.
           </p>
+
 
           <a
             href="#products"
@@ -163,66 +255,36 @@
     </section>
 
 
-    <!-- ================= CATEGORIES ================= -->
+    <!-- ================= NEW PRODUCTS ================= -->
 
-    <section class="categories-section">
+    <section
+      class="new-products-section"
+      id="new"
+    >
 
       <div class="container">
 
         <div class="section-heading">
 
           <div>
+
             <span class="eyebrow">
-              KOSHI.WEAR
+              NEW
             </span>
 
             <h2>
-              تصفّح حسب الفئة
+              وصل حديثًا
             </h2>
+
           </div>
 
         </div>
 
 
-        <div class="categories-grid">
-
-          <button
-            class="category-card"
-            data-category="all"
-            type="button"
-          >
-            <span>✦</span>
-            <strong>كل المنتجات</strong>
-          </button>
-
-          <button
-            class="category-card"
-            data-category="new"
-            type="button"
-          >
-            <span>NEW</span>
-            <strong>وصل حديثًا</strong>
-          </button>
-
-          <button
-            class="category-card"
-            data-category="sale"
-            type="button"
-          >
-            <span>%</span>
-            <strong>العروض</strong>
-          </button>
-
-          <button
-            class="category-card"
-            data-category="accessories"
-            type="button"
-          >
-            <span>◈</span>
-            <strong>الإكسسوارات</strong>
-          </button>
-
-        </div>
+        <div
+          id="newProductsGrid"
+          class="products-grid new-products-grid"
+        ></div>
 
       </div>
 
@@ -243,7 +305,7 @@
           <div>
 
             <span class="eyebrow">
-              SHOP
+              KOSHI.WEAR
             </span>
 
             <h2>
@@ -251,6 +313,7 @@
             </h2>
 
           </div>
+
 
           <div class="products-tools">
 
@@ -312,66 +375,76 @@
     </section>
 
 
-    <!-- ================= PROMO ================= -->
+    <!-- ================= FAVORITES ================= -->
 
     <section
-      class="promo-section"
-      id="offers"
+      class="favorites-section"
+      id="favorites"
     >
 
       <div class="container">
 
-        <div class="promo-box">
+        <div class="section-heading">
 
           <div>
 
             <span class="eyebrow">
-              SPECIAL OFFER
+              FAVORITES
             </span>
 
             <h2>
-              لا تفوّت عروض KOSHI.WEAR
+              المفضلة ❤️
             </h2>
-
-            <p>
-              تابع أحدث المنتجات والعروض الحصرية.
-            </p>
 
           </div>
 
-          <a
-            href="#products"
-            class="secondary-btn"
-          >
-            اكتشف العروض
-          </a>
-
         </div>
+
+
+        <div
+          id="favoritesEmpty"
+          class="products-empty"
+        >
+          لم تضف أي منتجات إلى المفضلة بعد.
+        </div>
+
+
+        <div
+          id="favoritesGrid"
+          class="products-grid"
+        ></div>
 
       </div>
 
     </section>
 
 
-    <!-- ================= NEWSLETTER ================= -->
+    <!-- ================= CUSTOMER SERVICE ================= -->
 
-    <section class="newsletter-section">
+    <section class="customer-service-section">
 
       <div class="container">
 
-        <div class="newsletter">
+        <div class="customer-service-box">
 
           <span class="eyebrow">
-            KOSHI.WEAR
+            CUSTOMER SERVICE
           </span>
 
           <h2>
-            كن أول من يعرف
+            خدمة العملاء
           </h2>
 
           <p>
-            تابع جديدنا وعروضنا القادمة.
+            وليد الكوشي
           </p>
+
+          <a
+            href="tel:0593805242"
+            class="primary-btn"
+          >
+            0593805242
+          </a>
 
         </div>
 
@@ -382,7 +455,7 @@
   </main>
 
 
-  <!-- ================= CART OVERLAY ================= -->
+  <!-- ================= OVERLAY ================= -->
 
   <div
     id="overlay"
@@ -412,10 +485,12 @@
 
       </div>
 
+
       <button
         id="closeCart"
         class="close-btn"
         type="button"
+        aria-label="إغلاق السلة"
       >
         ×
       </button>
@@ -449,6 +524,7 @@
 
       </div>
 
+
       <button
         id="checkoutButton"
         class="checkout-btn"
@@ -475,17 +551,22 @@
       data-close-product
     ></div>
 
+
     <div class="modal-content product-modal-content">
 
       <button
         class="modal-close"
         type="button"
         data-close-product
+        aria-label="إغلاق"
       >
         ×
       </button>
 
-      <div id="productModalBody"></div>
+
+      <div
+        id="productModalBody"
+      ></div>
 
     </div>
 
@@ -500,21 +581,26 @@
 
       <div class="footer-grid">
 
+
+        <!-- Store -->
+
         <div>
 
           <a
-            href="#"
+            href="#home"
             class="footer-logo"
           >
             KOSHI<span>.WEAR</span>
           </a>
 
           <p>
-            أزياء وإكسسوارات مختارة بعناية.
+            أزياء أطفال مختارة بعناية.
           </p>
 
         </div>
 
+
+        <!-- Links -->
 
         <div>
 
@@ -530,12 +616,18 @@
             المنتجات
           </a>
 
-          <a href="#offers">
-            العروض
+          <a href="#new">
+            وصل حديثًا
+          </a>
+
+          <a href="#favorites">
+            المفضلة
           </a>
 
         </div>
 
+
+        <!-- Customer Service -->
 
         <div>
 
@@ -544,8 +636,12 @@
           </h3>
 
           <p>
-            تواصل معنا للاستفسار عن الطلبات والشحن.
+            وليد الكوشي
           </p>
+
+          <a href="tel:0593805242">
+            0593805242
+          </a>
 
         </div>
 
