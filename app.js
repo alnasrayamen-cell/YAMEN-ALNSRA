@@ -11,7 +11,7 @@ const SUPABASE_URL = "https://eflcolwdhddfncbuvjua.supabase.co";
   لا تضع Secret Key.
 */
 const SUPABASE_PUBLISHABLE_KEY =
-  "PUT_YOUR_EXISTING_PUBLISHABLE_KEY_HERE";
+  "sb_publishable_J8K4FI12ExE5stcHVHviRQ_Uk__w4ko";
 
 const supabaseClient = window.supabase.createClient(
   SUPABASE_URL,
