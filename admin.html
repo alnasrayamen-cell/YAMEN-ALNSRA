@@ -1,1 +1,825 @@
-
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | YAMEN ALNSRA</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #0f1115;
+            color: #fff;
+        }
+        button,
+        input,
+        select,
+        textarea {
+            font-family: inherit;
+        }
+        /* =========================
+           LAYOUT
+        ========================= */
+        .dashboard {
+            min-height: 100vh;
+            display: flex;
+        }
+        /* =========================
+           SIDEBAR
+        ========================= */
+        .sidebar {
+            width: 270px;
+            background: #171a20;
+            border-left: 1px solid #292e38;
+            padding: 25px 18px;
+            position: fixed;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            overflow-y: auto;
+        }
+        .brand {
+            padding: 10px 12px 25px;
+            border-bottom: 1px solid #292e38;
+            margin-bottom: 20px;
+        }
+        .brand h1 {
+            margin: 0;
+            font-size: 22px;
+        }
+        .brand p {
+            margin: 7px 0 0;
+            color: #9ca3af;
+            font-size: 13px;
+        }
+        .menu-title {
+            color: #6b7280;
+            font-size: 12px;
+            margin: 20px 12px 8px;
+        }
+        .menu button {
+            width: 100%;
+            padding: 13px 14px;
+            margin-bottom: 5px;
+            background: transparent;
+            color: #d1d5db;
+            border: 0;
+            border-radius: 10px;
+            text-align: right;
+            cursor: pointer;
+            font-size: 15px;
+        }
+        .menu button:hover,
+        .menu button.active {
+            background: #252a33;
+            color: #fff;
+        }
+        .logout {
+            margin-top: 25px !important;
+            color: #ff8b8b !important;
+        }
+        /* =========================
+           MAIN
+        ========================= */
+        .main {
+            flex: 1;
+            margin-right: 270px;
+            padding: 30px;
+        }
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        .topbar h2 {
+            margin: 0;
+            font-size: 28px;
+        }
+        .admin-profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .admin-avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: #252a33;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+        .admin-profile small {
+            display: block;
+            color: #9ca3af;
+            margin-top: 3px;
+        }
+        /* =========================
+           CARDS
+        ========================= */
+        .stats {
+            display: grid;
+            grid-template-columns:
+                repeat(4, minmax(0, 1fr));
+            gap: 18px;
+            margin-bottom: 25px;
+        }
+        .stat-card {
+            background: #171a20;
+            border: 1px solid #292e38;
+            border-radius: 16px;
+            padding: 22px;
+        }
+        .stat-card .icon {
+            font-size: 25px;
+        }
+        .stat-card h3 {
+            margin: 18px 0 6px;
+            font-size: 28px;
+        }
+        .stat-card p {
+            margin: 0;
+            color: #9ca3af;
+        }
+        /* =========================
+           PANELS
+        ========================= */
+        .panel {
+            background: #171a20;
+            border: 1px solid #292e38;
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 22px;
+        }
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .panel-header h3 {
+            margin: 0;
+        }
+        .panel-header span {
+            color: #9ca3af;
+            font-size: 13px;
+        }
+        /* =========================
+           ONLINE
+        ========================= */
+        .online-status {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .online-dot {
+            width: 10px;
+            height: 10px;
+            background: #22c55e;
+            border-radius: 50%;
+        }
+        .online-number {
+            font-size: 30px;
+            font-weight: bold;
+        }
+        /* =========================
+           TABLE
+        ========================= */
+        .table-wrapper {
+            overflow-x: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th,
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #292e38;
+            text-align: right;
+            white-space: nowrap;
+        }
+        th {
+            color: #9ca3af;
+            font-size: 13px;
+        }
+        td {
+            font-size: 14px;
+        }
+        .empty {
+            padding: 40px 20px;
+            text-align: center;
+            color: #6b7280;
+        }
+        /* =========================
+           BADGES
+        ========================= */
+        .badge {
+            display: inline-block;
+            padding: 6px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+        }
+        .badge-new {
+            background: #332b16;
+            color: #facc15;
+        }
+        .badge-confirmed {
+            background: #152d20;
+            color: #4ade80;
+        }
+        .badge-delivery {
+            background: #172a3d;
+            color: #60a5fa;
+        }
+        /* =========================
+           BUTTONS
+        ========================= */
+        .primary-button {
+            border: 0;
+            padding: 10px 15px;
+            border-radius: 9px;
+            background: #fff;
+            color: #111;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .secondary-button {
+            border: 1px solid #343a46;
+            padding: 10px 15px;
+            border-radius: 9px;
+            background: transparent;
+            color: #fff;
+            cursor: pointer;
+        }
+        /* =========================
+           SECTIONS
+        ========================= */
+        .section {
+            display: none;
+        }
+        .section.active {
+            display: block;
+        }
+        /* =========================
+           RESPONSIVE
+        ========================= */
+        @media (max-width: 1000px) {
+            .stats {
+                grid-template-columns:
+                    repeat(2, minmax(0, 1fr));
+            }
+        }
+        @media (max-width: 700px) {
+            .sidebar {
+                width: 80px;
+                padding: 15px 8px;
+            }
+            .brand h1,
+            .brand p,
+            .menu-title,
+            .menu button span {
+                display: none;
+            }
+            .menu button {
+                text-align: center;
+                font-size: 20px;
+            }
+            .main {
+                margin-right: 80px;
+                padding: 18px;
+            }
+            .stats {
+                grid-template-columns: 1fr;
+            }
+            .topbar h2 {
+                font-size: 21px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="dashboard">
+    <!-- =========================
+         SIDEBAR
+    ========================== -->
+    <aside class="sidebar">
+        <div class="brand">
+            <h1>
+                YAMEN ALNSRA
+            </h1>
+            <p>
+                لوحة الإدارة
+            </p>
+        </div>
+        <div class="menu">
+            <div class="menu-title">
+                الرئيسية
+            </div>
+            <button
+                class="active"
+                onclick="showSection('dashboard')"
+            >
+                📊
+                <span>لوحة التحكم</span>
+            </button>
+            <div class="menu-title">
+                المتجر
+            </div>
+            <button onclick="showSection('orders')">
+                📦
+                <span>الطلبات</span>
+            </button>
+            <button onclick="showSection('products')">
+                🛍️
+                <span>المنتجات</span>
+            </button>
+            <button onclick="showSection('inventory')">
+                📋
+                <span>المخزون</span>
+            </button>
+            <button onclick="showSection('offers')">
+                🏷️
+                <span>العروض والخصومات</span>
+            </button>
+            <div class="menu-title">
+                العملاء
+            </div>
+            <button onclick="showSection('customers')">
+                👥
+                <span>الزبائن</span>
+            </button>
+            <button onclick="showSection('visitors')">
+                🟢
+                <span>الزوار الآن</span>
+            </button>
+            <div class="menu-title">
+                الإحصائيات
+            </div>
+            <button onclick="showSection('analytics')">
+                📈
+                <span>الإحصائيات</span>
+            </button>
+            <div class="menu-title">
+                الإعدادات
+            </div>
+            <button onclick="showSection('settings')">
+                ⚙️
+                <span>الإعدادات</span>
+            </button>
+            <button
+                class="logout"
+                onclick="logout()"
+            >
+                🚪
+                <span>تسجيل الخروج</span>
+            </button>
+        </div>
+    </aside>
+    <!-- =========================
+         MAIN
+    ========================== -->
+    <main class="main">
+        <!-- TOPBAR -->
+        <div class="topbar">
+            <div>
+                <h2 id="pageTitle">
+                    لوحة التحكم
+                </h2>
+            </div>
+            <div class="admin-profile">
+                <div>
+                    <strong>
+                        Yamen
+                    </strong>
+                    <small>
+                        Administrator
+                    </small>
+                </div>
+                <div class="admin-avatar">
+                    👤
+                </div>
+            </div>
+        </div>
+        <!-- =========================
+             DASHBOARD
+        ========================== -->
+        <section
+            id="dashboard"
+            class="section active"
+        >
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="icon">
+                        📦
+                    </div>
+                    <h3 id="totalOrders">
+                        —
+                    </h3>
+                    <p>
+                        إجمالي الطلبات
+                    </p>
+                </div>
+                <div class="stat-card">
+                    <div class="icon">
+                        👥
+                    </div>
+                    <h3 id="totalCustomers">
+                        —
+                    </h3>
+                    <p>
+                        إجمالي الزبائن
+                    </p>
+                </div>
+                <div class="stat-card">
+                    <div class="icon">
+                        🟢
+                    </div>
+                    <h3 id="onlineVisitors">
+                        —
+                    </h3>
+                    <p>
+                        الزوار الآن
+                    </p>
+                </div>
+                <div class="stat-card">
+                    <div class="icon">
+                        💰
+                    </div>
+                    <h3 id="totalSales">
+                        —
+                    </h3>
+                    <p>
+                        إجمالي المبيعات
+                    </p>
+                </div>
+            </div>
+            <!-- ONLINE -->
+            <div class="panel">
+                <div class="panel-header">
+                    <h3>
+                        الزوار الآن
+                    </h3>
+                    <span>
+                        مباشر
+                    </span>
+                </div>
+                <div class="online-status">
+                    <div class="online-dot"></div>
+                    <div class="online-number">
+                        —
+                    </div>
+                    <span>
+                        زائر متصل حاليًا
+                    </span>
+                </div>
+                <div class="empty">
+                    سيتم عرض بيانات الزوار الحقيقية بعد ربط نظام التحليلات.
+                </div>
+            </div>
+            <!-- ORDERS -->
+            <div class="panel">
+                <div class="panel-header">
+                    <h3>
+                        آخر الطلبات
+                    </h3>
+                    <button
+                        class="secondary-button"
+                        onclick="showSection('orders')"
+                    >
+                        عرض الكل
+                    </button>
+                </div>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>
+                                    رقم الطلب
+                                </th>
+                                <th>
+                                    الزبون
+                                </th>
+                                <th>
+                                    المصدر
+                                </th>
+                                <th>
+                                    المجموع
+                                </th>
+                                <th>
+                                    الحالة
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="recentOrders">
+                            <tr>
+                                <td
+                                    colspan="5"
+                                    class="empty"
+                                >
+                                    لا توجد طلبات بعد
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+        <!-- =========================
+             ORDERS
+        ========================== -->
+        <section
+            id="orders"
+            class="section"
+        >
+            <div class="panel">
+                <div class="panel-header">
+                    <div>
+                        <h3>
+                            الطلبات
+                        </h3>
+                        <span>
+                            جميع طلبات العملاء
+                        </span>
+                    </div>
+                </div>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>
+                                    الطلب
+                                </th>
+                                <th>
+                                    العميل
+                                </th>
+                                <th>
+                                    الهاتف
+                                </th>
+                                <th>
+                                    الموقع
+                                </th>
+                                <th>
+                                    المصدر
+                                </th>
+                                <th>
+                                    المجموع
+                                </th>
+                                <th>
+                                    الحالة
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="ordersTable">
+                            <tr>
+                                <td
+                                    colspan="7"
+                                    class="empty"
+                                >
+                                    لا توجد طلبات بعد
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+        <!-- =========================
+             PRODUCTS
+        ========================== -->
+        <section
+            id="products"
+            class="section"
+        >
+            <div class="panel">
+                <div class="panel-header">
+                    <div>
+                        <h3>
+                            المنتجات
+                        </h3>
+                        <span>
+                            إدارة منتجات المتجر
+                        </span>
+                    </div>
+                    <button class="primary-button">
+                        + إضافة منتج
+                    </button>
+                </div>
+                <div class="empty">
+                    سيتم ربط المنتجات بقاعدة البيانات.
+                </div>
+            </div>
+        </section>
+        <!-- =========================
+             INVENTORY
+        ========================== -->
+        <section
+            id="inventory"
+            class="section"
+        >
+            <div class="panel">
+                <div class="panel-header">
+                    <div>
+                        <h3>
+                            المخزون والباركود
+                        </h3>
+                        <span>
+                            إدارة الكميات والباركود
+                        </span>
+                    </div>
+                    <button class="primary-button">
+                        + إضافة مخزون
+                    </button>
+                </div>
+                <div class="empty">
+                    سيتم ربط نظام المخزون والباركود.
+                </div>
+            </div>
+        </section>
+        <!-- =========================
+             OFFERS
+        ========================== -->
+        <section
+            id="offers"
+            class="section"
+        >
+            <div class="panel">
+                <div class="panel-header">
+                    <div>
+                        <h3>
+                            العروض والخصومات
+                        </h3>
+                        <span>
+                            Black Friday والعروض الخاصة
+                        </span>
+                    </div>
+                    <button class="primary-button">
+                        + إنشاء عرض
+                    </button>
+                </div>
+                <div class="empty">
+                    لا توجد عروض بعد.
+                </div>
+            </div>
+        </section>
+        <!-- =========================
+             CUSTOMERS
+        ========================== -->
+        <section
+            id="customers"
+            class="section"
+        >
+            <div class="panel">
+                <div class="panel-header">
+                    <div>
+                        <h3>
+                            الزبائن
+                        </h3>
+                        <span>
+                            العملاء الذين قاموا بالطلب
+                        </span>
+                    </div>
+                </div>
+                <div class="empty">
+                    لا يوجد زبائن بعد.
+                </div>
+            </div>
+        </section>
+        <!-- =========================
+             VISITORS
+        ========================== -->
+        <section
+            id="visitors"
+            class="section"
+        >
+            <div class="panel">
+                <div class="panel-header">
+                    <div>
+                        <h3>
+                            الزوار الآن
+                        </h3>
+                        <span>
+                            المتصلون بالموقع حاليًا
+                        </span>
+                    </div>
+                </div>
+                <div class="empty">
+                    سيتم تشغيل نظام الزوار المباشر بعد ربط قاعدة البيانات والتحليلات.
+                </div>
+            </div>
+        </section>
+        <!-- =========================
+             ANALYTICS
+        ========================== -->
+        <section
+            id="analytics"
+            class="section"
+        >
+            <div class="panel">
+                <div class="panel-header">
+                    <div>
+                        <h3>
+                            الإحصائيات
+                        </h3>
+                        <span>
+                            مصادر الزيارات والمبيعات
+                        </span>
+                    </div>
+                </div>
+                <div class="empty">
+                    سيتم عرض Instagram وFacebook وTikTok وGoogle
+                    وباقي مصادر الزيارات بعد ربط نظام التحليلات.
+                </div>
+            </div>
+        </section>
+        <!-- =========================
+             SETTINGS
+        ========================== -->
+        <section
+            id="settings"
+            class="section"
+        >
+            <div class="panel">
+                <div class="panel-header">
+                    <div>
+                        <h3>
+                            إعدادات الأدمن
+                        </h3>
+                        <span>
+                            الحساب والمتجر
+                        </span>
+                    </div>
+                </div>
+                <div class="empty">
+                    سيتم إضافة تغيير اسم المستخدم وكلمة المرور،
+                    صورة الأدمن، واسم المتجر في المرحلة التالية.
+                </div>
+            </div>
+        </section>
+    </main>
+</div>
+<script>
+    function showSection(sectionId) {
+        document
+            .querySelectorAll(".section")
+            .forEach(section => {
+                section.classList.remove("active");
+            });
+        const section =
+            document.getElementById(sectionId);
+        if (section) {
+            section.classList.add("active");
+        }
+        document
+            .querySelectorAll(".menu button")
+            .forEach(button => {
+                button.classList.remove("active");
+            });
+        const buttons =
+            document.querySelectorAll(".menu button");
+        buttons.forEach(button => {
+            const text =
+                button.textContent;
+            if (
+                (sectionId === "dashboard" && text.includes("لوحة التحكم")) ||
+                (sectionId === "orders" && text.includes("الطلبات")) ||
+                (sectionId === "products" && text.includes("المنتجات")) ||
+                (sectionId === "inventory" && text.includes("المخزون")) ||
+                (sectionId === "offers" && text.includes("العروض")) ||
+                (sectionId === "customers" && text.includes("الزبائن")) ||
+                (sectionId === "visitors" && text.includes("الزوار")) ||
+                (sectionId === "analytics" && text.includes("الإحصائيات")) ||
+                (sectionId === "settings" && text.includes("الإعدادات"))
+            ) {
+                button.classList.add("active");
+            }
+        });
+        const titles = {
+            dashboard: "لوحة التحكم",
+            orders: "الطلبات",
+            products: "المنتجات",
+            inventory: "المخزون والباركود",
+            offers: "العروض والخصومات",
+            customers: "الزبائن",
+            visitors: "الزوار الآن",
+            analytics: "الإحصائيات",
+            settings: "الإعدادات"
+        };
+        document
+            .getElementById("pageTitle")
+            .textContent =
+            titles[sectionId] || "لوحة التحكم";
+    }
+    function logout() {
+        window.location.href =
+            "admin-login.html";
+    }
+</script>
+</body>
+</html>
