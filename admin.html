@@ -1,1 +1,743 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
 
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Little Stars | لوحة الإدارة</title>
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+    <link
+        rel="stylesheet"
+        href="admin.css"
+    >
+
+</head>
+
+<body>
+
+<div class="admin-layout">
+
+    <!-- ================= SIDEBAR ================= -->
+
+    <aside class="sidebar">
+
+        <div class="brand">
+            <strong>✦ Little Stars</strong>
+            <small>لوحة الإدارة</small>
+        </div>
+
+        <nav>
+
+            <button
+                class="nav-btn active"
+                data-section="dashboard"
+            >
+                📊 الرئيسية
+            </button>
+
+            <button
+                class="nav-btn"
+                data-section="orders"
+            >
+                🛒 الطلبات
+            </button>
+
+            <button
+                class="nav-btn"
+                data-section="products"
+            >
+                📦 المنتجات
+            </button>
+
+            <button
+                class="nav-btn"
+                data-section="add-product"
+            >
+                ➕ إضافة منتج
+            </button>
+
+            <button
+                class="nav-btn"
+                data-section="store"
+            >
+                ⚙️ إعدادات المتجر
+            </button>
+
+        </nav>
+
+        <button
+            id="logoutButton"
+            class="logout-button"
+        >
+            🚪 تسجيل الخروج
+        </button>
+
+    </aside>
+
+
+    <!-- ================= MAIN ================= -->
+
+    <main class="main-content">
+
+        <!-- HEADER -->
+
+        <header class="admin-header">
+
+            <div>
+
+                <h1 id="pageTitle">
+                    الرئيسية
+                </h1>
+
+                <p>
+                    إدارة Little Stars
+                </p>
+
+            </div>
+
+            <a
+                href="index.html"
+                target="_blank"
+                class="store-link"
+            >
+                🌐 فتح المتجر
+            </a>
+
+        </header>
+
+
+        <!-- ================= DASHBOARD ================= -->
+
+        <section
+            id="dashboard"
+            class="admin-section active"
+        >
+
+            <div class="stats-grid">
+
+                <div class="stat-card">
+                    <span>📦</span>
+                    <small>المنتجات</small>
+                    <strong id="statProducts">0</strong>
+                </div>
+
+                <div class="stat-card">
+                    <span>🛒</span>
+                    <small>الطلبات</small>
+                    <strong id="statOrders">0</strong>
+                </div>
+
+                <div class="stat-card">
+                    <span>⏳</span>
+                    <small>طلبات جديدة</small>
+                    <strong id="statPending">0</strong>
+                </div>
+
+                <div class="stat-card">
+                    <span>💰</span>
+                    <small>إجمالي المبيعات</small>
+                    <strong id="statSales">₪0</strong>
+                </div>
+
+            </div>
+
+
+            <div class="panel">
+
+                <div class="panel-header">
+
+                    <div>
+                        <h2>
+                            آخر الطلبات
+                        </h2>
+
+                        <p>
+                            أحدث طلبات الزبائن
+                        </p>
+                    </div>
+
+                    <button
+                        class="small-button"
+                        data-open="orders"
+                    >
+                        كل الطلبات
+                    </button>
+
+                </div>
+
+                <div
+                    id="recentOrders"
+                    class="table-wrapper"
+                ></div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= ORDERS ================= -->
+
+        <section
+            id="orders"
+            class="admin-section"
+        >
+
+            <div class="panel">
+
+                <div class="panel-header">
+
+                    <div>
+                        <h2>
+                            طلبات الزبائن
+                        </h2>
+
+                        <p>
+                            اعرف بالضبط ماذا طلب كل زبون
+                        </p>
+                    </div>
+
+                    <button
+                        class="small-button"
+                        id="refreshOrders"
+                    >
+                        🔄 تحديث
+                    </button>
+
+                </div>
+
+                <div
+                    id="ordersList"
+                    class="orders-list"
+                ></div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= PRODUCTS ================= -->
+
+        <section
+            id="products"
+            class="admin-section"
+        >
+
+            <div class="panel">
+
+                <div class="panel-header">
+
+                    <div>
+                        <h2>
+                            المنتجات
+                        </h2>
+
+                        <p>
+                            تعديل وإدارة منتجات المتجر
+                        </p>
+                    </div>
+
+                    <button
+                        class="primary-button"
+                        data-open="add-product"
+                    >
+                        + إضافة منتج
+                    </button>
+
+                </div>
+
+                <div
+                    id="productsList"
+                    class="products-admin-grid"
+                ></div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= ADD PRODUCT ================= -->
+
+        <section
+            id="add-product"
+            class="admin-section"
+        >
+
+            <div class="panel">
+
+                <div class="panel-header">
+
+                    <div>
+                        <h2 id="productFormTitle">
+                            إضافة منتج جديد
+                        </h2>
+
+                        <p>
+                            أدخل جميع تفاصيل المنتج
+                        </p>
+                    </div>
+
+                    <button
+                        class="small-button"
+                        id="cancelEdit"
+                    >
+                        إلغاء
+                    </button>
+
+                </div>
+
+
+                <form
+                    id="productForm"
+                    class="product-form"
+                >
+
+                    <input
+                        type="hidden"
+                        id="productId"
+                    >
+
+
+                    <div class="form-grid">
+
+                        <div class="field">
+
+                            <label>
+                                اسم المنتج *
+                            </label>
+
+                            <input
+                                id="productName"
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="field">
+
+                            <label>
+                                SKU
+                            </label>
+
+                            <input id="productSku">
+
+                        </div>
+
+
+                        <div class="field">
+
+                            <label>
+                                الباركود
+                            </label>
+
+                            <input id="productBarcode">
+
+                        </div>
+
+
+                        <div class="field">
+
+                            <label>
+                                السعر *
+                            </label>
+
+                            <input
+                                id="productPrice"
+                                type="number"
+                                min="0"
+                                step="0.01"
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="field">
+
+                            <label>
+                                سعر الخصم
+                            </label>
+
+                            <input
+                                id="productSalePrice"
+                                type="number"
+                                min="0"
+                                step="0.01"
+                            >
+
+                        </div>
+
+
+                        <div class="field">
+
+                            <label>
+                                المخزون *
+                            </label>
+
+                            <input
+                                id="productStock"
+                                type="number"
+                                min="0"
+                                step="1"
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="field">
+
+                            <label>
+                                التقييم
+                            </label>
+
+                            <input
+                                id="productRating"
+                                type="number"
+                                min="0"
+                                max="5"
+                                step="0.1"
+                                value="5"
+                            >
+
+                        </div>
+
+
+                        <div class="field">
+
+                            <label>
+                                عدد التقييمات
+                            </label>
+
+                            <input
+                                id="productReviews"
+                                type="number"
+                                min="0"
+                                value="0"
+                            >
+
+                        </div>
+
+
+                        <div class="field">
+
+                            <label>
+                                التصنيف
+                            </label>
+
+                            <select id="productCategory">
+
+                                <option value="boys">
+                                    أولاد
+                                </option>
+
+                                <option value="girls">
+                                    بنات
+                                </option>
+
+                                <option value="baby">
+                                    مواليد
+                                </option>
+
+                                <option value="shoes">
+                                    أحذية
+                                </option>
+
+                                <option value="winter">
+                                    شتوي
+                                </option>
+
+                                <option value="summer">
+                                    صيفي
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <div class="field">
+
+                            <label>
+                                الحالة
+                            </label>
+
+                            <select id="productActive">
+
+                                <option value="true">
+                                    ظاهر في المتجر
+                                </option>
+
+                                <option value="false">
+                                    مخفي
+                                </option>
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="field full">
+
+                        <label>
+                            وصف المنتج
+                        </label>
+
+                        <textarea
+                            id="productDescription"
+                            rows="5"
+                        ></textarea>
+
+                    </div>
+
+
+                    <div class="field full">
+
+                        <label>
+                            رابط صورة المنتج *
+                        </label>
+
+                        <input
+                            id="productImage"
+                            type="url"
+                            placeholder="https://..."
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="field full">
+
+                        <label>
+                            الألوان
+                        </label>
+
+                        <input
+                            id="productColors"
+                            placeholder="أبيض, أسود, أزرق"
+                        >
+
+                    </div>
+
+
+                    <div class="field full">
+
+                        <label>
+                            المقاسات
+                        </label>
+
+                        <input
+                            id="productSizes"
+                            placeholder="2Y, 4Y, 6Y, 8Y"
+                        >
+
+                    </div>
+
+
+                    <button
+                        class="primary-button save-product"
+                        type="submit"
+                    >
+                        💾 حفظ المنتج
+                    </button>
+
+                </form>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= STORE ================= -->
+
+        <section
+            id="store"
+            class="admin-section"
+        >
+
+            <div class="panel">
+
+                <div class="panel-header">
+
+                    <div>
+                        <h2>
+                            إعدادات المتجر
+                        </h2>
+
+                        <p>
+                            الاسم والصورة الافتتاحية والمعلومات الأساسية
+                        </p>
+                    </div>
+
+                </div>
+
+
+                <form
+                    id="storeForm"
+                    class="product-form"
+                >
+
+                    <div class="field">
+
+                        <label>
+                            اسم المتجر
+                        </label>
+
+                        <input
+                            id="storeName"
+                            value="Little Stars"
+                        >
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label>
+                            العنوان الفرعي
+                        </label>
+
+                        <input
+                            id="storeSubtitle"
+                            value="Kids Fashion"
+                        >
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label>
+                            صورة افتتاحية المتجر
+                        </label>
+
+                        <input
+                            id="heroImage"
+                            type="url"
+                            placeholder="رابط صورة الواجهة"
+                        >
+
+                    </div>
+
+
+                    <div class="preview">
+
+                        <span>
+                            معاينة الصورة
+                        </span>
+
+                        <img
+                            id="heroPreview"
+                            src=""
+                            alt=""
+                        >
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label>
+                            نص الواجهة الرئيسي
+                        </label>
+
+                        <input
+                            id="heroTitle"
+                            value="أناقة صغيرة وفرحة كبيرة"
+                        >
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label>
+                            وصف الواجهة
+                        </label>
+
+                        <textarea
+                            id="heroDescription"
+                            rows="4"
+                        >اكتشف أجمل تشكيلة من ملابس الأطفال بتصاميم مريحة وعصرية.</textarea>
+
+                    </div>
+
+
+                    <button
+                        class="primary-button"
+                        type="submit"
+                    >
+                        💾 حفظ إعدادات المتجر
+                    </button>
+
+                </form>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<!-- ================= ORDER MODAL ================= -->
+
+<div
+    id="orderModal"
+    class="modal"
+>
+
+    <div class="modal-box">
+
+        <button
+            id="closeOrderModal"
+            class="modal-close"
+        >
+            ✕
+        </button>
+
+        <div id="orderDetails"></div>
+
+    </div>
+
+</div>
+
+
+<div
+    id="toast"
+    class="toast"
+></div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script src="admin.js"></script>
+
+</body>
+</html>
