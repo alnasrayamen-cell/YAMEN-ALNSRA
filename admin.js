@@ -34,35 +34,148 @@ document.addEventListener(
     "DOMContentLoaded",
     async () => {
 
-        const {
-            data
-        } =
-            await supabaseClient.auth.getSession();
-
-        if (!data.session) {
-
-            window.location.href =
-                "admin-login.html";
-
+        if (
+            document.getElementById(
+                "loginForm"
+            )
+        ) {
+            setupLogin();
             return;
         }
 
-        setupNavigation();
+        if (
+            document.getElementById(
+                "productForm"
+            )
+        ) {
 
-        setupButtons();
+            const session =
+                await checkAdminSession();
 
-        setupForms();
+            if (!session) {
+                window.location.href =
+                    "admin-login.html";
+                return;
+            }
 
-        await loadDashboard();
+            initializeAdmin();
 
-        await loadProducts();
-
-        await loadOrders();
-
-        loadStoreSettings();
+        }
 
     }
 );
+
+
+/* =========================================================
+   LOGIN
+========================================================= */
+
+function setupLogin() {
+
+    const form =
+        document.getElementById(
+            "loginForm"
+        );
+
+    form.addEventListener(
+        "submit",
+        async event => {
+
+            event.preventDefault();
+
+            const email =
+                document.getElementById(
+                    "loginEmail"
+                ).value.trim();
+
+            const password =
+                document.getElementById(
+                    "loginPassword"
+                ).value;
+
+            const button =
+                document.getElementById(
+                    "loginButton"
+                );
+
+            const message =
+                document.getElementById(
+                    "loginMessage"
+                );
+
+            button.disabled = true;
+            button.textContent =
+                "جاري تسجيل الدخول...";
+
+            message.textContent = "";
+
+            const {
+                error
+            } =
+                await supabaseClient.auth
+                    .signInWithPassword({
+                        email,
+                        password
+                    });
+
+            if (error) {
+
+                message.textContent =
+                    "بيانات الدخول غير صحيحة.";
+
+                button.disabled = false;
+
+                button.textContent =
+                    "دخول لوحة الإدارة";
+
+                return;
+            }
+
+            window.location.href =
+                "admin.html";
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   SESSION
+========================================================= */
+
+async function checkAdminSession() {
+
+    const {
+        data
+    } =
+        await supabaseClient.auth
+            .getSession();
+
+    return data.session;
+
+}
+
+
+/* =========================================================
+   INITIALIZE ADMIN
+========================================================= */
+
+async function initializeAdmin() {
+
+    setupNavigation();
+
+    setupButtons();
+
+    setupProductForm();
+
+    setupSettings();
+
+    setupLogout();
+
+    await loadEverything();
+
+}
 
 
 /* =========================================================
@@ -72,7 +185,9 @@ document.addEventListener(
 function setupNavigation() {
 
     document
-        .querySelectorAll(".nav-btn")
+        .querySelectorAll(
+            ".nav-item"
+        )
         .forEach(button => {
 
             button.addEventListener(
@@ -88,62 +203,36 @@ function setupNavigation() {
 
         });
 
-
-    document
-        .querySelectorAll("[data-open]")
-        .forEach(button => {
-
-            button.addEventListener(
-                "click",
-                () => {
-
-                    openSection(
-                        button.dataset.open
-                    );
-
-                }
-            );
-
-        });
-
 }
 
 
-function openSection(sectionId) {
+function openSection(section) {
 
     document
-        .querySelectorAll(".admin-section")
-        .forEach(section => {
-
-            section.classList.remove(
-                "active"
-            );
-
-        });
-
-
-    const section =
-        document.getElementById(
-            sectionId
-        );
-
-    if (section) {
-
-        section.classList.add(
-            "active"
-        );
-
-    }
-
-
-    document
-        .querySelectorAll(".nav-btn")
+        .querySelectorAll(
+            ".nav-item"
+        )
         .forEach(button => {
 
             button.classList.toggle(
                 "active",
                 button.dataset.section ===
-                sectionId
+                section
+            );
+
+        });
+
+
+    document
+        .querySelectorAll(
+            ".admin-section"
+        )
+        .forEach(element => {
+
+            element.classList.toggle(
+                "active",
+                element.id ===
+                `section-${section}`
             );
 
         });
@@ -152,28 +241,51 @@ function openSection(sectionId) {
     const titles = {
 
         dashboard:
-            "الرئيسية",
+            [
+                "لوحة التحكم",
+                "إدارة متجر Little Stars"
+            ],
 
         orders:
-            "طلبات الزبائن",
+            [
+                "الطلبات",
+                "جميع طلبات الزبائن"
+            ],
 
         products:
-            "المنتجات",
+            [
+                "المنتجات",
+                "إدارة المنتجات والمخزون"
+            ],
 
         "add-product":
-            "إضافة منتج",
+            [
+                "إضافة منتج",
+                "إضافة أو تعديل منتج"
+            ],
 
-        store:
-            "إعدادات المتجر"
+        settings:
+            [
+                "إعدادات المتجر",
+                "معلومات المتجر"
+            ]
 
     };
 
 
-    document.getElementById(
-        "pageTitle"
-    ).textContent =
-        titles[sectionId] ||
-        "الإدارة";
+    if (titles[section]) {
+
+        document.getElementById(
+            "pageTitle"
+        ).textContent =
+            titles[section][0];
+
+        document.getElementById(
+            "pageDescription"
+        ).textContent =
+            titles[section][1];
+
+    }
 
 }
 
@@ -185,20 +297,30 @@ function openSection(sectionId) {
 function setupButtons() {
 
     document
-        .getElementById(
-            "logoutButton"
+        .querySelectorAll(
+            "[data-go-section]"
         )
-        .addEventListener(
-            "click",
-            logout
-        );
+        .forEach(button => {
+
+            button.addEventListener(
+                "click",
+                () => {
+
+                    openSection(
+                        button.dataset.goSection
+                    );
+
+                }
+            );
+
+        });
 
 
     document
         .getElementById(
             "refreshOrders"
         )
-        .addEventListener(
+        ?.addEventListener(
             "click",
             loadOrders
         );
@@ -206,142 +328,29 @@ function setupButtons() {
 
     document
         .getElementById(
-            "cancelEdit"
+            "closeOrderModal"
         )
-        .addEventListener(
+        ?.addEventListener(
             "click",
-            resetProductForm
+            closeOrderModal
         );
 
 }
 
 
 /* =========================================================
-   AUTH
+   LOAD EVERYTHING
 ========================================================= */
 
-async function logout() {
+async function loadEverything() {
 
-    await supabaseClient.auth.signOut();
+    await Promise.all([
+        loadProducts(),
+        loadOrders(),
+        loadSettings()
+    ]);
 
-    window.location.href =
-        "admin-login.html";
-
-}
-
-
-/* =========================================================
-   DASHBOARD
-========================================================= */
-
-async function loadDashboard() {
-
-    try {
-
-        const [
-            productsResult,
-            ordersResult
-        ] =
-            await Promise.all([
-
-                supabaseClient
-                    .from("products")
-                    .select(
-                        "id",
-                        {
-                            count: "exact",
-                            head: true
-                        }
-                    ),
-
-                supabaseClient
-                    .from("orders")
-                    .select(
-                        "*"
-                    )
-
-            ]);
-
-
-        const productCount =
-            productsResult.count ||
-            0;
-
-        const allOrders =
-            ordersResult.data ||
-            [];
-
-
-        document.getElementById(
-            "statProducts"
-        ).textContent =
-            productCount;
-
-
-        document.getElementById(
-            "statOrders"
-        ).textContent =
-            allOrders.length;
-
-
-        const pending =
-            allOrders.filter(
-                order =>
-                    String(
-                        order.status ||
-                        ""
-                    ).toLowerCase() ===
-                    "pending"
-                    ||
-                    String(
-                        order.status ||
-                        ""
-                    ) ===
-                    "جديد"
-            ).length;
-
-
-        document.getElementById(
-            "statPending"
-        ).textContent =
-            pending;
-
-
-        const sales =
-            allOrders.reduce(
-                (
-                    total,
-                    order
-                ) =>
-                    total +
-                    Number(
-                        order.total ||
-                        order.total_amount ||
-                        0
-                    ),
-                0
-            );
-
-
-        document.getElementById(
-            "statSales"
-        ).textContent =
-            "₪" +
-            formatPrice(sales);
-
-
-        renderRecentOrders(
-            allOrders
-        );
-
-    } catch (error) {
-
-        console.error(
-            "Dashboard error:",
-            error
-        );
-
-    }
+    updateDashboard();
 
 }
 
@@ -366,22 +375,19 @@ async function loadProducts() {
                 }
             );
 
-
     if (error) {
 
-        console.error(error);
-
-        showToast(
+        toast(
             "تعذر تحميل المنتجات"
         );
+
+        console.error(error);
 
         return;
     }
 
-
     products =
         data || [];
-
 
     renderProducts();
 
@@ -390,99 +396,116 @@ async function loadProducts() {
 
 function renderProducts() {
 
-    const container =
+    const table =
         document.getElementById(
-            "productsList"
+            "productsTable"
         );
 
+    if (!table) return;
 
     if (!products.length) {
 
-        container.innerHTML = `
-            <div class="empty">
-                لا توجد منتجات حتى الآن.
-            </div>
+        table.innerHTML = `
+            <tr>
+                <td colspan="7">
+                    لا توجد منتجات
+                </td>
+            </tr>
         `;
 
         return;
     }
 
 
-    container.innerHTML =
-        products
-            .map(product => {
+    table.innerHTML =
+        products.map(
+            product => {
 
                 const image =
                     product.image_url ||
-                    "https://via.placeholder.com/500";
-
+                    "https://via.placeholder.com/100";
 
                 const price =
-                    Number(
-                        product.sale_price ??
-                        product.price ??
-                        0
-                    );
-
+                    product.sale_price ??
+                    product.price ??
+                    0;
 
                 return `
 
-                <article class="admin-product">
+                    <tr>
 
-                    <img
-                        src="${escapeHTML(image)}"
-                        alt="${escapeHTML(product.name || "")}"
-                    >
+                        <td>
+                            <img
+                                class="product-thumb"
+                                src="${escapeHTML(image)}"
+                                alt=""
+                            >
+                        </td>
 
-                    <div class="admin-product-info">
+                        <td>
+                            <strong>
+                                ${escapeHTML(
+                                    product.name
+                                )}
+                            </strong>
+                        </td>
 
-                        <span>
+                        <td>
                             ${escapeHTML(
-                                product.sku || "بدون SKU"
+                                product.sku || "-"
                             )}
-                        </span>
+                        </td>
 
-                        <h3>
-                            ${escapeHTML(
-                                product.name || "منتج"
-                            )}
-                        </h3>
+                        <td>
+                            ₪${price}
+                        </td>
 
-                        <strong>
-                            ₪${formatPrice(price)}
-                        </strong>
+                        <td>
+                            ${product.stock ?? 0}
+                        </td>
 
-                        <small>
-                            المخزون:
-                            ${Number(product.stock || 0)}
-                        </small>
+                        <td>
 
-                    </div>
+                            <span class="status ${
+                                product.is_active
+                                    ? "active"
+                                    : "inactive"
+                            }">
 
-                    <div class="product-actions">
+                                ${
+                                    product.is_active
+                                        ? "ظاهر"
+                                        : "مخفي"
+                                }
 
-                        <button
-                            class="edit-button"
-                            onclick="editProduct('${product.id}')"
-                        >
-                            تعديل
-                        </button>
+                            </span>
 
-                        <button
-                            class="delete-button"
-                            onclick="deleteProduct('${product.id}')"
-                        >
-                            حذف
-                        </button>
+                        </td>
 
-                    </div>
+                        <td>
 
-                </article>
+                            <button
+                                class="action-button edit-button"
+                                onclick="editProduct('${product.id}')"
+                            >
+                                تعديل
+                            </button>
+
+                            <button
+                                class="action-button delete-button"
+                                onclick="deleteProduct('${product.id}')"
+                            >
+                                حذف
+                            </button>
+
+                        </td>
+
+                    </tr>
 
                 `;
 
-            })
-            .join("");
+            }
+        ).join("");
 
 }
 
@@ -491,48 +514,34 @@ function renderProducts() {
    PRODUCT FORM
 ========================================================= */
 
-function setupForms() {
+function setupProductForm() {
 
-    document
-        .getElementById(
+    const form =
+        document.getElementById(
             "productForm"
-        )
-        .addEventListener(
-            "submit",
-            saveProduct
         );
+
+    form.addEventListener(
+        "submit",
+        saveProduct
+    );
 
 
     document
         .getElementById(
-            "storeForm"
+            "cancelProductEdit"
         )
         .addEventListener(
-            "submit",
-            saveStoreSettings
-        );
-
-
-    document
-        .getElementById(
-            "heroImage"
-        )
-        .addEventListener(
-            "input",
-            updateHeroPreview
+            "click",
+            resetProductForm
         );
 
 }
 
 
-/* =========================================================
-   SAVE PRODUCT
-========================================================= */
-
 async function saveProduct(event) {
 
     event.preventDefault();
-
 
     const product = {
 
@@ -541,9 +550,33 @@ async function saveProduct(event) {
                 "productName"
             ).value.trim(),
 
+        description:
+            document.getElementById(
+                "productDescription"
+            ).value.trim(),
+
+        price:
+            Number(
+                document.getElementById(
+                    "productPrice"
+                ).value
+            ),
+
+        sale_price:
+            nullableNumber(
+                document.getElementById(
+                    "productSalePrice"
+                ).value
+            ),
+
+        image_url:
+            document.getElementById(
+                "productImage"
+            ).value.trim() || null,
+
         sku:
             document.getElementById(
-                "productSku"
+                "productSKU"
             ).value.trim() || null,
 
         barcode:
@@ -551,60 +584,22 @@ async function saveProduct(event) {
                 "productBarcode"
             ).value.trim() || null,
 
-        price:
-            Number(
-                document.getElementById(
-                    "productPrice"
-                ).value || 0
-            ),
-
-        sale_price:
-            getNullableNumber(
-                document.getElementById(
-                    "productSalePrice"
-                ).value
-            ),
-
         stock:
             Number(
                 document.getElementById(
                     "productStock"
-                ).value || 0
+                ).value
             ),
-
-        rating:
-            Number(
-                document.getElementById(
-                    "productRating"
-                ).value || 5
-            ),
-
-        reviews:
-            Number(
-                document.getElementById(
-                    "productReviews"
-                ).value || 0
-            ),
-
-        description:
-            document.getElementById(
-                "productDescription"
-            ).value.trim(),
-
-        image_url:
-            document.getElementById(
-                "productImage"
-            ).value.trim(),
 
         colors:
-            textToArray(
+            stringToArray(
                 document.getElementById(
                     "productColors"
                 ).value
             ),
 
         sizes:
-            textToArray(
+            stringToArray(
                 document.getElementById(
                     "productSizes"
                 ).value
@@ -613,9 +608,38 @@ async function saveProduct(event) {
         is_active:
             document.getElementById(
                 "productActive"
-            ).value === "true"
+            ).checked
 
     };
+
+
+    const rating =
+        Number(
+            document.getElementById(
+                "productRating"
+            ).value
+        );
+
+    const reviews =
+        Number(
+            document.getElementById(
+                "productReviews"
+            ).value
+        );
+
+
+    /*
+       إذا كانت أعمدة rating/reviews
+       موجودة عندك، سيتم إرسالها.
+       إذا لم تكن موجودة، نعيد المحاولة
+       بدونها.
+    */
+
+    product.rating =
+        rating;
+
+    product.reviews =
+        reviews;
 
 
     let result;
@@ -637,9 +661,47 @@ async function saveProduct(event) {
         result =
             await supabaseClient
                 .from("products")
-                .insert(
-                    product
-                );
+                .insert(product);
+
+    }
+
+
+    if (
+        result.error &&
+        (
+            result.error.message
+                .toLowerCase()
+                .includes("rating")
+            ||
+            result.error.message
+                .toLowerCase()
+                .includes("reviews")
+        )
+    ) {
+
+        delete product.rating;
+        delete product.reviews;
+
+
+        if (editingProductId) {
+
+            result =
+                await supabaseClient
+                    .from("products")
+                    .update(product)
+                    .eq(
+                        "id",
+                        editingProductId
+                    );
+
+        } else {
+
+            result =
+                await supabaseClient
+                    .from("products")
+                    .insert(product);
+
+        }
 
     }
 
@@ -650,7 +712,7 @@ async function saveProduct(event) {
             result.error
         );
 
-        showToast(
+        toast(
             "حدث خطأ أثناء حفظ المنتج"
         );
 
@@ -658,7 +720,7 @@ async function saveProduct(event) {
     }
 
 
-    showToast(
+    toast(
         editingProductId
             ? "تم تعديل المنتج بنجاح"
             : "تمت إضافة المنتج بنجاح"
@@ -669,199 +731,191 @@ async function saveProduct(event) {
 
     await loadProducts();
 
-    await loadDashboard();
+    updateDashboard();
+
+    openSection("products");
+
+}
+
+
+function editProduct(id) {
+
+    const product =
+        products.find(
+            item =>
+                String(item.id) ===
+                String(id)
+        );
+
+    if (!product) return;
+
+
+    editingProductId =
+        product.id;
+
+
+    document.getElementById(
+        "productId"
+    ).value =
+        product.id;
+
+
+    document.getElementById(
+        "productName"
+    ).value =
+        product.name || "";
+
+
+    document.getElementById(
+        "productDescription"
+    ).value =
+        product.description || "";
+
+
+    document.getElementById(
+        "productPrice"
+    ).value =
+        product.price ?? "";
+
+
+    document.getElementById(
+        "productSalePrice"
+    ).value =
+        product.sale_price ?? "";
+
+
+    document.getElementById(
+        "productImage"
+    ).value =
+        product.image_url || "";
+
+
+    document.getElementById(
+        "productSKU"
+    ).value =
+        product.sku || "";
+
+
+    document.getElementById(
+        "productBarcode"
+    ).value =
+        product.barcode || "";
+
+
+    document.getElementById(
+        "productStock"
+    ).value =
+        product.stock ?? 0;
+
+
+    document.getElementById(
+        "productColors"
+    ).value =
+        arrayToString(
+            product.colors
+        );
+
+
+    document.getElementById(
+        "productSizes"
+    ).value =
+        arrayToString(
+            product.sizes
+        );
+
+
+    document.getElementById(
+        "productActive"
+    ).checked =
+        product.is_active !== false;
+
+
+    document.getElementById(
+        "productRating"
+    ).value =
+        product.rating ?? 5;
+
+
+    document.getElementById(
+        "productReviews"
+    ).value =
+        product.reviews ?? 0;
+
+
+    document.getElementById(
+        "productFormTitle"
+    ).textContent =
+        "تعديل المنتج";
+
+
+    document.getElementById(
+        "saveProductButton"
+    ).textContent =
+        "💾 حفظ التعديلات";
+
 
     openSection(
-        "products"
+        "add-product"
     );
 
 }
 
 
-/* =========================================================
-   EDIT PRODUCT
-========================================================= */
+async function deleteProduct(id) {
 
-window.editProduct =
-    function (id) {
-
-        const product =
-            products.find(
-                item =>
-                    String(item.id) ===
-                    String(id)
-            );
-
-
-        if (!product) {
-            return;
-        }
-
-
-        editingProductId =
-            product.id;
-
-
-        document.getElementById(
-            "productFormTitle"
-        ).textContent =
-            "تعديل المنتج";
-
-
-        document.getElementById(
-            "productId"
-        ).value =
-            product.id;
-
-
-        document.getElementById(
-            "productName"
-        ).value =
-            product.name || "";
-
-
-        document.getElementById(
-            "productSku"
-        ).value =
-            product.sku || "";
-
-
-        document.getElementById(
-            "productBarcode"
-        ).value =
-            product.barcode || "";
-
-
-        document.getElementById(
-            "productPrice"
-        ).value =
-            product.price ?? "";
-
-
-        document.getElementById(
-            "productSalePrice"
-        ).value =
-            product.sale_price ?? "";
-
-
-        document.getElementById(
-            "productStock"
-        ).value =
-            product.stock ?? 0;
-
-
-        document.getElementById(
-            "productRating"
-        ).value =
-            product.rating ?? 5;
-
-
-        document.getElementById(
-            "productReviews"
-        ).value =
-            product.reviews ?? 0;
-
-
-        document.getElementById(
-            "productDescription"
-        ).value =
-            product.description || "";
-
-
-        document.getElementById(
-            "productImage"
-        ).value =
-            product.image_url || "";
-
-
-        document.getElementById(
-            "productColors"
-        ).value =
-            arrayToText(
-                product.colors
-            );
-
-
-        document.getElementById(
-            "productSizes"
-        ).value =
-            arrayToText(
-                product.sizes
-            );
-
-
-        document.getElementById(
-            "productActive"
-        ).value =
-            product.is_active === false
-                ? "false"
-                : "true";
-
-
-        openSection(
-            "add-product"
+    const product =
+        products.find(
+            item =>
+                String(item.id) ===
+                String(id)
         );
 
-    };
+    if (!product) return;
 
 
-/* =========================================================
-   DELETE PRODUCT
-========================================================= */
-
-window.deleteProduct =
-    async function (id) {
-
-        const confirmed =
-            confirm(
-                "هل أنت متأكد من حذف هذا المنتج؟"
-            );
-
-
-        if (!confirmed) {
-            return;
-        }
-
-
-        const {
-            error
-        } =
-            await supabaseClient
-                .from("products")
-                .delete()
-                .eq(
-                    "id",
-                    id
-                );
-
-
-        if (error) {
-
-            console.error(error);
-
-            showToast(
-                "تعذر حذف المنتج"
-            );
-
-            return;
-        }
-
-
-        showToast(
-            "تم حذف المنتج"
+    const confirmed =
+        confirm(
+            `هل أنت متأكد من حذف "${product.name}"؟`
         );
 
-
-        await loadProducts();
-
-        await loadDashboard();
-
-    };
+    if (!confirmed) return;
 
 
-/* =========================================================
-   RESET PRODUCT FORM
-========================================================= */
+    const {
+        error
+    } =
+        await supabaseClient
+            .from("products")
+            .delete()
+            .eq(
+                "id",
+                id
+            );
+
+
+    if (error) {
+
+        console.error(error);
+
+        toast(
+            "تعذر حذف المنتج"
+        );
+
+        return;
+    }
+
+
+    toast(
+        "تم حذف المنتج"
+    );
+
+
+    await loadProducts();
+
+    updateDashboard();
+
+}
+
 
 function resetProductForm() {
 
@@ -869,15 +923,17 @@ function resetProductForm() {
         null;
 
 
-    document.getElementById(
-        "productForm"
-    ).reset();
+    document
+        .getElementById(
+            "productForm"
+        )
+        .reset();
 
 
     document.getElementById(
-        "productFormTitle"
-    ).textContent =
-        "إضافة منتج جديد";
+        "productActive"
+    ).checked =
+        true;
 
 
     document.getElementById(
@@ -893,9 +949,15 @@ function resetProductForm() {
 
 
     document.getElementById(
-        "productActive"
-    ).value =
-        "true";
+        "productFormTitle"
+    ).textContent =
+        "إضافة منتج جديد";
+
+
+    document.getElementById(
+        "saveProductButton"
+    ).textContent =
+        "💾 حفظ المنتج";
 
 }
 
@@ -923,12 +985,9 @@ async function loadOrders() {
 
     if (error) {
 
-        console.error(
-            "Orders error:",
-            error
-        );
+        console.error(error);
 
-        showToast(
+        toast(
             "تعذر تحميل الطلبات"
         );
 
@@ -942,50 +1001,40 @@ async function loadOrders() {
 
     renderOrders();
 
-    renderRecentOrders(
-        orders
-    );
+    renderRecentOrders();
 
-    updateOrderStats();
+    updateDashboard();
 
 }
 
 
-/* =========================================================
-   RENDER ORDERS
-========================================================= */
-
 function renderOrders() {
 
-    const container =
+    const table =
         document.getElementById(
-            "ordersList"
+            "ordersTable"
         );
+
+    if (!table) return;
 
 
     if (!orders.length) {
 
-        container.innerHTML = `
-            <div class="empty">
-                لا توجد طلبات حتى الآن.
-            </div>
+        table.innerHTML = `
+            <tr>
+                <td colspan="7">
+                    لا توجد طلبات حتى الآن
+                </td>
+            </tr>
         `;
 
         return;
     }
 
 
-    container.innerHTML =
-        orders
-            .map(order => {
-
-                const total =
-                    Number(
-                        order.total ??
-                        order.total_amount ??
-                        0
-                    );
-
+    table.innerHTML =
+        orders.map(
+            order => {
 
                 const status =
                     order.status ||
@@ -994,658 +1043,679 @@ function renderOrders() {
 
                 return `
 
-                <article class="order-card">
-
-                    <div class="order-top">
-
-                        <div>
-
-                            <strong>
-                                ${escapeHTML(
-                                    order.order_number ||
-                                    "طلب #" +
-                                    String(order.id).slice(0,8)
-                                )}
-                            </strong>
-
-                            <span>
-                                ${formatDate(
-                                    order.created_at
-                                )}
-                            </span>
-
-                        </div>
-
-                        <span class="status">
-                            ${escapeHTML(
-                                translateStatus(status)
-                            )}
-                        </span>
-
-                    </div>
-
-
-                    <div class="order-customer">
-
-                        <strong>
-                            ${escapeHTML(
-                                order.customer_name ||
-                                "بدون اسم"
-                            )}
-                        </strong>
-
-                        <span>
-                            📞
-                            ${escapeHTML(
-                                order.phone ||
-                                order.customer_phone ||
-                                "-"
-                            )}
-                        </span>
-
-                        <span>
-                            📍
-                            ${escapeHTML(
-                                order.address ||
-                                order.city ||
-                                "-"
-                            )}
-                        </span>
-
-                    </div>
-
-
-                    <div class="order-bottom">
-
-                        <strong>
-                            ₪${formatPrice(total)}
-                        </strong>
-
-                        <button
-                            class="small-button"
-                            onclick="viewOrder('${order.id}')"
-                        >
-                            👁️ تفاصيل الطلب
-                        </button>
-
-                    </div>
-
-                </article>
-
-                `;
-
-            })
-            .join("");
-
-}
-
-
-/* =========================================================
-   RECENT ORDERS
-========================================================= */
-
-function renderRecentOrders(
-    list
-) {
-
-    const container =
-        document.getElementById(
-            "recentOrders"
-        );
-
-
-    if (!container) {
-        return;
-    }
-
-
-    const recent =
-        list.slice(
-            0,
-            6
-        );
-
-
-    if (!recent.length) {
-
-        container.innerHTML =
-            `<div class="empty">
-                لا توجد طلبات.
-            </div>`;
-
-        return;
-    }
-
-
-    container.innerHTML = `
-
-        <table>
-
-            <thead>
-
-                <tr>
-                    <th>الطلب</th>
-                    <th>الزبون</th>
-                    <th>المجموع</th>
-                    <th>الحالة</th>
-                </tr>
-
-            </thead>
-
-            <tbody>
-
-                ${recent
-                    .map(order => `
-
                     <tr>
 
                         <td>
-                            ${escapeHTML(
-                                order.order_number ||
-                                "#" +
-                                String(order.id).slice(0,8)
-                            )}
+                            <strong>
+                                ${escapeHTML(
+                                    order.order_number ||
+                                    order.id?.slice(0,8) ||
+                                    "-"
+                                )}
+                            </strong>
                         </td>
 
                         <td>
                             ${escapeHTML(
                                 order.customer_name ||
+                                order.customer_id ||
+                                "غير محدد"
+                            )}
+                        </td>
+
+                        <td>
+                            ₪${order.total ?? 0}
+                        </td>
+
+                        <td>
+
+                            <span class="status ${
+                                statusClass(
+                                    status
+                                )
+                            }">
+
+                                ${escapeHTML(
+                                    translateStatus(
+                                        status
+                                    )
+                                )}
+
+                            </span>
+
+                        </td>
+
+                        <td>
+                            ${escapeHTML(
+                                order.traffic_source ||
                                 "-"
                             )}
                         </td>
 
                         <td>
-                            ₪${formatPrice(
-                                order.total ??
-                                order.total_amount ??
-                                0
+                            ${formatDate(
+                                order.created_at
                             )}
                         </td>
 
                         <td>
-                            ${escapeHTML(
-                                translateStatus(
-                                    order.status ||
-                                    "pending"
-                                )
-                            )}
+
+                            <button
+                                class="action-button view-button"
+                                onclick="showOrder('${order.id}')"
+                            >
+                                👁️ التفاصيل
+                            </button>
+
                         </td>
 
                     </tr>
 
-                `)
-                .join("")}
+                `;
 
-            </tbody>
-
-        </table>
-
-    `;
+            }
+        ).join("");
 
 }
 
 
 /* =========================================================
-   VIEW ORDER
+   ORDER DETAILS
 ========================================================= */
 
-window.viewOrder =
-    async function (orderId) {
+async function showOrder(orderId) {
 
-        const order =
-            orders.find(
-                item =>
-                    String(item.id) ===
-                    String(orderId)
-            );
+    const order =
+        orders.find(
+            item =>
+                String(item.id) ===
+                String(orderId)
+        );
 
-
-        if (!order) {
-            return;
-        }
+    if (!order) return;
 
 
-        const {
-            data: items,
-            error
-        } =
-            await supabaseClient
-                .from("order_items")
-                .select("*")
-                .eq(
-                    "order_id",
-                    orderId
-                );
-
-
-        if (error) {
-
-            console.error(error);
-
-        }
-
-
-        const orderItems =
-            items || [];
-
-
-        const total =
-            Number(
-                order.total ??
-                order.total_amount ??
-                0
-            );
-
-
-        document.getElementById(
-            "orderDetails"
-        ).innerHTML = `
-
-            <h2>
-                تفاصيل الطلب
-            </h2>
-
-            <div class="detail-grid">
-
-                <div>
-                    <small>رقم الطلب</small>
-                    <strong>
-                        ${escapeHTML(
-                            order.order_number ||
-                            String(order.id)
-                        )}
-                    </strong>
-                </div>
-
-                <div>
-                    <small>التاريخ</small>
-                    <strong>
-                        ${formatDate(
-                            order.created_at
-                        )}
-                    </strong>
-                </div>
-
-                <div>
-                    <small>اسم الزبون</small>
-                    <strong>
-                        ${escapeHTML(
-                            order.customer_name ||
-                            "-"
-                        )}
-                    </strong>
-                </div>
-
-                <div>
-                    <small>رقم الهاتف</small>
-                    <strong>
-                        ${escapeHTML(
-                            order.phone ||
-                            order.customer_phone ||
-                            "-"
-                        )}
-                    </strong>
-                </div>
-
-                <div>
-                    <small>العنوان</small>
-                    <strong>
-                        ${escapeHTML(
-                            order.address ||
-                            "-"
-                        )}
-                    </strong>
-                </div>
-
-                <div>
-                    <small>المدينة</small>
-                    <strong>
-                        ${escapeHTML(
-                            order.city ||
-                            "-"
-                        )}
-                    </strong>
-                </div>
-
-            </div>
-
-
-            <h3 class="items-title">
-                المنتجات المطلوبة
-            </h3>
-
-
-            <div class="order-items">
-
-                ${
-                    orderItems.length
-                        ? orderItems
-                            .map(item => `
-
-                                <div class="order-item">
-
-                                    <div>
-
-                                        <strong>
-                                            ${escapeHTML(
-                                                item.product_name ||
-                                                item.name ||
-                                                "منتج"
-                                            )}
-                                        </strong>
-
-                                        <span>
-                                            الكمية:
-                                            ${Number(
-                                                item.quantity ||
-                                                0
-                                            )}
-                                        </span>
-
-                                        ${
-                                            item.size
-                                                ? `
-                                                <span>
-                                                    المقاس:
-                                                    ${escapeHTML(
-                                                        item.size
-                                                    )}
-                                                </span>
-                                                `
-                                                : ""
-                                        }
-
-                                        ${
-                                            item.color
-                                                ? `
-                                                <span>
-                                                    اللون:
-                                                    ${escapeHTML(
-                                                        item.color
-                                                    )}
-                                                </span>
-                                                `
-                                                : ""
-                                        }
-
-                                    </div>
-
-                                    <strong>
-                                        ₪${formatPrice(
-                                            Number(
-                                                item.price ||
-                                                0
-                                            ) *
-                                            Number(
-                                                item.quantity ||
-                                                0
-                                            )
-                                        )}
-                                    </strong>
-
-                                </div>
-
-                            `)
-                            .join("")
-                        : `
-                            <div class="empty">
-                                لا توجد تفاصيل للمنتجات في order_items.
-                            </div>
-                        `
-                }
-
-            </div>
-
-
-            ${
-                order.notes
-                    ? `
-                    <div class="notes">
-                        <strong>ملاحظات الزبون:</strong>
-                        <p>
-                            ${escapeHTML(
-                                order.notes
-                            )}
-                        </p>
-                    </div>
-                    `
-                    : ""
-            }
-
-
-            <div class="order-total">
-
-                <span>
-                    الإجمالي
-                </span>
-
-                <strong>
-                    ₪${formatPrice(total)}
-                </strong>
-
-            </div>
-
-        `;
-
-
+    const modal =
         document.getElementById(
             "orderModal"
-        ).classList.add(
-            "show"
         );
 
-    };
+    const details =
+        document.getElementById(
+            "orderDetails"
+        );
 
 
-/* =========================================================
-   ORDER MODAL
-========================================================= */
+    details.innerHTML = `
 
-document
-    .getElementById(
-        "closeOrderModal"
-    )
-    .addEventListener(
-        "click",
-        () => {
+        <div class="order-summary">
 
-            document.getElementById(
-                "orderModal"
-            ).classList.remove(
-                "show"
+            <p>
+                <strong>رقم الطلب:</strong>
+                ${escapeHTML(
+                    order.order_number ||
+                    order.id
+                )}
+            </p>
+
+            <p>
+                <strong>الزبون:</strong>
+                ${escapeHTML(
+                    order.customer_name ||
+                    order.customer_id ||
+                    "غير محدد"
+                )}
+            </p>
+
+            <p>
+                <strong>المجموع:</strong>
+                ₪${order.total ?? 0}
+            </p>
+
+            <p>
+                <strong>الحالة:</strong>
+                ${escapeHTML(
+                    translateStatus(
+                        order.status ||
+                        "pending"
+                    )
+                )}
+            </p>
+
+            <p>
+                <strong>الملاحظات:</strong>
+                ${escapeHTML(
+                    order.notes || "لا يوجد"
+                )}
+            </p>
+
+        </div>
+
+        <hr>
+
+        <h3>
+            المنتجات المطلوبة
+        </h3>
+
+        <div id="orderItemsContainer">
+            جاري تحميل المنتجات...
+        </div>
+
+    `;
+
+
+    modal.classList.add(
+        "open"
+    );
+
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+            .from("order_items")
+            .select("*")
+            .eq(
+                "order_id",
+                orderId
             );
 
-        }
-    );
 
-
-document
-    .getElementById(
-        "orderModal"
-    )
-    .addEventListener(
-        "click",
-        event => {
-
-            if (
-                event.target.id ===
-                "orderModal"
-            ) {
-
-                event.currentTarget.classList.remove(
-                    "show"
-                );
-
-            }
-
-        }
-    );
-
-
-/* =========================================================
-   STORE SETTINGS
-========================================================= */
-
-function loadStoreSettings() {
-
-    const saved =
-        localStorage.getItem(
-            "littleStarsStoreSettings"
+    const container =
+        document.getElementById(
+            "orderItemsContainer"
         );
 
 
-    if (!saved) {
+    if (error) {
+
+        container.innerHTML =
+            `
+                <p>
+                    تعذر تحميل تفاصيل المنتجات.
+                </p>
+            `;
+
+        console.error(error);
+
         return;
     }
 
 
-    try {
+    if (!data?.length) {
 
-        const settings =
-            JSON.parse(
-                saved
-            );
+        container.innerHTML =
+            `
+                <p>
+                    لا توجد تفاصيل مسجلة لهذا الطلب.
+                </p>
+            `;
 
-
-        document.getElementById(
-            "storeName"
-        ).value =
-            settings.name ||
-            "Little Stars";
-
-
-        document.getElementById(
-            "storeSubtitle"
-        ).value =
-            settings.subtitle ||
-            "Kids Fashion";
-
-
-        document.getElementById(
-            "heroImage"
-        ).value =
-            settings.heroImage ||
-            "";
-
-
-        document.getElementById(
-            "heroTitle"
-        ).value =
-            settings.heroTitle ||
-            "أناقة صغيرة وفرحة كبيرة";
-
-
-        document.getElementById(
-            "heroDescription"
-        ).value =
-            settings.heroDescription ||
-            "";
-
-
-        updateHeroPreview();
-
-    } catch {
-
-        console.log(
-            "Could not load store settings"
-        );
-
+        return;
     }
+
+
+    container.innerHTML =
+        data.map(
+            item => {
+
+                const product =
+                    products.find(
+                        product =>
+                            String(
+                                product.id
+                            ) ===
+                            String(
+                                item.product_id
+                            )
+                    );
+
+
+                const name =
+                    item.product_name ||
+                    product?.name ||
+                    item.name ||
+                    "منتج";
+
+
+                const quantity =
+                    item.quantity ??
+                    1;
+
+
+                const price =
+                    item.price ??
+                    item.unit_price ??
+                    product?.price ??
+                    0;
+
+
+                const size =
+                    item.size ||
+                    item.selected_size ||
+                    "";
+
+
+                return `
+
+                    <div class="order-detail-item">
+
+                        <div>
+
+                            <strong>
+                                ${escapeHTML(name)}
+                            </strong>
+
+                            <br>
+
+                            <small>
+                                الكمية: ${quantity}
+                                ${
+                                    size
+                                        ? ` | المقاس: ${escapeHTML(size)}`
+                                        : ""
+                                }
+                            </small>
+
+                        </div>
+
+                        <strong>
+                            ₪${Number(price) * Number(quantity)}
+                        </strong>
+
+                    </div>
+
+                `;
+
+            }
+        ).join("");
 
 }
 
 
-async function saveStoreSettings(
-    event
-) {
+function closeOrderModal() {
+
+    document
+        .getElementById(
+            "orderModal"
+        )
+        .classList.remove(
+            "open"
+        );
+
+}
+
+
+/* =========================================================
+   SETTINGS
+========================================================= */
+
+async function loadSettings() {
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+            .from("store_settings")
+            .select("*")
+            .limit(1)
+            .maybeSingle();
+
+
+    if (error) {
+
+        console.error(
+            "Settings:",
+            error
+        );
+
+        return;
+    }
+
+
+    if (!data) return;
+
+
+    document.getElementById(
+        "storeName"
+    ).value =
+        data.store_name || "";
+
+
+    document.getElementById(
+        "storeLogo"
+    ).value =
+        data.logo_url || "";
+
+
+    document.getElementById(
+        "adminProfileImage"
+    ).value =
+        data.admin_profile_image_url ||
+        "";
+
+}
+
+
+function setupSettings() {
+
+    document
+        .getElementById(
+            "settingsForm"
+        )
+        .addEventListener(
+            "submit",
+            saveSettings
+        );
+
+}
+
+
+async function saveSettings(event) {
 
     event.preventDefault();
 
 
-    const settings = {
+    const values = {
 
-        name:
+        store_name:
             document.getElementById(
                 "storeName"
             ).value.trim(),
 
-        subtitle:
+        logo_url:
             document.getElementById(
-                "storeSubtitle"
-            ).value.trim(),
+                "storeLogo"
+            ).value.trim() ||
+            null,
 
-        heroImage:
+        admin_profile_image_url:
             document.getElementById(
-                "heroImage"
-            ).value.trim(),
-
-        heroTitle:
-            document.getElementById(
-                "heroTitle"
-            ).value.trim(),
-
-        heroDescription:
-            document.getElementById(
-                "heroDescription"
-            ).value.trim()
+                "adminProfileImage"
+            ).value.trim() ||
+            null
 
     };
 
 
-    localStorage.setItem(
-        "littleStarsStoreSettings",
-        JSON.stringify(settings)
-    );
+    const {
+        data: existing
+    } =
+        await supabaseClient
+            .from("store_settings")
+            .select("id")
+            .limit(1)
+            .maybeSingle();
 
 
-    /*
-     * إذا لم يكن جدول إعدادات المتجر
-     * موجودًا في Supabase فلن يتوقف
-     * النظام؛ يتم حفظ الإعدادات محليًا.
-     *
-     * عند إنشاء جدول settings لاحقًا
-     * يمكن ربطه هنا.
-     */
+    let result;
 
 
-    updateHeroPreview();
+    if (existing?.id) {
+
+        result =
+            await supabaseClient
+                .from("store_settings")
+                .update(values)
+                .eq(
+                    "id",
+                    existing.id
+                );
+
+    } else {
+
+        result =
+            await supabaseClient
+                .from("store_settings")
+                .insert(values);
+
+    }
 
 
-    showToast(
+    if (result.error) {
+
+        console.error(
+            result.error
+        );
+
+        toast(
+            "تعذر حفظ الإعدادات"
+        );
+
+        return;
+    }
+
+
+    toast(
         "تم حفظ إعدادات المتجر"
     );
 
 }
 
 
-function updateHeroPreview() {
+/* =========================================================
+   DASHBOARD
+========================================================= */
 
-    const url =
-        document.getElementById(
-            "heroImage"
-        ).value.trim();
+function updateDashboard() {
+
+    const productsCount =
+        products.length;
 
 
-    const preview =
-        document.getElementById(
-            "heroPreview"
+    const ordersCount =
+        orders.length;
+
+
+    const sales =
+        orders.reduce(
+            (
+                total,
+                order
+            ) =>
+                total +
+                Number(
+                    order.total || 0
+                ),
+            0
         );
 
 
-    if (!url) {
+    const pending =
+        orders.filter(
+            order =>
+                ![
+                    "completed",
+                    "cancelled",
+                    "delivered"
+                ].includes(
+                    String(
+                        order.status ||
+                        ""
+                    ).toLowerCase()
+                )
+        ).length;
 
-        preview.style.display =
-            "none";
+
+    document.getElementById(
+        "statProducts"
+    ).textContent =
+        productsCount;
+
+
+    document.getElementById(
+        "statOrders"
+    ).textContent =
+        ordersCount;
+
+
+    document.getElementById(
+        "statSales"
+    ).textContent =
+        `₪${sales}`;
+
+
+    document.getElementById(
+        "statPending"
+    ).textContent =
+        pending;
+
+
+    renderStockWarnings();
+
+}
+
+
+function renderRecentOrders() {
+
+    const container =
+        document.getElementById(
+            "recentOrders"
+        );
+
+    if (!container) return;
+
+
+    const recent =
+        orders.slice(
+            0,
+            5
+        );
+
+
+    if (!recent.length) {
+
+        container.innerHTML =
+            "<p>لا توجد طلبات.</p>";
 
         return;
     }
 
 
-    preview.src =
-        url;
+    container.innerHTML =
+        recent.map(
+            order => `
 
-    preview.style.display =
-        "block";
+                <div class="order-row">
+
+                    <div class="order-main">
+
+                        <strong>
+                            ${escapeHTML(
+                                order.order_number ||
+                                order.id?.slice(0,8) ||
+                                "-"
+                            )}
+                        </strong>
+
+                        <strong>
+                            ₪${order.total ?? 0}
+                        </strong>
+
+                    </div>
+
+                    <small>
+                        ${formatDate(
+                            order.created_at
+                        )}
+                    </small>
+
+                </div>
+
+            `
+        ).join("");
+
+}
+
+
+function renderStockWarnings() {
+
+    const container =
+        document.getElementById(
+            "stockWarnings"
+        );
+
+    if (!container) return;
+
+
+    const warnings =
+        products
+            .filter(
+                product =>
+                    Number(
+                        product.stock || 0
+                    ) <= 5
+            )
+            .slice(
+                0,
+                8
+            );
+
+
+    if (!warnings.length) {
+
+        container.innerHTML =
+            `
+                <p>
+                    ✅ المخزون جيد.
+                </p>
+            `;
+
+        return;
+    }
+
+
+    container.innerHTML =
+        warnings.map(
+            product => `
+
+                <div class="stock-warning">
+
+                    <strong>
+                        ${escapeHTML(
+                            product.name
+                        )}
+                    </strong>
+
+                    <br>
+
+                    <small>
+                        المتبقي:
+                        ${product.stock ?? 0}
+                    </small>
+
+                </div>
+
+            `
+        ).join("");
+
+}
+
+
+/* =========================================================
+   LOGOUT
+========================================================= */
+
+function setupLogout() {
+
+    document
+        .getElementById(
+            "logoutButton"
+        )
+        .addEventListener(
+            "click",
+            async () => {
+
+                await supabaseClient.auth
+                    .signOut();
+
+                window.location.href =
+                    "admin-login.html";
+
+            }
+        );
 
 }
 
@@ -1654,9 +1724,7 @@ function updateHeroPreview() {
    HELPERS
 ========================================================= */
 
-function textToArray(
-    value
-) {
+function stringToArray(value) {
 
     return String(
         value || ""
@@ -1671,13 +1739,9 @@ function textToArray(
 }
 
 
-function arrayToText(
-    value
-) {
+function arrayToString(value) {
 
-    if (
-        Array.isArray(value)
-    ) {
+    if (Array.isArray(value)) {
 
         return value.join(
             ", "
@@ -1685,148 +1749,69 @@ function arrayToText(
 
     }
 
+    if (
+        typeof value ===
+        "object" &&
+        value !== null
+    ) {
+
+        return Object.values(
+            value
+        ).join(", ");
+
+    }
 
     if (
         typeof value ===
         "string"
     ) {
 
+        try {
+
+            const parsed =
+                JSON.parse(value);
+
+            if (
+                Array.isArray(
+                    parsed
+                )
+            ) {
+
+                return parsed.join(
+                    ", "
+                );
+
+            }
+
+        } catch {}
+
         return value;
 
     }
-
 
     return "";
 
 }
 
 
-function getNullableNumber(
-    value
-) {
+function nullableNumber(value) {
 
     if (
-        value === "" ||
         value === null ||
-        value === undefined
+        value === undefined ||
+        String(value).trim() === ""
     ) {
 
         return null;
 
     }
 
-
-    const number =
-        Number(value);
-
-
-    return Number.isFinite(
-        number
-    )
-        ? number
-        : null;
+    return Number(value);
 
 }
 
 
-function formatPrice(
-    value
-) {
-
-    const number =
-        Number(
-            value || 0
-        );
-
-
-    return Number.isInteger(
-        number
-    )
-        ? String(number)
-        : number.toFixed(2);
-
-}
-
-
-function formatDate(
-    value
-) {
-
-    if (!value) {
-        return "-";
-    }
-
-
-    try {
-
-        return new Date(
-            value
-        ).toLocaleString(
-            "ar-PS",
-            {
-                year: "numeric",
-                month: "2-digit",
-                day: "2-digit",
-                hour: "2-digit",
-                minute: "2-digit"
-            }
-        );
-
-    } catch {
-
-        return String(value);
-
-    }
-
-}
-
-
-function translateStatus(
-    status
-) {
-
-    const values = {
-
-        pending:
-            "جديد",
-
-        confirmed:
-            "تم التأكيد",
-
-        processing:
-            "قيد التجهيز",
-
-        shipped:
-            "تم الشحن",
-
-        delivered:
-            "تم التسليم",
-
-        cancelled:
-            "ملغي",
-
-        canceled:
-            "ملغي",
-
-        new:
-            "جديد"
-
-    };
-
-
-    return values[
-        String(status)
-            .toLowerCase()
-    ] ||
-        status ||
-        "جديد";
-
-}
-
-
-function escapeHTML(
-    value
-) {
+function escapeHTML(value) {
 
     return String(
         value ?? ""
@@ -1855,132 +1840,172 @@ function escapeHTML(
 }
 
 
-function updateOrderStats() {
+function formatDate(value) {
 
-    const pending =
-        orders.filter(
-            order =>
-                String(
-                    order.status ||
-                    ""
-                ).toLowerCase() ===
-                "pending"
-        ).length;
+    if (!value) return "-";
 
+    try {
 
-    document.getElementById(
-        "statOrders"
-    ).textContent =
-        orders.length;
-
-
-    document.getElementById(
-        "statPending"
-    ).textContent =
-        pending;
-
-
-    const sales =
-        orders.reduce(
-            (
-                total,
-                order
-            ) =>
-                total +
-                Number(
-                    order.total ??
-                    order.total_amount ??
-                    0
-                ),
-            0
+        return new Date(
+            value
+        ).toLocaleString(
+            "ar-PS",
+            {
+                dateStyle:
+                    "short",
+                timeStyle:
+                    "short"
+            }
         );
 
+    } catch {
 
-    document.getElementById(
-        "statSales"
-    ).textContent =
-        "₪" +
-        formatPrice(sales);
+        return String(
+            value
+        );
+
+    }
 
 }
 
 
-function showToast(
-    message
-) {
+function translateStatus(status) {
 
-    const toast =
+    const map = {
+
+        pending:
+            "قيد الانتظار",
+
+        processing:
+            "قيد التجهيز",
+
+        shipped:
+            "تم الشحن",
+
+        delivered:
+            "تم التسليم",
+
+        completed:
+            "مكتمل",
+
+        cancelled:
+            "ملغي",
+
+        canceled:
+            "ملغي"
+
+    };
+
+
+    return (
+        map[
+            String(
+                status ||
+                ""
+            ).toLowerCase()
+        ] ||
+        status ||
+        "غير محدد"
+    );
+
+}
+
+
+function statusClass(status) {
+
+    const value =
+        String(
+            status ||
+            ""
+        ).toLowerCase();
+
+
+    if (
+        [
+            "completed",
+            "delivered"
+        ].includes(
+            value
+        )
+    ) {
+
+        return "active";
+
+    }
+
+
+    if (
+        [
+            "cancelled",
+            "canceled"
+        ].includes(
+            value
+        )
+    ) {
+
+        return "inactive";
+
+    }
+
+
+    return "pending";
+
+}
+
+
+let toastTimer;
+
+function toast(message) {
+
+    const element =
         document.getElementById(
-            "toast"
+            "adminToast"
         );
 
+    if (!element) return;
 
-    toast.textContent =
+
+    element.textContent =
         message;
 
 
-    toast.classList.add(
+    element.classList.add(
         "show"
     );
 
 
-    setTimeout(
-        () => {
-
-            toast.classList.remove(
-                "show"
-            );
-
-        },
-        3000
+    clearTimeout(
+        toastTimer
     );
+
+
+    toastTimer =
+        setTimeout(
+            () => {
+
+                element.classList.remove(
+                    "show"
+                );
+
+            },
+            3000
+        );
 
 }
 
 
 /* =========================================================
-   REALTIME
+   GLOBAL FUNCTIONS
 ========================================================= */
 
-supabaseClient
-    .channel(
-        "admin-products"
-    )
-    .on(
-        "postgres_changes",
-        {
-            event: "*",
-            schema: "public",
-            table: "products"
-        },
-        async () => {
+window.editProduct =
+    editProduct;
 
-            await loadProducts();
+window.deleteProduct =
+    deleteProduct;
 
-            await loadDashboard();
+window.showOrder =
+    showOrder;
 
-        }
-    )
-    .subscribe();
-
-
-supabaseClient
-    .channel(
-        "admin-orders"
-    )
-    .on(
-        "postgres_changes",
-        {
-            event: "*",
-            schema: "public",
-            table: "orders"
-        },
-        async () => {
-
-            await loadOrders();
-
-            await loadDashboard();
-
-        }
-    )
-    .subscribe();
+window.closeOrderModal =
+    closeOrderModal;
