@@ -4,238 +4,82 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Little Stars | دخول الإدارة</title>
+    <title>تسجيل دخول الإدارة | Little Stars</title>
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="admin.css">
 
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap"
-          rel="stylesheet">
-
-    <style>
-        * {
-            box-sizing: border-box;
-        }
-
-        body {
-            margin: 0;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: #f7f5ff;
-            font-family: Cairo, sans-serif;
-            color: #252330;
-            padding: 20px;
-        }
-
-        .login-card {
-            width: 100%;
-            max-width: 430px;
-            background: white;
-            padding: 35px;
-            border-radius: 25px;
-            box-shadow: 0 20px 70px rgba(50, 40, 100, .12);
-        }
-
-        .logo {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .logo strong {
-            color: #7657f6;
-            font-size: 28px;
-        }
-
-        .logo span {
-            display: block;
-            color: #999;
-            font-size: 12px;
-        }
-
-        h1 {
-            margin: 0 0 8px;
-            font-size: 23px;
-        }
-
-        .description {
-            color: #777;
-            font-size: 13px;
-            margin-bottom: 25px;
-        }
-
-        label {
-            display: block;
-            font-size: 13px;
-            font-weight: 700;
-            margin: 15px 0 7px;
-        }
-
-        input {
-            width: 100%;
-            height: 50px;
-            border: 1px solid #ddd9e8;
-            border-radius: 13px;
-            padding: 0 15px;
-            font-family: inherit;
-            outline: none;
-        }
-
-        input:focus {
-            border-color: #7657f6;
-        }
-
-        button {
-            width: 100%;
-            height: 52px;
-            border: 0;
-            border-radius: 13px;
-            margin-top: 22px;
-            background: linear-gradient(135deg, #8569ff, #6243e8);
-            color: white;
-            font-family: inherit;
-            font-weight: 800;
-            cursor: pointer;
-        }
-
-        button:hover {
-            opacity: .92;
-        }
-
-        #message {
-            min-height: 24px;
-            text-align: center;
-            margin-top: 15px;
-            color: #d64d64;
-            font-size: 13px;
-        }
-    </style>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 
-<body>
+<body class="login-page">
 
-<div class="login-card">
+    <main class="login-container">
 
-    <div class="logo">
-        <strong>✦ Little Stars</strong>
-        <span>لوحة إدارة المتجر</span>
-    </div>
+        <div class="login-card">
 
-    <h1>تسجيل دخول الإدارة</h1>
+            <div class="login-logo">
+                ✦
+            </div>
 
-    <div class="description">
-        سجّل الدخول للوصول إلى إدارة المنتجات والطلبات والمتجر.
-    </div>
+            <h1>Little Stars</h1>
 
-    <form id="loginForm">
+            <p class="login-subtitle">
+                لوحة تحكم المتجر
+            </p>
 
-        <label for="email">
-            البريد الإلكتروني
-        </label>
+            <form id="adminLoginForm">
 
-        <input
-            type="email"
-            id="email"
-            autocomplete="username"
-            required
-        >
+                <div class="form-group">
 
-        <label for="password">
-            كلمة المرور
-        </label>
+                    <label for="email">
+                        البريد الإلكتروني
+                    </label>
 
-        <input
-            type="password"
-            id="password"
-            autocomplete="current-password"
-            required
-        >
+                    <input
+                        type="email"
+                        id="email"
+                        required
+                        autocomplete="email"
+                        placeholder="أدخل البريد الإلكتروني">
 
-        <button type="submit">
-            دخول إلى لوحة الإدارة
-        </button>
+                </div>
 
-    </form>
+                <div class="form-group">
 
-    <div id="message"></div>
+                    <label for="password">
+                        كلمة المرور
+                    </label>
 
-</div>
+                    <input
+                        type="password"
+                        id="password"
+                        required
+                        autocomplete="current-password"
+                        placeholder="أدخل كلمة المرور">
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+                </div>
 
-<script>
+                <button
+                    type="submit"
+                    class="primary-button"
+                    id="loginButton">
 
-const SUPABASE_URL =
-    "https://eflcolwdhddfncbuvjua.supabase.co";
+                    تسجيل الدخول
 
-const SUPABASE_KEY =
-    "sb_publishable_J8K4FI12ExE5stcHVHviRQ_Uk__w4ko";
+                </button>
 
-const supabaseClient =
-    window.supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_KEY
-    );
+                <p
+                    id="loginMessage"
+                    class="login-message">
+                </p>
 
-const form =
-    document.getElementById("loginForm");
+            </form>
 
-const message =
-    document.getElementById("message");
+        </div>
 
+    </main>
 
-supabaseClient.auth.getSession()
-    .then(({ data }) => {
-
-        if (data.session) {
-            window.location.href = "admin.html";
-        }
-
-    });
-
-
-form.addEventListener("submit", async event => {
-
-    event.preventDefault();
-
-    message.textContent =
-        "جارٍ تسجيل الدخول...";
-
-    const email =
-        document.getElementById("email")
-            .value
-            .trim();
-
-    const password =
-        document.getElementById("password")
-            .value;
-
-
-    const { error } =
-        await supabaseClient.auth.signInWithPassword({
-            email,
-            password
-        });
-
-
-    if (error) {
-
-        console.error(error);
-
-        message.textContent =
-            "بيانات الدخول غير صحيحة.";
-
-        return;
-    }
-
-
-    window.location.href =
-        "admin.html";
-
-});
-
-</script>
+    <script src="admin.js"></script>
 
 </body>
 </html>
