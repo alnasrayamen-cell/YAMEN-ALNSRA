@@ -6,190 +6,95 @@
 
     <title>تسجيل دخول الأدمن | Little Stars</title>
 
+    <link rel="stylesheet" href="admin.css">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap"
-          rel="stylesheet">
-
-    <link rel="stylesheet" href="admin.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
 </head>
 
 <body class="login-page">
 
-<div class="login-card">
+<div class="login-wrapper">
 
-    <div class="login-logo">
-        ✦
-    </div>
+    <div class="login-card">
 
-    <h1>
-        Little Stars
-    </h1>
+        <div class="login-logo">
+            ✦
+        </div>
 
-    <p class="login-subtitle">
-        لوحة إدارة المتجر
-    </p>
+        <h1>
+            Little Stars
+        </h1>
 
-    <form id="loginForm">
+        <p class="login-subtitle">
+            لوحة إدارة المتجر
+        </p>
 
-        <label>
-            البريد الإلكتروني
-        </label>
+        <form id="loginForm">
 
-        <input
-            id="loginEmail"
-            type="email"
-            placeholder="admin@example.com"
-            required
-            autocomplete="email">
+            <div class="form-group">
 
-        <label>
-            كلمة المرور
-        </label>
+                <label>
+                    البريد الإلكتروني
+                </label>
 
-        <input
-            id="loginPassword"
-            type="password"
-            placeholder="••••••••"
-            required
-            autocomplete="current-password">
+                <input
+                    type="email"
+                    id="loginEmail"
+                    placeholder="admin@example.com"
+                    required
+                >
 
-        <button
-            id="loginButton"
-            type="submit">
+            </div>
 
-            دخول لوحة الإدارة
+            <div class="form-group">
 
-        </button>
+                <label>
+                    كلمة المرور
+                </label>
+
+                <input
+                    type="password"
+                    id="loginPassword"
+                    placeholder="••••••••"
+                    required
+                >
+
+            </div>
+
+            <button
+                type="submit"
+                class="primary-admin-button"
+                id="loginButton"
+            >
+                دخول لوحة الإدارة
+            </button>
+
+        </form>
 
         <div
             id="loginMessage"
-            class="login-message">
-        </div>
+            class="login-message"
+        ></div>
 
-    </form>
+        <a
+            href="index.html"
+            class="back-store"
+        >
+            ← العودة للمتجر
+        </a>
+
+    </div>
 
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script>
-
-"use strict";
-
-const SUPABASE_URL =
-    "https://eflcolwdhddfncbuvjua.supabase.co";
-
-const SUPABASE_KEY =
-    "sb_publishable_J8K4FI12ExE5stcHVHviRQ_Uk__w4ko";
-
-const supabaseClient =
-    window.supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_KEY
-    );
-
-const loginForm =
-    document.getElementById("loginForm");
-
-const loginButton =
-    document.getElementById("loginButton");
-
-const loginMessage =
-    document.getElementById("loginMessage");
-
-async function checkExistingSession() {
-
-    const {
-        data
-    } =
-        await supabaseClient.auth.getSession();
-
-    if (
-        data &&
-        data.session
-    ) {
-        window.location.href =
-            "admin.html";
-    }
-}
-
-checkExistingSession();
-
-loginForm.addEventListener(
-    "submit",
-    async function(event) {
-
-        event.preventDefault();
-
-        const email =
-            document
-                .getElementById("loginEmail")
-                .value
-                .trim();
-
-        const password =
-            document
-                .getElementById("loginPassword")
-                .value;
-
-        loginMessage.textContent =
-            "";
-
-        loginButton.disabled =
-            true;
-
-        loginButton.textContent =
-            "جاري تسجيل الدخول...";
-
-        const {
-            data,
-            error
-        } =
-            await supabaseClient.auth.signInWithPassword({
-                email,
-                password
-            });
-
-        if (error) {
-
-            console.error(error);
-
-            loginMessage.textContent =
-                "البريد الإلكتروني أو كلمة المرور غير صحيحة.";
-
-            loginButton.disabled =
-                false;
-
-            loginButton.textContent =
-                "دخول لوحة الإدارة";
-
-            return;
-        }
-
-        if (
-            !data ||
-            !data.session
-        ) {
-
-            loginMessage.textContent =
-                "تعذر إنشاء جلسة الدخول.";
-
-            loginButton.disabled =
-                false;
-
-            loginButton.textContent =
-                "دخول لوحة الإدارة";
-
-            return;
-        }
-
-        window.location.href =
-            "admin.html";
-    }
-);
-
-</script>
+<script src="admin.js"></script>
 
 </body>
 </html>
